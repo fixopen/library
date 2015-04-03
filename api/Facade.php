@@ -61,7 +61,7 @@ trait Facade
                         if ($child == 'me') {
                             $childObject = $subject;
                         }
-                        if ($childObject) {
+                        if (!$childObject) {
                             $childObject = self::IsPrimaryKey($child);
                         }
                         if ($childObject) {
