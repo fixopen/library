@@ -32,7 +32,7 @@ class Database {
     private static $driver = 'pgsql'; //'mysql'
     private static $port = '5432'; //'3306'
     private static $host = '127.0.0.1';
-    private static $dbname = 'cloudPhone';
+    private static $dbname = 'library';
     private static $username = 'postgres'; //'root'
     private static $password = '123456';
 
