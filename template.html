@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>template</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/favicon.ico">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/non-responsive.css" rel="stylesheet">
+    <link href="css/easyui.css" rel="stylesheet">
+    <link href="css/icon.css" rel="stylesheet">
+    <link href="css/global.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="header">header</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4" id="tree">
+                <div class="easyui-panel">
+                    <ul id="treeContainer"></ul>
+                </div>
+                <div id="menuContainer" class="easyui-menu" style="width:120px;">
+                    <div id="addItem" data-options="iconCls:'icon-add'">新增</div>
+                    <div id="editItem" data-options="iconCls:'icon-add'">修改</div>
+                    <div id="removeItem" data-options="iconCls:'icon-remove'">删除</div>
+                    <div class="menu-sep"></div>
+                    <div id="expandItem">展开</div>
+                    <div id="collapseItem">关闭</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <table>
+                    <thead id="listHeader"></thead>
+                    <tbody id="list"></tbody>
+                </table>
+            </div>
+            <div class="col-lg-4" id="detail">
+                detail
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="footer">footer</div>
+            </div>
+        </div>
+    </div>
+    <template id="groupHeadersTemplate">
+        ...
+    </template>
+    <template id="groupListItemTemplate">
+        ...
+    </template>
+    <template id="groupTemplate">
+        ...
+    </template>
+    <template id="contactHeadersTemplate">
+        ...
+    </template>
+    <template id="contactListItemTemplate">
+        ...
+    </template>
+    <template id="contactTemplate">
+        ...
+    </template>
+    <template id="userHeadersTemplate">
+        ...
+    </template>
+    <template id="userListItemTemplate">
+        ...
+    </template>
+    <template id="userTemplate">
+        <div>
+            <span>${name}</span><br />
+            <img src="${photo}" alt="" />
+        </div>
+    </template>
+    <template id="deviceHeadersTemplate">
+        ...
+    </template>
+    <template id="deviceListItemTemplate">
+        ...
+    </template>
+    <template id="deviceTemplate">
+        ...
+    </template>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easyui.min.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/tree.js"></script>
+    <script src="js/template.js"></script>
+</body>
+</html>

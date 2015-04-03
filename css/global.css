@@ -1,0 +1,848 @@
+/*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+    margin-bottom: 0;
+    font-family: "微软雅黑", "华文楷体", serif
+}
+
+.container {
+    width: 990px !important;
+}
+
+.fit {
+    width: 100%;
+    height: 100%;
+}
+
+.more {
+    position: absolute;
+    text-align: center;
+    bottom: 2em;
+    width: 10%;
+    left: 45%;
+}
+/*
+ * Global add-ons
+ */
+
+.sub-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.padding-lr-0 {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.padding-l-0 {
+    padding-left: 0;
+}
+
+.padding-r-0 {
+    padding-right: 0;
+}
+
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+    border: 0;
+}
+
+.navbar-header > a > img {
+    height: 100%;
+}
+
+.carousel-inner .item > img {
+    width: 100%;
+}
+
+/*
+ * Sidebar
+ */
+
+/* Hide for mobile, show later */
+.sidebar {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 141px;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        /*  padding: 20px; */
+        overflow-x: hidden;
+        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+        background-color: #f5f5f5;
+        border-right: 1px solid #eee;
+    }
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+    margin-right: -21px; /* 20px padding + 1px border */
+    margin-bottom: 20px;
+    margin-left: -15px;
+}
+
+.nav-sidebar > li > a {
+    color: #000000;;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+    color: #fff;
+    background-color: #008E9C;;
+}
+
+/*
+ * Main content
+ */
+
+.main {
+    /* padding: 20px;*/
+}
+
+@media (min-width: 768px) {
+    .main {
+        /*   padding-right: 40px;
+           padding-left: 40px;*/
+    }
+}
+
+.main .page-header {
+    margin-top: 0;
+}
+
+/*
+ * Placeholder dashboard ideas
+ */
+
+.navbar-second {
+    position: fixed;
+    z-index: 1000;
+    top: 50px;
+    display: block;
+    width: 100%;
+    font-weight: bold;
+    background: #13C2D3;
+    color: #fff;
+    height: 52px;
+}
+
+.navbar-collapse {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#secondNavbar > ul {
+    height: 52px;
+    text-align: justify;
+}
+
+#secondNavbar > ul > li {
+    text-align: center;
+    width: 100px;
+}
+
+#secondNavbar > ul > li > a {
+    color: #fff;
+    font-size: 16px;
+}
+
+#secondNavbar > ul > li.active {
+    background-color: #008E9C;
+}
+
+#secondNavbar > ul > li.active > a {
+    background-color: #008E9C;
+}
+
+#secondNavbar > ul > li:hover {
+    background-color: #13CFDF;
+}
+
+#secondNavbar > ul > li:hover > a {
+    background-color: #13CFDF;
+}
+
+.breadcrumb {
+    position: fixed;
+    z-index: 1000;
+    top: 100px;
+    display: block;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .navbar-second {
+    }
+}
+
+.totalContent {
+    width: 990px;
+}
+
+.lower {
+    position: relative;
+    top: 10px;
+}
+
+.lower-lt {
+    position: relative;
+    top: 3px;
+}
+
+.title {
+    background-color: #E9F0F8;
+    /*height: 25px;
+    line-height: 25px;
+    width: 100%;
+    text-indent: 0.5em;
+    position: relative;*/
+}
+
+#template {
+    display: none;
+}
+
+.resource {
+    /*width: 16%;*/
+}
+
+.resource-class {
+    height: 7em;
+}
+
+.resource-class .top {
+    width: 70%;
+    height: 5em;
+    background-color: #3E8FDF;
+    border-top-left-radius: 12px 12px;
+    border-top-right-radius: 12px 12px;
+}
+
+.resource-class .middle {
+    position: relative;
+    left: 15%;
+    width: 50%;
+    height: 0.2em;
+}
+
+.resource-class .bottom {
+    position: relative;
+    left: 15%;
+    width: 70%;
+    height: 1.2em;
+    border-bottom-right-radius: 12px 12px;
+    border-bottom-left-radius: 12px 12px;
+    background-color: #8E8E8E;
+}
+
+.friend-link {
+    float: left;
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.friend-link:last-child, .friend-link:nth-last-child(5) {
+    padding-left: 15px;
+}
+
+.friend-link:nth-last-child(n+2) {
+}
+
+.table span {
+    margin-left: 3%;
+}
+
+.myquestion ul li {
+    list-style: none;
+    position: relative;
+    top: 2em;
+}
+
+.myquestion li {
+    margin-top: 10px;
+}
+
+form label.error, label.error {
+    /* remove the next line when you have trouble in IE6 with labels in list */
+    color: red;
+    font-style: italic
+}
+
+div.error {
+    display: none;
+}
+
+input {
+    border: 1px solid black;
+}
+
+input.checkbox {
+    border: none
+}
+
+input:focus {
+    border: 1px dotted black;
+}
+
+input.error {
+    border: 1px dotted red;
+}
+
+span.red {
+    color: red;
+}
+
+span.yellow {
+    color: yellow;
+}
+
+span.orange {
+    color: orange;
+}
+
+.img-resource {
+    width: 110px;
+    height: 160px;
+}
+
+.news-item, .allNews {
+    list-style: none;
+}
+
+div.space-1 {
+    height: 10px;
+    clear: both;
+}
+
+div.space-2 {
+    height: 20px;
+    clear: both;
+}
+
+div.space-3 {
+    height: 30px;
+    clear: both;
+}
+
+p {
+    text-indent: 2em;
+}
+
+.news-item, .resource-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-top: 4px;
+}
+
+.resource-name {
+    font-size: 12px;
+    padding-top: 4px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: black;
+}
+
+.do a {
+    position: relative;
+    margin-left: 2.5em;
+}
+
+#secondNavbar li {
+    /*padding-left:0px !important;
+    padding-right:30px;*/
+}
+
+#secondNavbar li > a {
+    /*text-align: left !important;
+    padding-left:0px !important;
+    padding-right:30px;*/
+}
+
+.toppanel-heading, .panel-title {
+    font-weight: bold;
+}
+
+.blue {
+    color: #00f;
+}
+
+.gray {
+    color: #CCC;
+}
+
+.res-thumbnails {
+    list-style: none;
+    margin: 0;
+    padding: 0
+}
+
+.res-thumbnails > div {
+    float: left;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    margin: 2px;
+    /*border:2px solid #333;*/
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.res-thumbnails > div > :first-child {
+    display: block;
+    position: relative
+}
+
+.res-thumbnails > div .tags {
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    overflow: visible;
+    direction: rtl;
+    padding: 0;
+    margin: 0;
+    height: auto;
+    width: auto;
+    background-color: transparent;
+    border: 0;
+    vertical-align: inherit;
+}
+
+.res-thumbnails > div .tags.tags-top {
+    top: 0;
+    bottom: auto;
+}
+
+/*
+    grayscale灰度
+    sepia褐色（求专业指点翻译）
+    saturate饱和度
+    hue-rotate色相旋转
+    invert反色
+    opacity透明度
+    brightness亮度
+    contrast对比度
+    blur模糊
+    drop-shadow阴影
+
+滤镜效果 描述 ：
+Alpha 设置透明度 FILTER：ALPHA(opacity=opacity,finishopacity=finishopacity,style=style,startx=startx, 
+starty=starty,finishx=finishx,finishy=finishy)
+Blru 建立模糊效果 filter:blur(add=add,direction=direction,strength=strength)
+Chroma 把指定的颜色设置为透明 filter:chroma(color=color)
+DropShadow 建立一种偏移的影象轮廓，即投射阴影 filter:dropshadow(color=color,offx=ofx,offy=offy,positive=positive)
+FlipH 水平反转 {filter:filph} ,{filter:filpv}
+FlipV 垂直反转 {filter:filph} ,{filter:filpv}
+Glow 为对象的外边界增加光效 filter:glow(color=color,strength)
+Grayscale 降低图片的彩色度 {filter:gray} ,{filter:invert},{filter:xray} 
+Invert 将色彩、饱和度以及亮度值完全反转建立底片效果 {filter:gray} ,{filter:invert},{filter:xray} 
+Light 在一个对象上进行灯光投影 style="filter:light(); width:400; height:300" onload="javascript:this.filters.light.addAmbient(10,250,100,55)" onmousemove="javascript:this.filters.light.changeColor(0,150,100,50,0)"
+
+·AddAmbient 加入包围的光源 
+·AddCone 加入锥形光源 
+·AddPoint 加入点光源 
+·Changcolor 改变光的颜色 
+·Changstrength 改变光源的强度 
+·Clear 清除所有的光源 
+·MoveLight 移动光源
+
+Mask 为一个对象建立透明膜 filter:mask(color=color)
+Shadow 建立一个对象的固体轮廓，即阴影效果 filter:shadow(color=color,direction=direction)
+Wave 在X轴和Y轴方向利用正弦波纹打乱图片 filter:wave(add=add,freq=freq,lightstrength=strength,phase=phase,strength=strength)
+Xray 只显示对象的轮廓 {filter:gray} ,{filter:invert},{filter:xray} 
+*/
+.res-thumbnails > div .tags > .label-holder {
+    opacity: .62;
+    filter: opacity(0.92);
+    display: table;
+    margin: 5px 0 0 0;
+    direction: ltr;
+    text-align: left
+}
+
+.res-thumbnails > div .tags > .label-holder:hover {
+    opacity: 1;
+    filter: opacity(1)
+}
+
+.res-thumbnails > div > .tools {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -30px;
+    width: 24px;
+    background-color: rgba(0, 0, 0, 0.55);
+    text-align: center;
+    vertical-align: middle;
+    -webkit-transition: all .2s ease;
+    transition: all .2s ease
+}
+
+.res-thumbnails > div > .tools.tools-right {
+    left: auto;
+    right: -30px
+}
+
+.res-thumbnails > div > .tools.tools-bottom {
+    width: auto;
+    height: 28px;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: -30px
+}
+
+.res-thumbnails > div > .tools.tools-top {
+    width: auto;
+    height: 28px;
+    left: 0;
+    right: 0;
+    top: -30px;
+    bottom: auto
+}
+
+.res-thumbnails > div:hover > .tools {
+    left: 0
+}
+
+.res-thumbnails > div:hover > .tools.tools-bottom {
+    top: auto;
+    bottom: 0
+}
+
+.res-thumbnails > div > .tools.tools-bottom-fixed {
+    width: auto;
+    height: 28px;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    color: #fff;
+}
+
+.res-thumbnails > div:hover > .tools.tools-top {
+    bottom: auto;
+    top: 0
+}
+
+.res-thumbnails > div:hover > .tools.tools-right {
+    left: auto;
+    right: 0
+}
+
+.res-thumbnails > div > .tools > a, .res-thumbnails > li > :first-child .inner a {
+    display: inline-block;
+    color: #FFF;
+    font-size: 18px;
+    font-weight: normal;
+    padding: 0 4px
+}
+
+.res-thumbnails > div > .tools > a:hover, .res-thumbnails > div > :first-child .inner a:hover {
+    text-decoration: none;
+    color: #c9e2ea
+}
+
+.res-thumbnails > div .tools.tools-bottom > a, .res-thumbnails > div .tools.tools-top > a {
+    display: inline-block
+}
+
+.res-thumbnails > div > :first-child > .text {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    text-align: center;
+    color: #FFF;
+    background-color: rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    filter: opacity(0);
+    -webkit-transition: all .2s ease;
+    transition: all .2s ease
+}
+
+.res-thumbnails > div > :first-child > .text:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: 0
+}
+
+.res-thumbnails > div > :first-child > .text > .inner {
+    padding: 4px 0;
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 90%
+}
+
+.res-thumbnails > div:hover > :first-child > .text {
+    opacity: 1;
+    filter: opacity(1)
+}
+
+@media only screen and (max-width: 480px) {
+    .res-thumbnails {
+        text-align: center
+    }
+
+    .res-thumbnails > div {
+        float: none;
+        display: inline-block
+    }
+}
+
+.rowPadding {
+    position: relative;
+    padding-top: 10px;
+}
+
+.paddingLeft {
+    margin-left: -12px;
+}
+
+.more a span {
+    color: black;
+}
+
+.typePadding {
+    margin-left: 32px;
+}
+
+.currentLocation {
+    background: url('../images/currentLocationBg.gif') 0 0 no-repeat;
+    /*background: image('../images/currentLocationBg.gif?tlwh=0,0,20,20')*/
+    position: fixed;
+    height: 26px;
+    line-height: 26px;
+    padding-left: 25px;
+    top: 102px;
+    width: 960px;
+    z-index: 1040;
+    color: #444;
+}
+
+.row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.padding-left-20 {
+    padding-left: 20px;
+}
+
+.padding-left-5 {
+    padding-left: 5px;
+}
+
+.margin-left-20 {
+    margin-left: 20px;
+}
+
+.more span {
+    color: #999;
+}
+
+.widthHeight {
+    width: 225px;
+    height: 115px;
+}
+
+.classCenter {
+    text-align: center;
+    line-height: 115px;
+}
+
+.newUl {
+    list-style: none;
+}
+
+.dynamic li {
+    float: left;
+    list-style: none;
+    color: #42a1b3;
+    margin-left: 20px;
+}
+
+.dynamic li span {
+    margin-left: 3px;
+}
+
+.res-list ul li {
+    border-bottom: 1px dashed #777878;
+    padding: 5px 0;
+    overflow: hidden;
+    line-height: 30px;
+    list-style: none;
+    text-align: /*-webkit-match-parent*/center;
+    background: #F0F0F0;
+    margin-bottom: 10px;
+}
+
+.one .two {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.person-left li {
+    list-style: none;
+}
+
+.person-right li {
+    list-style: none;
+}
+
+.person-right {
+    color: white;
+    font-size: 19px;
+    margin-left: 0;
+}
+
+.classUl li {
+    list-style: none;
+    float: left;
+    line-height: 30px;
+    font-size: 16px;
+    color: #000;
+}
+
+.classUl .active {
+    border-bottom: solid 2px #76E8F2
+}
+
+.dynamic a {
+    cursor: pointer;
+}
+
+.select ul li {
+    list-style: none;
+}
+
+.order li a {
+    float: left;
+    margin-left: 20px;
+}
+
+.type li a {
+    float: left;
+    margin-left: 20px;
+}
+
+.time li a {
+    float: left;
+    margin-left: 20px;
+}
+
+.uploadbutton {
+    display: inline-block;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+}
+
+.file {
+    position: absolute;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.message-loading-overlay {
+    position: absolute;
+    z-index: 14;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    text-align: center
+}
+
+.message-loading-overlay > [class*="icon-"] {
+    position: absolute;
+    top: 15%;
+    left: 0;
+    right: 0;
+    text-align: center
+}
+
+.artInfo {
+    line-height: 22px;
+}
+
+.artInfo {
+    border-bottom: solid 1px #ccc;
+    color: #999;
+    padding: 10px 0;
+    text-align: center;
+    position: relative;
+}
+
+.shareUl li {
+    list-style: none;
+    float: left;
+    margin-left: 13px;
+}
+
+.BreadDischarge a {
+    color: #000;
+}
+
+.condition-container {
+    padding-top: 20px;
+}
+
+.condition-tpl a {
+    color: #666;
+}
+
+.personInfoStyle {
+    margin-top: 30px;
+    margin-left: 30px;
+}
+
+.carousel-control {
+    width: 5%;
+}
+
+.person-avatar {
+    width: 120px;
+    height: 125px;
+}
+
+.res-title {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
