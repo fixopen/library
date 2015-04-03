@@ -76,7 +76,8 @@ CREATE TABLE book (
     abstract text,
     "order" bigint,
     "resourceId" bigint,
-    "lastUpdateTime" timestamp(4) without time zone
+    "lastUpdateTime" timestamp(4) without time zone,
+    "mimeType" character varying(32)
 );
 
 
