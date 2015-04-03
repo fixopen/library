@@ -3,7 +3,7 @@
 class business
 {
 
-    private static $tableName = 'user';
+    private static $tableName = 'business';
 
     use Permission,
         DataAccess,
