@@ -36,7 +36,7 @@ CREATE TYPE actiontype AS ENUM (
 );
 
 
-ALTER TYPE actiontype OWNER TO postgres;
+ALTER TYPE public.actiontype OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -49,11 +49,12 @@ SET default_with_oids = false;
 CREATE TABLE administrator (
     id bigint NOT NULL,
     name character varying(32),
-    password character varying(64)
+    password character varying(64),
+    "lastOperationTime" timestamp(4) without time zone
 );
 
 
-ALTER TABLE administrator OWNER TO postgres;
+ALTER TABLE public.administrator OWNER TO postgres;
 
 --
 -- Name: book; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -74,11 +75,12 @@ CREATE TABLE book (
     keywords character varying(256),
     abstract text,
     "order" bigint,
-    "resourceId" bigint
+    "resourceId" bigint,
+    "lastUpdateTime" timestamp(4) without time zone
 );
 
 
-ALTER TABLE book OWNER TO postgres;
+ALTER TABLE public.book OWNER TO postgres;
 
 --
 -- Name: business; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -93,7 +95,7 @@ CREATE TABLE business (
 );
 
 
-ALTER TABLE business OWNER TO postgres;
+ALTER TABLE public.business OWNER TO postgres;
 
 --
 -- Name: device; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -111,7 +113,20 @@ CREATE TABLE device (
 );
 
 
-ALTER TABLE device OWNER TO postgres;
+ALTER TABLE public.device OWNER TO postgres;
+
+--
+-- Name: systemParameter; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE "systemParameter" (
+    id bigint NOT NULL,
+    name character varying(32),
+    value text
+);
+
+
+ALTER TABLE public."systemParameter" OWNER TO postgres;
 
 --
 -- Name: user; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -120,11 +135,12 @@ ALTER TABLE device OWNER TO postgres;
 CREATE TABLE "user" (
     id bigint NOT NULL,
     no character varying(32),
-    "registerTime" timestamp(4) with time zone
+    "registerTime" timestamp(4) without time zone,
+    "lastOperationTime" timestamp(4) without time zone
 );
 
 
-ALTER TABLE "user" OWNER TO postgres;
+ALTER TABLE public."user" OWNER TO postgres;
 
 --
 -- Data for Name: administrator; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -146,6 +162,12 @@ ALTER TABLE "user" OWNER TO postgres;
 
 --
 -- Data for Name: device; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- Data for Name: systemParameter; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
@@ -194,6 +216,14 @@ ALTER TABLE ONLY device
 
 ALTER TABLE ONLY administrator
     ADD CONSTRAINT name_u UNIQUE (name);
+
+
+--
+-- Name: systemparameter_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY "systemParameter"
+    ADD CONSTRAINT systemparameter_pk PRIMARY KEY (id);
 
 
 --
