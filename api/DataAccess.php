@@ -9,11 +9,11 @@ trait DataAccess
     {
         if (count(self::$types) == 0) {
             $queryStmt = 'SELECT * FROM ' . self::Mark(self::$tableName) . ' LIMIT 1';
-            print $queryStmt . '<br />';
+            //print $queryStmt . '<br />';
             $r = Database::GetInstance()->query($queryStmt, PDO::FETCH_ASSOC);
             if ($r) {
                 $columnCount = $r->columnCount();
-                print $columnCount . '<br />';
+                //print $columnCount . '<br />';
                 for ($i = 0; $i < $columnCount; ++$i) {
                     $metaInfo = $r->getColumnMeta($i);
                     self::$types[$metaInfo['name']] = $metaInfo['native_type'];
@@ -40,7 +40,7 @@ trait DataAccess
     private static function GetMarkedColumnNames() {
         $result = array();
         self::GetTableType();
-        print_r(self::$types);
+        //print_r(self::$types);
         foreach (self::$types as $key => $typeName) {
             $result[] = self::Mark($key);
         }
@@ -224,7 +224,7 @@ trait DataAccess
             $pagedClause = ' LIMIT ' . $count . ' OFFSET ' . $offset;
         }
         $query = 'SELECT ' . implode(', ', self::GetMarkedColumnNames()) . ' FROM ' . self::Mark(self::$tableName) . $whereClause . $orderByClause . $pagedClause;
-        print $query . '<br />';
+        //print $query . '<br />';
         return self::GetData($query, __CLASS__);
     }
 
