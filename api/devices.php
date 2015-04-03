@@ -10,26 +10,17 @@ class devices
         Statistics,
         JSON,
         PathProcess,
+        Session,
         NormalFacadeImpl,
         Facade;
 
     private $no = ''; //sn
-    private $name = ''; //telephoneNumber
-    private $groupId = 0;
-    private $userId = 0;
-    private $state = '';
-    private $prefix = 0; //for IdGenerator
-    private $description = '';
-
-    public static function import($file)
-    {
-        //
-    }
-
-    public static function export($file)
-    {
-        //
-    }
+    private $address = '';
+    private $location = NULL; //(x, y);
+    private $lastOperationTime = NULL;
+    private $lastUpdateTime = NULL;
+    private $controlNo = '';
+    private $controlPassword = '';
 
     public function getNo()
     {
@@ -41,64 +32,64 @@ class devices
         $this->no = $no;
     }
 
-    public function getName()
+    public function getAddress()
     {
-        return $this->name;
+        return $this->address;
     }
 
-    public function setName($name)
+    public function setAddress($address)
     {
-        $this->name = $name;
+        $this->address = $address;
     }
 
-    public function getGroupId()
+    public function getLocation()
     {
-        return $this->groupId;
+        return $this->location;
     }
 
-    public function setGroupId($groupId)
+    public function setLocation($location)
     {
-        $this->groupId = $groupId;
+        $this->location = $location;
     }
 
-    public function getUserId()
+    public function getLastOperationTime()
     {
-        return $this->userId;
+        return $this->lastOperationTime;
     }
 
-    public function setUserId($userId)
+    public function setLastOperationTime($lastOperationTime)
     {
-        $this->userId = $userId;
+        $this->lastOperationTime = $lastOperationTime;
     }
 
-    public function getState()
+    public function getLastUpdateTime()
     {
-        return $this->state;
+        return $this->lastUpdateTime;
     }
 
-    public function setState($state)
+    public function setLastUpdateTime($lastUpdateTime)
     {
-        $this->state = $state;
+        $this->lastUpdateTime = $lastUpdateTime;
     }
 
-    public function getPrefix()
+    public function getControlNo()
     {
-        return $this->prefix;
+        return $this->controlNo;
     }
 
-    public function setPrefix($prefix)
+    public function setControlNo($controlNo)
     {
-        $this->prefix = $prefix;
+        $this->controlNo = $controlNo;
     }
 
-    public function getDescription()
+    public function getControlPassword()
     {
-        return $this->description;
+        return $this->controlPassword;
     }
 
-    public function setDescription($description)
+    public function setControlPassword($controlPassword)
     {
-        $this->description = $description;
+        $this->controlPassword = $controlPassword;
     }
 
 }

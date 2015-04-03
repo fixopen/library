@@ -1,0 +1,354 @@
+协议
+管理员::登录、登出、修改自身密码、获取书籍列表、获取设备列表、获取用户列表、查看书籍阅读统计、查看设备阅读统计、查看用户阅读统计、上传书籍、上传书籍内容、上传书籍封皮、下架书籍、删除书籍、设定系统参数（DRM期限）
+借阅机设备::登录、登出、心跳、业务上报、书籍下载、书籍内容下载、书籍封皮下载
+用户（读者）::登录、登出
+
+管理员::
+登录
+发送：
+POST /api/administrators/{adminLoginName}/sessions HTTP/1.1
+...
+Content-Type: application/json
+Accept: application/json
+...
+
+{"password": "password"}
+
+接收：
+HTTP/1.1 200 Ok
+...
+Set-Cookie: sessionId=.....
+Content-Type: application/json
+...
+
+{administratorInfo}
+
+登出
+发送:
+DELETE /api/administrators/me/sessions/{sessionId} HTTP/1.1
+...
+Accept: application/json
+Cookie: sessionId=.....
+...
+
+接收：
+HTTP/1.1 200 Ok
+...
+
+修改自身密码
+发送:
+PATCH /api/administrators/me HTTP/1.1
+...
+Accept: application/json
+Cookie: sessionId=.....
+...
+
+{"password": "newPassword"}
+
+接收：
+HTTP/1.1 200 Ok
+...
+
+获取书籍列表
+发送：
+GET /api/books?offset=0&count=10&orderBy=<orderInfo> HTTP/1.1
+...
+Accept: application/json
+Cookie: sessionId=.....
+...
+
+接收：
+HTTP/1.1 200 Ok
+...
+Content-Type: application/json
+...
+
+[{"id": "id", "name": "name", "author": "author", "authorAlias": "authorAlias", "publisher": "publisher", "publishTime": "publishTime", "isbn": "isbn", "standardClassify": "standardClassify", "firstLevelClassify": "firstLevelClassify", "secondLevelClassify": "secondLevelClassify", "authorizationEndTime": "authorizationEndTime", "keywords": "keywords", "abstract": "abstract", "order": order, "resourceId": resourceId, "lastUpdateTime": "lastUpdateTime"}, ...]
+
+获取设备列表
+发送：
+GET /api/devices?offset=0&count=10&orderBy=<orderInfo> HTTP/1.1
+...
+Accept: application/json
+Cookie: sessionId=.....
+...
+
+接收：
+HTTP/1.1 200 Ok
+...
+Content-Type: application/json
+...
+
+[{"id": "id", "no": "no", "address": "address", "location": "location", "lastOperationTime": "lastOperationTime", "lastUpdateTime": "lastUpdateTime", "controlNo": "controlNo", "controlPassword": "controlPassword"}, ...]
+
+获取用户列表
+发送：
+GET /api/users?offset=0&count=10&orderBy=<orderInfo> HTTP/1.1
+...
+Accept: application/json
+Cookie: sessionId=.....
+...
+
+接收：
+HTTP/1.1 200 Ok
+...
+Content-Type: application/json
+...
+
+[{"id": "id", "no": "no", "registerTime": "registerTime", "lastOperationTime": "lastOperationTime"}, ...]
+
+查看书籍阅读统计
+查看设备阅读统计
+查看用户阅读统计
+
+上传书籍
+发送：
+POST /api/books/{bookId} HTTP/1.1
+...
+Accept: application/json
+Cookie: sessionId=.....
+...
+
+{"id": "id", "name": "name", "author": "author", "authorAlias": "authorAlias", "publisher": "publisher", "publishTime": "publishTime", "isbn": "isbn", "standardClassify": "standardClassify", "firstLevelClassify": "firstLevelClassify", "secondLevelClassify": "secondLevelClassify", "authorizationEndTime": "authorizationEndTime", "keywords": "keywords", "abstract": "abstract", "order": order, "resourceId": resourceId, "mimeType": "application/pdf"}
+
+接收：
+HTTP/1.1 201 Created
+...
+Content-Type: application/json
+...
+
+上传书籍内容
+发送：
+POST /api/books/{bookId}?offset=m HTTP/1.1
+...
+Content-Type: application/pdf
+Content-Length: n
+Cookie: sessionId=.....
+...
+
+!#$!@$%^#$^$%&*$%^*$%!@@#%$^#@!~@#!$#@%^#%%!~!@&^*&)(^%$%)
+
+接收：
+HTTP/1.1 200 Ok
+...
+Content-Type: application/json
+...
+
+注：上面的offset参数可有可无，如果有，表示上传的内容从文件的offset位置开始写入。下同。
+
+上传书籍封皮
+发送：
+POST /api/books/{bookId}/cover?offset=m HTTP/1.1
+...
+Content-Type: image/jpeg
+Content-Length: n
+Cookie: sessionId=.....
+...
+
+!#$!@$%^#$^$%&*$%^*$%!@@#%$^#@!~@#!$#@%^#%%!~!@&^*&)(^%$%)
+
+接收：
+HTTP/1.1 200 Ok
+...
+Content-Type: application/json
+...
+
+下架书籍
+发送：
+PATCH /api/books/{bookId} HTTP/1.1
+...
+Content-Type: application/json
+Cookie: sessionId=.....
+...
+
+{"authorizationEndTime": "before the server currentTime"}
+
+接收：
+HTTP/1.1 200 Ok
+...
+Content-Type: application/json
+...
+
+删除书籍
+发送：
+DELETE /api/books/{bookId} HTTP/1.1
+...
+Cookie: sessionId=.....
+...
+
+接收：
+HTTP/1.1 200 Ok
+...
+Content-Type: application/json
+...
+
+设定系统参数（DRM期限）
+发送：
+PUT /api/systemParameters/{parameterName} HTTP/1.1
+...
+Cookie: sessionId=.....
+...
+
+{"value": v}
+
+接收：
+HTTP/1.1 200 Ok
+...
+Content-Type: application/json
+...
+
+注：paramterName现在仅有BorrowingPeriod（借阅时段）
+
+借阅机设备::
+登录、登出、心跳、业务上报、书籍下载、书籍内容下载、书籍封皮下载
+登录
+发送：
+POST /api/devices/{deviceNo}/sessions HTTP/1.1
+...
+Content-Type: application/json
+Accept: application/json
+...
+
+{device-changed-info, "lastUpdateTime": "lastUpdateTime"}
+
+接收：
+HTTP/1.1 200 Ok
+...
+Set-Cookie: sessionId=.....
+Content-Type: application/json
+...
+
+[syncInfo, ...]
+注：syncInfo为如下形式：{"id": "id", "authorizationEndTime": "authorizationEndTime", "lastUpdateTime": "lastUpdateTime"}，并且按照lastUpdateTime排序，下同。
+
+登出
+发送:
+DELETE /api/devices/me/sessions/{sessionId} HTTP/1.1
+...
+Accept: application/json
+Cookie: sessionId=.....
+...
+
+接收：
+HTTP/1.1 200 Ok
+...
+
+心跳
+发送：
+PUT /api/devices/me/sessions/{sessionId} HTTP/1.1
+...
+Accept: application/json
+Cookie: sessionId=.....
+...
+
+{"lastUpdateTime": "lastUpdateTime"}
+
+接收：
+HTTP/1.1 200 Ok
+...
+
+[syncInfo, ...]
+
+注：服务器端心跳超时为30min。也就是说，30min收不到客户端的任何请求（不仅仅是心跳），讲认为客户端已经下线。
+
+业务上报
+发送：
+POST /api/business HTTP/1.1
+...
+Content-Type: application/json
+Accept: application/json
+Cookie: sessionId=.....
+...
+
+[{"bookId": "bookId", "time": "time", "action": "Follow|View|Download"[, "userId": "userId"]}, ...]
+注：外层的[]表示数组，是必须的，而里面的[]表示那一部分可有可无，是可选项，对于Follow和View，没有对应的userId，对于Download才有。
+
+接收：
+HTTP/1.1 200 Ok
+...
+
+[syncInfo, ...]
+
+书籍下载
+发送：
+GET /api/books/{bookId} HTTP/1.1
+...
+Accept: application/json
+Cookie: sessionId=.....
+...
+
+接收：
+HTTP/1.1 200 Ok
+...
+Content-Type: application/json
+...
+
+{"id": "id", "name": "name", "author": "author", "authorAlias": "authorAlias", "publisher": "publisher", "publishTime": "publishTime", "isbn": "isbn", "standardClassify": "standardClassify", "firstLevelClassify": "firstLevelClassify", "secondLevelClassify": "secondLevelClassify", "authorizationEndTime": "authorizationEndTime", "keywords": "keywords", "abstract": "abstract", "order": order, "resourceId": resourceId, "lastUpdateTime": "lastUpdateTime", "mimeType": "mimeType"}
+
+书籍内容下载
+发送：
+GET /api/books/{bookId} HTTP/1.1
+...
+Accept: application/pdf, text/plain
+Cookie: sessionId=.....
+Range: bytes=0-14213412
+...
+
+接收：
+HTTP/1.1 200 Ok
+...
+Content-Type: application/octet-stream
+...
+
+!#$!@$%^#$^$%&*$%^*$%!@@#%$^#@!~@#!$#@%^#%%!~!@&^*&)(^%$%)
+
+注：可以通过添加Range头域，用以支持断点续传
+注：最好在Accept头域使用书籍元信息中指明的书籍mimeType
+
+书籍封皮下载
+发送：
+GET /api/books/{bookId}/cover HTTP/1.1
+...
+Accept: image/jpeg
+Cookie: sessionId=.....
+...
+
+接收：
+HTTP/1.1 200 Ok
+...
+Content-Type: image/png
+...
+
+!#$!@$%^#$^$%&*$%^*$%!@@#%$^#@!~@#!$#@%^#%%!~!@&^*&)(^%$%)
+
+用户（读者）::
+登录
+发送：
+POST /api/users/{loginName}/sessions HTTP/1.1
+...
+Content-Type: application/json
+Accept: application/json
+...
+
+{}
+
+接收：
+HTTP/1.1 200 Ok
+...
+Set-Cookie: sessionId=.....
+Content-Type: application/json
+...
+
+{userInfo}
+
+登出
+发送:
+DELETE /api/users/me/sessions/{sessionId} HTTP/1.1
+...
+Accept: application/json
+Cookie: sessionId=.....
+...
+
+接收：
+HTTP/1.1 200 Ok
+...
