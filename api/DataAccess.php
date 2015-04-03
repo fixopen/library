@@ -220,7 +220,7 @@ trait DataAccess
             $pagedClause = ' LIMIT ' . $count . ' OFFSET ' . $offset;
         }
         $query = 'SELECT ' . implode(', ', self::GetMarkedColumnNames()) . ' FROM ' . self::Mark(self::$tableName) . $whereClause . $orderByClause . $pagedClause;
-        //print $query;
+        print $query . '<br />s';
         return self::GetData($query, __CLASS__);
     }
 
