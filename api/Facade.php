@@ -23,8 +23,9 @@ trait Facade
 
         $request['temp']['parent'] = $parent;
 
-        $requestContentType = $request['headers']['Content-Type'];
-        if (strpos($requestContentType, 'application/json') == 0) {
+        //$requestContentType = $request['headers']['Content-Type'];
+        $acceptContentType = $request['headers']['Accept'];
+        if (strpos($acceptContentType, 'application/json') == 0) {
             //normal
             //filter & orderBy & offset & count
             $pathCount = count($request['paths']);
