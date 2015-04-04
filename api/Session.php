@@ -3,39 +3,40 @@
 trait Session
 {
 
+    public static function GetBySessionId($sessionId)
+    {
+        return self::GetOne('sessionId', $sessionId);
+    }
+
     private static $specSubresource = array('sessions' => 'sessionsProc');
 
     public function loginProcess()
     {
-        $hasSession = TRUE;
-        $session = sessions::GetByUserId($this->getId());
-        if (!$session) {
-            $session = new sessions();
-            $session->setUserId($this->getId());
-            $hasSession = FALSE;
-        }
         $sessionId = rand();
-        while (sessions::IsPrimaryKey($sessionId)) {
+        while (self::GetBySessionId($sessionId)) {
             $sessionId = rand();
         }
-        $session->setSessionId((string)$sessionId);
+        $this->setSessionId((string)$sessionId);
         $now = time();
-        $session->setStartTime($now);
-        $session->setLastOperationTime($now);
-        if ($hasSession) {
-            $session->Update();
-        } else {
-            $session->Insert();
-        }
+        $this->setLastOperationTime($now);
+        $this->Update();
         return $sessionId;
     }
 
     public function logoutProcess($sessionId)
     {
-        $session = sessions::GetByUserId($this->getId());
-        if ($session) {
-            $session = new sessions();
-            $session->setSessionId('');
+        $isSelf = FALSE;
+        if ($sessionId == 'me') {
+            $isSelf = TRUE;
+        }
+        if (!$isSelf) {
+            $self = self::GetBySessionId($sessionId);
+            if ($self->id == $this->id) {
+                $isSelf = TRUE;
+            }
+        }
+        if ($isSelf) {
+            $this->setSessionId(NULL);
             $this->Update();
         }
     }
@@ -54,13 +55,22 @@ trait Session
                             $sessionId = $this->loginProcess();
                             $request['response']['cookies']['sessionId'] = $sessionId;
                             $request['response']['cookies']['token'] = 'onlyForTest';
-                            $request['response']['body'] = $this->toJson(); //'{"id": ' . $this->getId() . ', "sessionId": "' . $sessionId . '", "token": "onlyForTest"}';
+                            //print_r($this);
+                            $request['response']['body'] = $this->toJson();
+                            //print $this->toJson() . '<br />';
+                            //print_r($request);
                         } else {
                             $request['response']['code'] = 404; //invalidate username or password
                             $request['response']['body'] = '{"state": "invalid username or password, try again"}';
                         }
                     } else {
-                        $request['response']['code'] = 400; //bad request
+                        $sessionId = $this->loginProcess();
+                        $request['response']['cookies']['sessionId'] = $sessionId;
+                        $request['response']['cookies']['token'] = 'onlyForTest';
+                        //print_r($this);
+                        $request['response']['body'] = $this->toJson();
+                        //print $this->toJson() . '<br />';
+                        //print_r($request);
                     }
                 } else {
                     $request['response']['code'] = 400; //bad request
@@ -101,6 +111,7 @@ trait Session
             default:
                 break;
         }
+        return $request;
     }
 
 }

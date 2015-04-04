@@ -94,6 +94,8 @@ function writeResponse($response)
         //session_id($sessionId);
         session_id($response['cookies']['sessionId']);
         //print 'send cookie to client';
+        //Set-Cookie：name=value; path=/api//; domain=.ibm.com; expires=Wednesday, 19-OCT-05 23:12:40 GMT; [secure]
+        //header('Set-Cookie: sessionId=' . $response['cookies']['sessionId'] . '; path=/api');
         $setCookiesHeaderValue = 'sessionId=' . $response['cookies']['sessionId'];
         $r = setcookie('sessionId', $response['cookies']['sessionId']);
         if ($r == FALSE) {
@@ -104,7 +106,8 @@ function writeResponse($response)
         if ($r == FALSE) {
             print 'token cookie set fail.<br />';
         }
-        header('Set-Cookie: ' . $setCookiesHeaderValue);
+        //header('Set-Cookie: ' . $setCookiesHeaderValue);
+        //header('Set-Cookie: token=' . $response['cookies']['token'] . '; path=/api');
         //print 'sessionId' . $response['cookies']['sessionId'];
         //print 'token' . $response['cookies']['token'];
     }
@@ -123,7 +126,10 @@ function testBed()
 
 date_default_timezone_set('UTC');
 date_default_timezone_set("Asia/Chongqing");
-session_start();
+//@@ini_set('session.save_path', '/var/tmp');
+//@@$sessionpath = session_save_path();
+//@@print $sessionpath . '<br />';
+//@@session_start();
 
 set_error_handler("error_function", E_WARNING);
 

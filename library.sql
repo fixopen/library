@@ -50,7 +50,8 @@ CREATE TABLE administrator (
     id bigint NOT NULL,
     name character varying(32),
     password character varying(64),
-    "lastOperationTime" timestamp(4) without time zone
+    "sessionId" character varying(32),
+    "lastOperationTime" bigint
 );
 
 
@@ -107,10 +108,11 @@ CREATE TABLE device (
     no character varying(32),
     address character varying(64),
     location point,
-    "lastOperationTime" timestamp(4) without time zone,
     "lastUpdateTime" timestamp(4) without time zone,
     "controlNo" character varying(32),
-    "controlPassword" character varying(32)
+    "controlPassword" character varying(32),
+    "sessionId" character varying(32),
+    "lastOperationTime" bigint
 );
 
 
@@ -137,7 +139,8 @@ CREATE TABLE "user" (
     id bigint NOT NULL,
     no character varying(32),
     "registerTime" timestamp(4) without time zone,
-    "lastOperationTime" timestamp(4) without time zone
+    "sessionId" character varying(32),
+    "lastOperationTime" bigint
 );
 
 
@@ -147,6 +150,7 @@ ALTER TABLE public."user" OWNER TO postgres;
 -- Data for Name: administrator; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO administrator VALUES (1, 'admin', 'admin', '305815268', 1428120930);
 
 
 --

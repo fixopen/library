@@ -57,12 +57,13 @@ class QueryParser
                 $body = file_get_contents('php://input');
                 break;
         }
+        //print_r($_SESSION);
         return array(
             'method' => $method,
             'paths' => $paths,
             'params' => $params,
             'cookies' => $_COOKIE,
-            'sessionInfo' => $_SESSION,
+            //'sessionInfo' => $_SESSION,
             'headers' => apache_request_headers(),
             //'headers' => http_get_request_headers(),
             'body' => $body,

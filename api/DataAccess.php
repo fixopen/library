@@ -278,6 +278,7 @@ trait DataAccess
     public function Update()
     {
         $command = 'UPDATE ' . self::Mark(self::$tableName) . ' SET ' . implode(', ', $this->GetSetItems()) . ' WHERE ' . self::ConstructNameValueFilter('id', $this->id);
+        //print $command . '<br />';
         return Database::GetInstance()->exec($command);
     }
 

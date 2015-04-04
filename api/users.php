@@ -20,6 +20,12 @@ class users
     private $no = '';
     private $registerTime = NULL; // timestamp(4) without time zone,
     private $lastOperationTime = NULL; //timestamp(4) without time zone,
+    private $sessionId = NULL;
+
+    public static function IsPrimaryKey($no)
+    {
+        return self::GetOne('no', $no);
+    }
 
     public function getNo()
     {
@@ -49,6 +55,16 @@ class users
     public function setLastOperationTime($lastOperationTime)
     {
         $this->lastOperationTime = $lastOperationTime;
+    }
+
+    public function getSessionId()
+    {
+        return $this->sessionId;
+    }
+
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
     }
 
 }

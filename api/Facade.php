@@ -55,7 +55,7 @@ trait Facade
                     $child = array_shift($request['paths']);
                     $classChildrenProcess = self::GetClassChildrenProcess($child);
                     if ($classChildrenProcess) {
-                        call_user_func(__CLASS__ . '::' . $classChildrenProcess, $request);
+                        $request = call_user_func(__CLASS__ . '::' . $classChildrenProcess, $request);
                     } else {
                         $childObject = NULL;
                         if ($child == 'me') {
@@ -102,16 +102,15 @@ trait Facade
                         $childObject = $subject;
                     }
                     //print_r($childObject);
-                    if ($childObject) { //id
-                        //print 'users sessions';
+                    if ($childObject) {
                         $grandson = array_shift($request['paths']);
                         $childObject->ObjectChildrenProcess($grandson, $request);
+                        print_r($request);
                     } else {
                         //print 'error';
                         $classChildrenProcess = self::GetClassChildrenProcess($child);
                         if ($classChildrenProcess) {
-                            call_user_func(__CLASS__ . '::' . $classChildrenProcess, $request);
-                            //self::ClassChildrenProcess($child, $request);
+                            $request = call_user_func(__CLASS__ . '::' . $classChildrenProcess, $request);
                         } else {
                             $request['response']['code'] = 404; //resource not found
                         }

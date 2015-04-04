@@ -12,22 +12,18 @@ trait PathProcess
 
     public function ObjectChildrenProcess($child, array &$request)
     {
-        //$count = count($request['paths']);
-        $processor = FALSE;
+        $has = FALSE;
         $className = __CLASS__;
         $class = new ReflectionClass($className);
         if ($class->hasProperty('specSubresource')) {
             if (array_key_exists($child, self::$specSubresource)) {
-                $processor = self::$specSubresource[$child];
-                //$this->$processor($request);
-                call_user_func(array($this, self::$specSubresource[$child]), $request);
+                $has = TRUE;
+                $request = call_user_func(array($this, self::$specSubresource[$child]), $request);
             }
         }
-        if (!$processor) {
+        if (!$has) {
             if (array_key_exists($child, self::$commonSubresource)) {
-                $processor = self::$specSubresource[$child];
-                //$this->$processor($request);
-                call_user_func(array($this, self::$commonSubresource[$child]), $request);
+                $request = call_user_func(array($this, self::$commonSubresource[$child]), $request);
             }
         }
     }
@@ -97,6 +93,7 @@ trait PathProcess
             default:
                 break;
         }
+        return $request;
     }
 
     public function notificationsProc(array &$request)
@@ -138,6 +135,7 @@ trait PathProcess
             default:
                 break;
         }
+        return $request;
     }
 
     public function identityProc(array &$request)
@@ -170,6 +168,7 @@ trait PathProcess
             default:
                 break;
         }
+        return $request;
     }
 
     public function objectBoundsProc(array &$request)
@@ -211,6 +210,7 @@ trait PathProcess
             default:
                 break;
         }
+        return $request;
     }
 
     public function prevProc(array &$request)
@@ -244,6 +244,7 @@ trait PathProcess
             default:
                 break;
         }
+        return $request;
     }
 
     public function nextProc(array &$request)
@@ -277,6 +278,7 @@ trait PathProcess
             default:
                 break;
         }
+        return $request;
     }
 
     private static $classCommonSubresource = array('notifications' => 'commonNotificationsProc',
@@ -295,7 +297,7 @@ trait PathProcess
         }
         if (!$result) {
             if (array_key_exists($classChild, self::$classCommonSubresource)) {
-                $result = __CLASS__ . '::' . self::$classCommonSubresource[$classChild];
+                $result = self::$classCommonSubresource[$classChild];
             }
         }
         return $result;
@@ -340,6 +342,7 @@ trait PathProcess
             default:
                 break;
         }
+        return $request;
     }
 
     private static function parseStatisticsInfo(array &$paths)
@@ -394,6 +397,7 @@ trait PathProcess
             default:
                 break;
         }
+        return $request;
     }
 
     public static function commonByMapProc(array &$request)
@@ -430,6 +434,7 @@ trait PathProcess
             default:
                 break;
         }
+        return $request;
     }
 
 }

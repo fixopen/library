@@ -12,7 +12,10 @@ class devices
         PathProcess,
         Session,
         NormalFacadeImpl,
-        Facade;
+        Facade {
+        DataAccess::IsPrimaryKey as isPrimary;
+        JSON::ToJson as privateToJson;
+    }
 
     private $no = ''; //sn
     private $address = '';
@@ -21,6 +24,12 @@ class devices
     private $lastUpdateTime = NULL;
     private $controlNo = '';
     private $controlPassword = '';
+    private $sessionId = NULL;
+
+    public static function IsPrimaryKey($no)
+    {
+        return self::GetOne('no', $no);
+    }
 
     public function getNo()
     {
@@ -90,6 +99,16 @@ class devices
     public function setControlPassword($controlPassword)
     {
         $this->controlPassword = $controlPassword;
+    }
+
+    public function getSessionId()
+    {
+        return $this->sessionId;
+    }
+
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
     }
 
 }

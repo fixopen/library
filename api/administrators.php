@@ -17,9 +17,15 @@ class administrators
         JSON::ToJson as privateToJson;
     }
 
+    public static function IsPrimaryKey($name)
+    {
+        return self::GetOne('name', $name);
+    }
+
     private $name = ''; //character varying(32),
     private $password = ''; //character varying(64),
     private $lastOperationTime = NULL;
+    private $sessionId = NULL;
 
     public function getName()
     {
@@ -49,6 +55,16 @@ class administrators
     public function setLastOperationTime($lastOperationTime)
     {
         $this->lastOperationTime = $lastOperationTime;
+    }
+
+    public function getSessionId()
+    {
+        return $this->sessionId;
+    }
+
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
     }
 
 }
