@@ -147,7 +147,7 @@ g.getTemplate = function (type) {
     return result
 }
 
-g.ajaxProcess = function (method, url, data, postProcess) {
+g.ajaxProcess = function (method, url, data, postProcess, headers) {
     if (!postProcess) {
         postProcess = data
         data = null
@@ -165,6 +165,9 @@ g.ajaxProcess = function (method, url, data, postProcess) {
         }
     }
     xhr.open(method, url, false)
+    for (var i = 0, c = headers.length; i < c; ++i) {
+        xhr.setRequestHeader(headers[i].name, headers[i].value)
+    }
     var sendContent = null
     if (data != null) {
         sendContent = JSON.stringify(data)
@@ -244,24 +247,24 @@ g.uploader = {
     }
 }
 
-g.getData = function (url, postProcess) {
-    g.ajaxProcess('GET', url, postProcess)
+g.getData = function (url, postProcess, headers) {
+    g.ajaxProcess('GET', url, postProcess, headers)
 }
 
-g.putData = function (url, data, postProcess) {
-    g.ajaxProcess('PUT', url, data, postProcess)
+g.putData = function (url, data, postProcess, headers) {
+    g.ajaxProcess('PUT', url, data, postProcess, headers)
 }
 
-g.patchData = function (url, data, postProcess) {
-    g.ajaxProcess('PATCH', url, data, postProcess)
+g.patchData = function (url, data, postProcess, headers) {
+    g.ajaxProcess('PATCH', url, data, postProcess, headers)
 }
 
-g.postData = function (url, data, postProcess) {
-    g.ajaxProcess('POST', url, data, postProcess)
+g.postData = function (url, data, postProcess, headers) {
+    g.ajaxProcess('POST', url, data, postProcess, headers)
 }
 
-g.deleteData = function (url, postProcess) {
-    g.ajaxProcess('DELETE', url, postProcess)
+g.deleteData = function (url, postProcess, headers) {
+    g.ajaxProcess('DELETE', url, postProcess, headers)
 }
 
 g.bind = function (element, data) {

@@ -68,6 +68,9 @@ trait DataAccess
                 case 'char':
                     $result = "'" . $v . "'";
                     break;
+                case 'timestamp':
+                    $result = "TIMESTAMP '" . $v . "'";
+                    break;
             }
         }
         return $result;
