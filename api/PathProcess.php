@@ -347,19 +347,21 @@ trait PathProcess
 
     private static function parseStatisticsInfo(array &$paths)
     {
+        $result = array();
         if (!empty($paths)) {
             $first = \array_shift($paths);
             if (!empty($paths)) {
-                $request['response']['method'] = \array_shift($paths);
-                $request['response']['item'] = $first;
-                $request['response']['stats'] = $request['response']['method'] . '(' . $first . ')';
+                $result['method'] = \array_shift($paths);
+                $result['item'] = $first;
+                $result['stats'] = $result['method'] . '(' . $first . ')';
             } else {
                 if ($first == 'count') {
-                    $request['response']['stats'] = 'count(*)';
-                    $request['response']['method'] = $first;
+                    $result['stats'] = 'count(*)';
+                    $result['method'] = $first;
                 }
             }
         }
+        return $result;
     }
 
     public static function commonStatisticsProc(array &$request)

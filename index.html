@@ -7,7 +7,7 @@
 <body>
 RequestLine:
 <div id="requestLine">
-    Method:
+    <label for="method">Method:</label>
     <select id="method" name="method">
         <option lable="GET" value="GET" selected>GET</option>
         <option lable="POST" value="POST">POST</option>
@@ -19,18 +19,15 @@ RequestLine:
         <option lable="TRACE" value="TRACE" disabled>TRACE</option>
         <option lable="CONNECT" value="CONNECT" disabled>CONNECT</option>
     </select>
-    URI:
-    <input type="text" id="uri" name="uri" size="36"/><br />
+    <label for="uri">URI:</label><input type="text" id="uri" name="uri" size="36"/><br />
     QueryString:
     <div id="queryString">
         Filter:
         <input type="text" id="rawFilter" name="rawFilter"/>
         <button id="convertFilter" name="convertFilter" value="=&gt;">=&gt;</button>
         <input type="text" id="filter" name="filter"/>
-        Offset:
-        <input type="text" id="offset" name="offset" size="5"/>
-        Count:
-        <input type="text" id="count" name="count" size="5"/>
+        <label for="offset">Offset:</label><input type="text" id="offset" name="offset" size="5"/>
+        <label for="count">Count:</label><input type="text" id="count" name="count" size="5"/>
         OrderBy:
         <input type="text" id="rawOrderBy" name="rawOrderBy"/>
         <button id="convertOrderBy" name="convertOrderBy" value="=&gt;">=&gt;</button>
@@ -223,8 +220,7 @@ Body:
                 //void setRequestHeader(DOMString header, DOMString value);
             }
         }
-        var chi = currentHeaderIndex
-        for (var i = 1; i < chi + 1; ++i) {
+        for (var i = 1; i < currentHeaderIndex + 1; ++i) {
             var name = doc.getElementById('headerName' + i)
             var value = doc.getElementById('headerValue' + i)
             xhr.setRequestHeader(name.value, value.value)
