@@ -67,7 +67,9 @@ trait Facade
                         if ($childObject) {
                             switch ($request['method']) {
                                 case 'POST':
+                                    //print 'resource exist<br />';
                                     $request['response']['code'] = 400; //bad request, resource exist
+                                    $request['response']['body'] = '{"state": "resource has exist"}';
                                     break;
                                 case 'PUT':
                                     self::SingleUpdate($request, $childObject);
