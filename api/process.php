@@ -121,7 +121,7 @@ function testBed()
     //$m = new Model('nullTable', array('name', 'description'));
     //$m->iteratorThis();
     //var_dump($m);
-    //print 'hello, world<br />';
+    print 'hello, world<br />';
 }
 
 date_default_timezone_set('UTC');

@@ -105,7 +105,7 @@ trait Facade
                     if ($childObject) {
                         $grandson = array_shift($request['paths']);
                         $childObject->ObjectChildrenProcess($grandson, $request);
-                        print_r($request);
+                        //print_r($request);
                     } else {
                         //print 'error';
                         $classChildrenProcess = self::GetClassChildrenProcess($child);
