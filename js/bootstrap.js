@@ -1928,7 +1928,7 @@ if (typeof jQuery === 'undefined') {
             element.addClass('active')
 
             if (transition) {
-                element[0].offsetWidth // reflow for transition
+                //element[0].offsetWidth // reflow for transition
                 element.addClass('in')
             } else {
                 element.removeClass('fade')

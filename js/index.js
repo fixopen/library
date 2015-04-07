@@ -4,6 +4,7 @@
 
 window.addEventListener('load', function(e) {
     var data = {}
+    var genericHeaders = [{'name': 'Content-Type', 'value': 'application/json'}, {'name': 'Accept', 'value': 'application/json'}]
     var doc = document
     var mainContainer = doc.getElementById('mainContainer')
     var firstPage = doc.getElementById('firstPage')
@@ -13,7 +14,7 @@ window.addEventListener('load', function(e) {
         if (!data.baseInfo) {
             g.getData('/api/baseInfo', function(d) {
                 data.baseInfo = d
-            }, [{'name': 'Content-Type', 'value': 'application/json'}, {'name': 'Accept', 'value': 'application/json'}])
+            }, genericHeaders)
         }
         g.bind(firstPageContent, data.baseInfo)
         mainContainer.appendChild(firstPageContent)
@@ -38,9 +39,30 @@ window.addEventListener('load', function(e) {
         var table = doc.getElementById('tableFramework').content.cloneNode(true)
         var header = doc.getElementById('bookItemHeader').content.cloneNode(true)
         table.querySelector('#header').appendChild(header)
-        var body = doc.getElementById('bookItem').content.cloneNode(true)
-        table.querySelector('#body').appendChild(body)
-        mainContainer.appendChild(table)
+        var tableBody = table.querySelector('#body')
+        //load data
+        if (!data.books) {
+            data.books = {}
+            data.books.currentPage = 1
+            g.getData('/api/books/statistics/count', function(d) {
+                data.books.total = d
+            }, genericHeaders)
+            g.getData('/api/books', function(d) {
+                data.books.content = d
+            }, genericHeaders)
+        }
+        //render
+        for (var i = 0, c = data.books.total; i < c; ++i) {
+            var body = doc.getElementById('bookItem').content.cloneNode(true)
+            g.bind(body, data.books.content[i])
+            tableBody.appendChild(body)
+        }
+        var handler = function(pageNo) {
+            //loadData(pageNo)
+            //render()
+        }
+        g.renderPageNavigator('pageIndex', 20, data.books.currentPage, data.books.total, handler)
+        mainContainer.appendChild(tableBody)
     }, false)
     var deviceList = doc.getElementById('deviceList')
     deviceList.addEventListener('click', function(event) {

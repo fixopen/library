@@ -35,7 +35,7 @@ g.getTreeNode = function (item, data, compareFn) {
 
 g.convertToTree = function (root, data, compareFn) {
     var nodes = g.buildTreeData(data, compareFn)
-    var treeData = [
+    return [
         {
             id: root.id,
             text: root.name,
@@ -44,7 +44,6 @@ g.convertToTree = function (root, data, compareFn) {
             isRoot: true
         }
     ]
-    return treeData
 }
 
 //查询children中最大的order
@@ -106,6 +105,7 @@ g.renderTree = function(treeData, treeViewId, menuId) {
                 } else {
                     data.parentId = null
                 }
+                var lb = null
                 if(point == "top") {
                     data.order = node.tag.order
                     g.patchData('/api/catalogs/' + data.id, data, function (result) {
@@ -118,7 +118,7 @@ g.renderTree = function(treeData, treeViewId, menuId) {
                         }
                     })
                     //parentId = n AND order > m UPDATE order = order + 1
-                    var lb = g.findLitterBrother(nodeParent.children, node.tag.order)
+                    lb = g.findLitterBrother(nodeParent.children, node.tag.order)
                     for (var i = 0, c = lb.length; i < c; ++i) {
                         lb[i].tag.order++;
                         g.patchData('/api/catalogs/' + lb[i].tag.id, lb[i].tag, function (result) {
@@ -132,7 +132,7 @@ g.renderTree = function(treeData, treeViewId, menuId) {
                         if (result.state == 200) {
                         }
                     })
-                    var lb = g.findLitterBrother(nodeParent.children, node.tag.order)
+                    lb = g.findLitterBrother(nodeParent.children, node.tag.order)
                     for (var i = 0, c = lb.length; i < c; ++i) {
                         lb[i].tag.order++;
                         g.patchData('/api/catalogs/' + lb[i].tag.id, lb[i].tag, function (result) {
@@ -179,12 +179,14 @@ g.registerTreeMenuHandler = function(treeViewId) {
     }, false)
     var collapse = doc.getElementById('collapseItem')
     collapse.addEventListener('click', function(e) {
-        var node = $('#' + treeViewId).tree('getSelected')
-        $('#' + treeViewId).tree('collapse', node.target)
+        var treeRoot = $('#' + treeViewId)
+        var node = treeRoot.tree('getSelected')
+        treeRoot.tree('collapse', node.target)
     }, false)
     var expand = doc.getElementById('expandItem')
     expand.addEventListener('click', function(e) {
-        var node = $('#' + treeViewId).tree('getSelected')
-        $('#' + treeViewId).tree('expand', node.target)
+        var treeRoot = $('#' + treeViewId)
+        var node = treeRoot.tree('getSelected')
+        treeRoot.tree('expand', node.target)
     }, false)
 }

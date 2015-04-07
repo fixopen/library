@@ -23,8 +23,9 @@ window.addEventListener('load', function (e) {
                     alert('请输入名称')
                     return
                 }
+                var data = null
                 if (templateInfo.editFlag == 0) {
-                    var data = {
+                    data = {
                         caption: title,
                         parentId: parentId,
                         bookId: templateInfo.bookId,
@@ -46,7 +47,7 @@ window.addEventListener('load', function (e) {
                         }
                     })
                 } else {
-                    var data = node.tag
+                    data = node.tag
                     data.caption = title
                     if (data.parent && data.parent.id)
                         data.parentId = data.parent.id
@@ -76,7 +77,7 @@ window.addEventListener('load', function (e) {
             g.deleteData('/api/users/me/sessions/' + sessionId, function(r) {
                 location.href = 'login.html'
             })
-            g.getData('/api/users/me/sessions/' + sessionId, function(r) {
+            g.getData('/api/users/me/sessions/' + sessionId, function(rd) {
                 //
             })
         }, false)

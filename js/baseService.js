@@ -639,7 +639,7 @@ g.ProgressController = function (id, steps) {
 $.fn.serializeJson = function () {
     var serializeObj = {}
     var array = this.serializeArray()
-    var str = this.serialize()
+    //var str = this.serialize()
     $(array).each(function () {
         if (serializeObj[this.name]) {
             if ($.isArray(serializeObj[this.name])) {
@@ -689,7 +689,7 @@ g.navigateByType = function (type) {
     location.replace(url)
 }
 
-g.search = function (evt) {
+g.search = function (e) {
     var key = document.getElementById('searchKey').value
     if (key) {
         location.href = 'resource-search.html?caption=' + encodeURIComponent(key)
@@ -713,11 +713,12 @@ g.renderPageNavigator = function (id, pageSize, currentPage, total, handler) {
     var pageIndexContainer = document.getElementById(id)
     pageIndexContainer.innerHTML = ''
 
-    var firstItemTemplate = g.getTemplate('first-page')
+    var c = document.getElementById('pageIndexTemplate')
+    var firstItemTemplate = c.querySelector('.first-page')
     var firstItem = g.dataToElement({}, firstItemTemplate);
     pageIndexContainer.appendChild(firstItem)
 
-    var itemTemplate = g.getTemplate('page-item')
+    var itemTemplate = c.querySelector('.page-item')
     var totalPage = Math.ceil(total / pageSize)
     var beginPageNo = 1
     if (currentPage > 5) {
@@ -732,24 +733,21 @@ g.renderPageNavigator = function (id, pageSize, currentPage, total, handler) {
     }
     var endPageNo = beginPageNo + 9
     for (var i = beginPageNo; i <= Math.min(endPageNo, totalPage); ++i) {
-        var data = {
-            pn: i
-        }
-        var item = g.dataToElement(data, itemTemplate)
+        var item = g.dataToElement({pageno: i}, itemTemplate)
         if (i == currentPage) {
             item.className = 'active'
         }
         pageIndexContainer.appendChild(item)
     }
 
-    var lastItemTemplate = g.getTemplate('last-page')
-    var lastItem = g.dataToElement({pn: totalPage}, lastItemTemplate)
+    var lastItemTemplate = c.querySelector('.last-page')
+    var lastItem = g.dataToElement({pageno: totalPage}, lastItemTemplate)
     pageIndexContainer.appendChild(lastItem)
 
     var anchors = pageIndexContainer.querySelectorAll('a')
     for (var i = 0, c = anchors.length; i < c; ++i) {
         anchors.item(i).addEventListener('click', function (e) {
-            var pageNo = e.target.attributes['data-pageNo'].value
+            var pageNo = e.target.attributes['data-pageno'].value
             handler(pageNo)
         })
     }
@@ -883,7 +881,7 @@ g.getFileIcon = function (file) {
     }
 }
 
-function loadRes(pn) {
+g.loadRes = function (pn) {
     if (!pn)
         pn = 1;
     var filter = {}
@@ -906,8 +904,8 @@ function loadRes(pn) {
             url += '&' + filterString
             g.getData(url, function (result2) {
                 if (result2.state == 200) {
-                    _resources = result2.data
-                    render(result2.data, total, pn);
+                    //var _resources = result2.data
+                    //render(result2.data, total, pn);
                 }
             });
         }
@@ -1079,7 +1077,8 @@ g.parseRef = function(data) {
 				if (propertyValue['$ref']) {
 					var now = part
 					var ref = propertyValue['$ref']
-					while (true) {
+                    var len = -1
+                    while (true) {
 						var chr = ref[0]
 						ref = ref.substr(1)
 						switch (chr) {
@@ -1087,7 +1086,7 @@ g.parseRef = function(data) {
 							now = part
 							break
 						case '[':
-                            var len = ref.indexOf(']')
+                            len = ref.indexOf(']')
                             var index = ref.substr(0, len)
                             now = now[index]
                             ref = ref.substr(len + 1)
@@ -1095,7 +1094,7 @@ g.parseRef = function(data) {
 						case '.':
                             var dotLen = ref.indexOf('.')
                             var squareLen = ref.indexOf('[')
-                            var len = dotLen < squareLen ? dotLen : squareLen
+                            len = dotLen < squareLen ? dotLen : squareLen
                             if (len == -1) {
                                 now = now[ref]
                                 ref = ''

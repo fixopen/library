@@ -58,14 +58,14 @@
     用户总数：394857名
 </template>
 <template id="bookFilter">
-    出 版 社:<input id="publisher" />
-    I S B N:<input id="isbn" /><br />
-    图书名称:<input id="bookName" />
-    图书 ID:<input id="bookId" /><br />
-    书库分类:<input id="bookClassifier" />
-    中图分类:<input id="bookStandardClassifier" /><br />
-    作者名称:<input id="author" />
-    上下架状态:<input id="bookState" />
+    <label for="publisher">出 版 社:</label><input id="publisher" />
+    <label for="isbn">I S B N:</label><input id="isbn" /><br />
+    <label for="bookName">图书名称:</label><input id="bookName" />
+    <label for="bookId">图书 ID:</label><input id="bookId" /><br />
+    <label for="bookClassifier">书库分类:</label><input id="bookClassifier" />
+    <label for="bookStandardClassifier">中图分类:</label><input id="bookStandardClassifier" /><br />
+    <label for="author">作者名称:</label><input id="author" />
+    <label for="bookState">上下架状态:</label><input id="bookState" />
 </template>
 <template id="tableFramework">
     <table border="1">
@@ -98,17 +98,17 @@
         <td>${ISBN}</td>
         <td>${state}</td>
         <td>
-            图书借阅详情 下架
+            <button>图书借阅详情</button><button>下架</button><button>删除</button>
         </td>
     </tr>
 </template>
 <template id="deviceFilter">
-    编号:<input id="deviceNo" />
-    借阅机位置:<input id="deviceAddress" /><br />
-    借阅机ID:<input id="deviceId" />
-    借阅机IP:<input id="deviceIp" /><br />
-    安装时间:<input id="setupTime" />
-    状态:<input id="deviceState" />
+    <label for="deviceNo">编号:</label><input id="deviceNo" />
+    <label for="deviceAddress">借阅机位置:</label><input id="deviceAddress" /><br />
+    <label for="deviceId">借阅机ID:</label><input id="deviceId" />
+    <label for="deviceIp">借阅机IP:</label><input id="deviceIp" /><br />
+    <label for="setupTime">安装时间:</label><input id="setupTime" />
+    <label for="deviceState">状态:</label><input id="deviceState" />
 </template>
 <template id="deviceItemHeader">
     <tr>
@@ -134,14 +134,14 @@
         <td>${controllerPassword}</td>
         <td>${state}</td>
         <td>
-            图书借阅详情
+            <button>图书借阅详情</button>
         </td>
     </tr>
 </template>
 <template id="userFilter">
-    用户编号:<input id="userNo" /><br />
-    注册时间:从<input id="registerStartTime" />到<input id="registerStopTime" /><br />
-    状态:<input id="userState" />
+    <label for="userNo">用户编号:</label><input id="userNo" /><br />
+    注册时间:<label for="registerStartTime">从</label><input id="registerStartTime" /><label for="registerStopTime">到</label><input id="registerStopTime" /><br />
+    <label for="userState">状态:</label><input id="userState" />
 </template>
 <template id="userItemHeader">
     <tr>
@@ -159,14 +159,14 @@
         <td>${registerTime}</td>
         <td>${state}</td>
         <td>
-            图书借阅详情
+            <button>图书借阅详情</button>
         </td>
     </tr>
 </template>
 <template id="pageIndexTemplate">
-    <li class="first-page"><a href="javascript:void(0)" pn="1">&laquo;</a></li>
-    <li class="page-item"><a href="javascript:void(0)" pn="${pn}">${pn}</a></li>
-    <li class="last-page"><a href="javascript:void(0)" pn="${pn}">&raquo;</a></li>
+    <li class="first-page"><a href="javascript:void(0)" data-pageNo="1">&laquo;</a></li>
+    <li class="page-item"><a href="javascript:void(0)" data-pageno="${pageno}">${pageno}</a></li>
+    <li class="last-page"><a href="javascript:void(0)" data-pageno="${pageno}">&raquo;</a></li>
 </template>
 <template id="statsContent">
     <table border="1">
@@ -174,9 +174,9 @@
         <tr>
             <th>图书编号</th>
             <th>图书名称</th>
-            <th>关注数量</th>
-            <th>阅读数量</th>
-            <th>下载数量</th>
+            <th>关注数量<button>Up\Down</button></th>
+            <th>阅读数量<button>Up\Down</button></th>
+            <th>下载数量<button>Up\Down</button></th>
         </tr>
         </thead>
         <tbody>
