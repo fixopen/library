@@ -8,48 +8,19 @@
  */
 class Model
 {
+
     private static $tableName;
     private static $types = array();
-
-    private static function Mark($n)
-    {
-        //return '`' . $n . '`';
-        return '"' . $n . '"';
-    }
-
-    private static function DatabaseQuote($v, $type)
-    {
-        $result = '';
-        if (is_null($v)) {
-            $result = 'NULL';
-        } else {
-            switch ($type) {
-                case 'varchar':
-                case 'text':
-                case 'char':
-                case 'bpchar':
-                    $result = "'" . $v . "'";
-                    break;
-                case 'int2':
-                case 'int4':
-                case 'int8':
-                case 'float4':
-                case 'float8':
-                    $result = $v;
-                    break;
-            }
-        }
-        return $result;
-    }
 
     public static function GetTableType()
     {
         if (count(self::$types) == 0) {
-            $r = Database::GetInstance()->query('SELECT * FROM ' . self::Mark(self::$tableName) . ' LIMIT 1', PDO::FETCH_ASSOC);
+            $r = Data::GetInstance()->query('SELECT * FROM ' . self::Mark(self::$tableName) . ' LIMIT 1', PDO::FETCH_ASSOC);
             if ($r) {
                 $columnCount = $r->columnCount();
                 for ($i = 0; $i < $columnCount; ++$i) {
                     $metaInfo = $r->getColumnMeta($i);
+                    //var_dump($metaInfo); len precision pdo_type pgsql:oid
                     self::$types[$metaInfo['name']] = $metaInfo['native_type'];
                 }
             }
@@ -60,6 +31,212 @@ class Model
     {
         self::$tableName = $tableName;
         self::GetTableType();
+    }
+
+    private static function Mark($n)
+    {
+        //return '`' . $n . '`';
+        return '"' . $n . '"';
+    }
+
+    public static function GetTypeByName($columnName) {
+        $result = FALSE;
+        self::GetTableType();
+        if (array_key_exists($columnName, self::$types)) {
+            $result = self::$types[$columnName];
+        }
+        return $result;
+    }
+
+    private static function GetMarkedColumnNames() {
+        $result = array();
+        self::GetTableType();
+        //print_r(self::$types);
+        foreach (self::$types as $key => $typeName) {
+            $result[] = self::Mark($key);
+        }
+        return $result;
+    }
+
+    private static function DatabaseQuote($v, $type)
+    {
+        $result = '';
+        if (is_null($v)) {
+            $result = 'NULL';
+        } else {
+            switch ($type) {
+                case 'varchar': //char with max length
+                case 'bpchar': //blank padding char with length
+                case 'text': //any char
+                case 'char': //one char
+                case 'name': //64 char
+                    $result = "'" . $v . "'";
+                    break;
+                case 'int2': //smallint smallserial
+                case 'int4': //integer serial
+                case 'int8': //bigint bigserial
+                case 'float4': //real
+                case 'float8': //double precision
+                    $result = $v;
+                    break;
+                case 'bool':
+                    $result = $v ? 'TRUE' : 'FALSE';
+                    break;
+                case 'cidr':
+                case 'inet':
+                case 'macaddr':
+                    $result = $v;
+                    break;
+                case 'timestamp':
+                    $result = "TIMESTAMP '" . $v . "'";
+                    break;
+            }
+        }
+        return $result;
+    }
+
+    private function GetNameValues() {
+        $result = array();
+        self::GetTableType(self::$tableName);
+        foreach (self::$types as $key => $typeName) {
+            //if (array_key_exists($key, (array)$this)) {
+            $result[self::Mark($key)] = self::DatabaseQuote($this->$key, $typeName);
+            //}
+        }
+        return $result;
+    }
+
+    public function GetSetItems() {
+        $result = array();
+        $nameValues = $this->GetNameValues();
+        foreach ($nameValues as $name => $value) {
+            $result[] = $name . ' = ' . $value;
+        }
+        return $result;
+    }
+
+    public function FillSelfByRow($row)
+    {
+        foreach (self::$types as $key => $typeName) {
+            $value = $row[$key];
+            if ($value != NULL) {
+                switch ($typeName) {
+                    case 'int2':
+                    case 'int4':
+                    case 'int8':
+                        $value = intval($value);
+                        break;
+                    case 'float4': //real
+                    case 'float8': //double precision
+                        $value = floatval($value);
+                        break;
+                }
+            }
+            $this->$key = $value;
+        }
+    }
+
+    private static function GetOneData($query, $className) {
+        $result = FALSE;
+        $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
+        if ($r) {
+            foreach ($r as $row) {
+                $item = new $className;
+                $item->FillSelfByRow($row);
+                $result = $item;
+                break;
+            }
+        }
+        return $result;
+    }
+
+    private static function GetData($query, $className) {
+        $result = array();
+        $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
+        if ($r) {
+            foreach ($r as $row) {
+                $item = new $className;
+                $item->FillSelfByRow($row);
+                $result[] = $item;
+            }
+        }
+        return $result;
+    }
+
+    private static function JsonMark($n)
+    {
+        return '"' . $n . '"';
+    }
+
+    private static function JsonQuote($v, $type)
+    {
+        $result = '';
+        if (is_null($v)) {
+            $result = 'null';
+        } else {
+            if ($type) {
+                switch ($type) {
+                    case 'varchar': //char with max length
+                    case 'bpchar': //blank padding char with length
+                    case 'text': //any char
+                    case 'char': //one char
+                    case 'name': //64 char
+                        $result = '"' . $v . '"';
+                        break;
+                    case 'int2': //smallint smallserial
+                    case 'int4': //integer serial
+                    case 'int8': //bigint bigserial
+                    case 'float4': //real
+                    case 'float8': //double precision
+                    case 'numeric':
+                    case 'money':
+                        $result = $v;
+                        break;
+                    case 'bool':
+                        $result = $v ? 'true' : 'false';
+                        break;
+                }
+            }
+        }
+        return $result;
+    }
+
+    public function FillSelfByJson($json)
+    {
+        foreach ($json as $key => $value) {
+            $value = $json[$key];
+            if ($value != NULL) {
+                $type = self::GetTypeByName($key);
+                if ($type) {
+                    switch ($type) {
+                        case 'int2':
+                        case 'int4':
+                        case 'int8':
+                            $value = intval($value);
+                            break;
+                        case 'float4': //real
+                        case 'float8': //double precision
+                            $value = floatval($value);
+                            break;
+                    }
+                }
+            }
+            $this->$key = $value;
+        }
+    }
+
+    public function ToJson()
+    {
+        $fields = array();
+        foreach (self::$types as $key => $type) {
+            $fields[] = self::JsonMark($key) . ': ' . self::JsonQuote($this->$key, $type);
+        }
+        return '{' . implode(', ', $fields) . '}';
+    }
+
+    public function ConvertToJson()
+    {
+        return json_encode($this);
     }
 
     public function __construct()
@@ -135,22 +312,22 @@ c44 integer, int4
 c45 integer[], _int4
 c46 interval, interval
 c47 interval(6)[], _interval
-c48 json,
-c49 json[],
-c50 line,
-c51 line[],
-c52 lseg,
-c53 lseg[],
-c54 macaddr,
-c55 macaddr[],
-c56 money,
-c57 macaddr[],
-c58 name,
-c59 name[],
-c60 numeric(8,4),
-c61 numeric(8,4)[],
-c62 numrange,
-c63 numrange[],
+c48 json, json
+c49 json[], _json
+c50 line, line
+c51 line[], _line
+c52 lseg, lseg
+c53 lseg[], _lseg
+c54 macaddr, macaddr
+c55 macaddr[], _macaddr
+c56 money, money
+c57 macaddr[], _macaddr
+c58 name, name
+c59 name[], _name
+c60 numeric(8,4), numeric
+c61 numeric(8,4)[], _numeric
+c62 numrange, numrange
+c63 numrange[], _numrange
 c64 oid,
 c65 oid[],
 c66 oidvector,
@@ -182,13 +359,13 @@ c91 regprocedure,
 c92 regprocedure[],
 c93 regtype,
 c94 regtype[],
-c95 reltime,
-c96 reltime[],
+c95 reltime, reltime
+c96 reltime[], _reltime
 c97 serial NOT NULL, int4
 c98 smallint, int2
 c100 smallserial NOT NULL, int2
 c101 smgr,
-c102 text,
+c102 text, text
 c104 tid,
 c105 tid[],
 c106 time(6) with time zone, timetz
@@ -208,12 +385,12 @@ c122 tsvector,
 c123 tsvector[],
 c124 txid_snapshot,
 c125 txid_snapshot[],
-c126 uuid,
-c127 uuid[],
-c129 xid,
-c130 xid[],
-c131 xml,
-c132 xml[],
+c126 uuid, uuid
+c127 uuid[], _uuid
+c129 xid, xid
+c130 xid[], _xid
+c131 xml, xml
+c132 xml[], _xml
 c133 calltype,
 c134 calltype[],
 c135 grouptype,
