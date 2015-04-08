@@ -5,6 +5,15 @@ class books
 
     private static $tableName = 'book';
 
+    public function getContent()
+    {
+        $ext = 'txt';
+        if ($this->mimeType == 'application/pdf') {
+            $ext = 'pdf';
+        }
+        return '/Library/WebServer/Documents/var/books/' . $this->getId() . '.' . $ext;
+    }
+
     use Permission,
         DataAccess,
         Statistics,
