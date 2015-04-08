@@ -121,11 +121,13 @@ function testBed()
     //$m = new Model('nullTable', array('name', 'description'));
     //$m->iteratorThis();
     //var_dump($m);
+    
     //print 'hello, world<br />';
-    include_once 'user.php';
-    user::Prepare();
-    $u = new user();
-    print $u->ToJson() . '<br />';
+
+    //include_once 'user.php';
+    //user::Prepare();
+    //$u = new user();
+    //print $u->ToJson() . '<br />';
 }
 
 date_default_timezone_set('UTC');
@@ -143,7 +145,7 @@ set_error_handler("error_function", E_WARNING);
 //《n》：number
 $request = QueryParser::ParseQuery();
 testBed();
-print_r($request);
+//print_r($request);
 $tableName = array_shift($request['paths']);
 $tableName::Process($request, NULL);
 writeResponse($request['response']);
