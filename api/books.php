@@ -5,6 +5,60 @@ class books
 
     private static $tableName = 'book';
 
+    private static $classSpecSubresource = array('updateSince' => 'updateSinceProc');
+
+    public static function updateSinceProc(array &$request)
+    {
+        $count = count($request['paths']);
+        switch ($request['method']) {
+            case 'POST':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'PUT':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'PATCH':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'GET':
+                if ($count == 1) {
+                    $time = array_shift($request['paths']);
+                    $where = ' WHERE ' . self::mark('lastUpdateTime') . ' > ' . $time . ' ORDER BY '  . self::mark('lastUpdateTime') . ' DESC ';
+                    $books = self::CustomSelect($where);
+                    $syncInfo = array();
+                    foreach ($books as $book) {
+                        $syncInfo[] = $book->toSyncJson();
+                    }
+                    $request['response']['body'] = '[' . implode(', ', $syncInfo) . ']';
+                } else {
+                    $request['response']['code'] = 400; //bad request
+                    $request['response']['body'] = '{"state": "must include [time] path segment"}';
+                }
+                break;
+            case 'DELETE':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            default:
+                break;
+        }
+        return $request;
+    }
+
+    public function toSyncJson()
+    {
+        $fields = array();
+        foreach ($this as $key => $value) {
+            if ($key == 'id' || $key == 'lastUpdateTime' || $key == 'authorizationEndTime') {
+                $fields[] = self::JsonMark($key) . ': ' . self::JsonQuote($value);
+            }
+        }
+        return '{' . implode(', ', $fields) . '}';
+    }
+
     public function getContent($type)
     {
         $ext = 'txt';
@@ -25,6 +79,8 @@ class books
         DataAccess,
         Statistics,
         JSON,
+        BinaryDownloader,
+        BinaryUploader,
         PathProcess,
         NormalFacadeImpl,
         Facade {

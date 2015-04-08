@@ -122,6 +122,10 @@ function testBed()
     //$m->iteratorThis();
     //var_dump($m);
     //print 'hello, world<br />';
+    include_once 'user.php';
+    user::Prepare();
+    $u = new user();
+    print $u->ToJson() . '<br />';
 }
 
 date_default_timezone_set('UTC');

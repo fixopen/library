@@ -322,7 +322,7 @@ trait Facade
             case 'POST':
             case 'PUT':
             case 'PATCH':
-                if (strpos($requestContentType, 'application/json') == 0) {
+                if (strpos($requestContentType, 'application/json') === 0) {
                     //binary uploader
                     self::binaryPush($request);
                 } else {
@@ -331,7 +331,7 @@ trait Facade
                 }
                 break;
             case 'GET':
-                if (strpos($acceptContentType, 'application/json') == 0) {
+                if (strpos($acceptContentType, 'application/json') === 0) {
                     //normal
                     self::normalPull($request);
                 } else {
@@ -340,7 +340,7 @@ trait Facade
                 }
                 break;
             case 'DELETE':
-                if (strpos($requestContentType, 'application/json') == 0) {
+                if (strpos($requestContentType, 'application/json') === 0) {
                     //normal delete
                     self::normalRemove($request);
                 } else {
