@@ -11,7 +11,9 @@ class books
         if ($this->mimeType == 'application/pdf') {
             $ext = 'pdf';
         }
-        return '/Library/WebServer/Documents/var/books/' . $this->getId() . '.' . $ext;
+        $prefix = 'C:/httpd-2.4.12-win64-VC11/Apache24/htdocs/Library/var/books/';
+        //$prefix = '/Library/WebServer/Documents/var/books/';
+        return $prefix . $this->getId() . '.' . $ext;
     }
 
     use Permission,
