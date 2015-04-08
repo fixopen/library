@@ -3,10 +3,10 @@
 trait BinaryDownloader
 {
 
-    public function download()
+    public function download($type)
     {
         //mime-type total-length file-name
-        $uri = $this->getContent();
+        $uri = $this->getContent($type);
         $filename = basename($uri);
         $file = fopen($filename, 'rb');
         fseek($file, 0, SEEK_END);
@@ -16,10 +16,10 @@ trait BinaryDownloader
         return $content;
     }
 
-    public function downloadSlice($offset, $count)
+    public function downloadSlice($type, $offset, $count)
     {
         //mime-type total-length file-name|file-uri start-position transfer-length
-        $uri = $this->getContent();
+        $uri = $this->getContent($type);
         //remove [scheme://host:port/path/]specPath/name.ext
         $filename = basename($uri);
         $file = fopen($filename, 'rb');

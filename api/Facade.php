@@ -202,18 +202,55 @@ trait Facade
 
                     }
                     if ($offset != -1 && $length != -1) {
-                        $request['response']['body'] = $childObject->downloadSlice($offset, $length);
+                        $request['response']['body'] = $childObject->downloadSlice('', $offset, $length);
                     } else {
-                        $request['response']['body'] = $childObject->download();
+                        $request['response']['body'] = $childObject->download('');
                     }
                 } else {
                     $request['response']['code'] = 400; //bad request
+                    $request['response']['body'] = '{"state": "resource not found"}';
                 }
                 break;
             case 2: //for books/{id}/cover
+                $child = array_shift($request['paths']);
+                $childObject = self::IsPrimaryKey($child);
+                if ($childObject) {
+                    $grandson = array_shift($request['paths']);
+                    if ($grandson == 'cover') {
+                        $offset = $request['params']['offset'];
+                        $length = $request['headers']['Content-Length'];
+                        $range = $request['headers']['Range'];
+                        if ($range) {
+                            //bytes=startPos-stopPos, ...
+                            $areas = explode(',', $range);
+                            foreach ($areas as $area) {
+                                $pair = explode('-', $area);
+                                if (count($pair) == 2) {
+                                    $startPos = intval($pair[0]);
+                                    $stopPos = intval($pair[1]);
+                                    $offset = $startPos;
+                                    $length = $stopPos - $startPos + 1;
+                                }
+                            }
+
+                        }
+                        if ($offset != -1 && $length != -1) {
+                            $request['response']['body'] = $childObject->downloadSlice('cover', $offset, $length);
+                        } else {
+                            $request['response']['body'] = $childObject->download('cover');
+                        }
+                    } else {
+                        $request['response']['code'] = 400; //bad request
+                        $request['response']['body'] = '{"state": "not recognize branch, must is [cover]"}';
+                    }
+                } else {
+                    $request['response']['code'] = 400; //bad request
+                    $request['response']['body'] = '{"state": "resource not found"}';
+                }
                 break;
             default:
                 $request['response']['code'] = 400; //bad request
+                $request['response']['body'] = '{"state": "path segment too much"}';
                 break;
         }
     }
@@ -226,18 +263,35 @@ trait Facade
                 $child = array_shift($request['paths']);
                 $childObject = self::IsPrimaryKey($child);
                 if ($childObject) {
-                    $offset = $request['params']['offset'];
-                    $length = $request['headers']['Content-Length'];
                     //delete the file
-                    $request['response']['code'] = 405; //method not allow
+                    unlink($childObject->getContent(''));
+                    //$request['response']['code'] = 405; //method not allow
                 } else {
                     $request['response']['code'] = 400; //bad request
+                    $request['response']['body'] = '{"state": "resource not found"}';
                 }
                 break;
             case 2: //for books/{id}/cover
+                $child = array_shift($request['paths']);
+                $childObject = self::IsPrimaryKey($child);
+                if ($childObject) {
+                    $grandson = array_shift($request['paths']);
+                    if ($grandson == 'cover') {
+                        //delete the file
+                        unlink($childObject->getContent('cover'));
+                        //$request['response']['code'] = 405; //method not allow
+                    } else {
+                        $request['response']['code'] = 400; //bad request
+                        $request['response']['body'] = '{"state": "not recognize branch, must is [cover]"}';
+                    }
+                } else {
+                    $request['response']['code'] = 400; //bad request
+                    $request['response']['body'] = '{"state": "resource not found"}';
+                }
                 break;
             default:
                 $request['response']['code'] = 400; //bad request
+                $request['response']['body'] = '{"state": "path segment too much"}';
                 break;
         }
     }
@@ -286,7 +340,7 @@ trait Facade
                 }
                 break;
             case 'DELETE':
-                if (strpos($acceptContentType, 'application/json') == 0) {
+                if (strpos($requestContentType, 'application/json') == 0) {
                     //normal delete
                     self::normalRemove($request);
                 } else {
