@@ -5,13 +5,18 @@ class books
 
     private static $tableName = 'book';
 
-    public function getContent()
+    public function getContent($type)
     {
         $ext = 'txt';
         if ($this->mimeType == 'application/pdf') {
             $ext = 'pdf';
         }
-        $prefix = 'C:/httpd-2.4.12-win64-VC11/Apache24/htdocs/Library/var/books/';
+        $base = 'C:/httpd-2.4.12-win64-VC11/Apache24/htdocs/Library/var/';
+        $prefix = $base . 'books/';
+        if ($type != '') {
+            $prefix = $base . $type . '/';
+            $ext = 'jpg';
+        }
         //$prefix = '/Library/WebServer/Documents/var/books/';
         return $prefix . $this->getId() . '.' . $ext;
     }

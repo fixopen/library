@@ -44,10 +44,10 @@ $_FILES['userfile']['error']
     The error code associated with this file upload.
     */
 
-    public function upload($fileContent)
+    public function upload($type, $fileContent)
     {
         //mime-type total-length file-name
-        $uri = $this->getContent();
+        $uri = $this->getContent($type);
         //remove [scheme://host:port/path/]specPath/name.ext
         //$filename = basename($uri);
         $filename = $uri;
@@ -56,10 +56,10 @@ $_FILES['userfile']['error']
         fclose($file);
     }
 
-    public function uploadSlice($fileContent, $offset, $count)
+    public function uploadSlice($type, $fileContent, $offset, $count)
     {
         //mime-type total-length file-name|file-uri start-position transfer-length
-        $uri = $this->getContent();
+        $uri = $this->getContent($type);
         //remove [scheme://host:port/path/]specPath/name.ext
         //$filename = basename($uri);
         $filename = $uri;

@@ -138,18 +138,40 @@ trait Facade
                     $offset = $request['params']['offset'];
                     $length = $request['headers']['Content-Length'];
                     if ($offset != -1 && $length != -1) {
-                        $childObject->uploadSlice($request['body'], $offset, $length);
+                        $childObject->uploadSlice('', $request['body'], $offset, $length);
                     } else {
-                        $childObject->upload($request['body']);
+                        $childObject->upload('', $request['body']);
                     }
                 } else {
                     $request['response']['code'] = 400; //bad request
+                    $request['response']['body'] = '{"state": "resource not found"}';
                 }
                 break;
             case 2: //for books/{id}/cover
+                $child = array_shift($request['paths']);
+                $childObject = self::IsPrimaryKey($child);
+                if ($childObject) {
+                    $grandson = array_shift($request['paths']);
+                    if ($grandson == 'cover') {
+                        $offset = $request['params']['offset'];
+                        $length = $request['headers']['Content-Length'];
+                        if ($offset != -1 && $length != -1) {
+                            $childObject->uploadSlice('cover', $request['body'], $offset, $length);
+                        } else {
+                            $childObject->upload('cover', $request['body']);
+                        }
+                    } else {
+                        $request['response']['code'] = 400; //bad request
+                        $request['response']['body'] = '{"state": "not recognize branch, must is [cover]"}';
+                    }
+                } else {
+                    $request['response']['code'] = 400; //bad request
+                    $request['response']['body'] = '{"state": "resource not found"}';
+                }
                 break;
             default:
                 $request['response']['code'] = 400; //bad request
+                $request['response']['body'] = '{"state": "path segment too much"}';
                 break;
         }
     }
