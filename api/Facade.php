@@ -323,11 +323,11 @@ trait Facade
             case 'PUT':
             case 'PATCH':
                 if (strpos($requestContentType, 'application/json') == 0) {
-                    //binary uploader
-                    self::binaryPush($request);
-                } else {
                     //normal
                     self::normalPush($request);
+                } else {
+                    //binary uploader
+                    self::binaryPush($request);
                 }
                 break;
             case 'GET':

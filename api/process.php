@@ -139,6 +139,7 @@ set_error_handler("error_function", E_WARNING);
 //《n》：number
 $request = QueryParser::ParseQuery();
 testBed();
+print_r($request);
 $tableName = array_shift($request['paths']);
 $tableName::Process($request, NULL);
 writeResponse($request['response']);
