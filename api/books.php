@@ -26,7 +26,7 @@ class books
             case 'GET':
                 if ($count == 1) {
                     $time = urldecode(array_shift($request['paths']));
-                    $where = ' WHERE ' . self::mark('lastUpdateTime') . ' > CAST ( \'' . $time . '\' AS TIMESTAMP WITHOUT TIME ZONE) ORDER BY '  . self::mark('lastUpdateTime') . ' DESC ';
+                    $where = ' WHERE ' . self::mark('lastUpdateTime') . ' > CAST ( \'' . $time . '\' AS TIMESTAMP WITHOUT TIME ZONE) ORDER BY '  . self::mark('lastUpdateTime') . ' ASC ';
                     $books = self::CustomSelect($where);
                     $syncInfo = array();
                     foreach ($books as $book) {

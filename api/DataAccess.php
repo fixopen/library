@@ -242,7 +242,7 @@ trait DataAccess
     public static function CustomSelect($whereClause)
     {
         $query = 'SELECT ' . implode(', ', self::GetMarkedColumnNames()) . ' FROM ' . self::Mark(self::$tableName) . $whereClause;
-        print $query . '<br />';
+        //print $query . '<br />';
         return self::GetData($query, __CLASS__);
     }
 
