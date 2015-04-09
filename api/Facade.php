@@ -210,7 +210,10 @@ trait Facade
                     if ($offset != -1 && $length != -1) {
                         $request['response']['body'] = $childObject->downloadSlice('', $offset, $length);
                     } else {
-                        $request['response']['body'] = $childObject->download('');
+                        $request['response']['headers']['Content-Type'] = $childObject->getMimeType();
+                        $c = $childObject->download('');
+                        $request['response']['headers']['Content-Length'] = $c['length'];
+                        $request['response']['body'] = $c['content'];
                     }
                 } else {
                     $request['response']['code'] = 400; //bad request
@@ -245,7 +248,10 @@ trait Facade
                         if ($offset != -1 && $length != -1) {
                             $request['response']['body'] = $childObject->downloadSlice('cover', $offset, $length);
                         } else {
-                            $request['response']['body'] = $childObject->download('cover');
+                            $request['response']['headers']['Content-Type'] = 'image/jpeg';
+                            $c = $childObject->download('cover');
+                            $request['response']['headers']['Content-Length'] = $c['length'];
+                            $request['response']['body'] = $c['content'];
                         }
                     } else {
                         $request['response']['code'] = 400; //bad request
