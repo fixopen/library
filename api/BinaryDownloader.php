@@ -7,7 +7,7 @@ trait BinaryDownloader
     {
         //mime-type total-length file-name
         $uri = $this->getContent($type);
-        $filename = basename($uri);
+        $filename = $uri; //basename($uri);
         $file = fopen($filename, 'rb');
         fseek($file, 0, SEEK_END);
         $length = ftell($file);
@@ -22,7 +22,7 @@ trait BinaryDownloader
         //mime-type total-length file-name|file-uri start-position transfer-length
         $uri = $this->getContent($type);
         //remove [scheme://host:port/path/]specPath/name.ext
-        $filename = basename($uri);
+        $filename = $uri; //basename($uri);
         $file = fopen($filename, 'rb');
         fseek($file, $offset);
         $content = fread($file, $count);
