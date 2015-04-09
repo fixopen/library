@@ -25,7 +25,7 @@ class books
                 break;
             case 'GET':
                 if ($count == 1) {
-                    $time = array_shift($request['paths']);
+                    $time = urldecode(array_shift($request['paths']));
                     $where = ' WHERE ' . self::mark('lastUpdateTime') . ' > ' . $time . ' ORDER BY '  . self::mark('lastUpdateTime') . ' DESC ';
                     $books = self::CustomSelect($where);
                     $syncInfo = array();

@@ -121,17 +121,17 @@ function testBed()
     //$m = new Model('nullTable', array('name', 'description'));
     //$m->iteratorThis();
     //var_dump($m);
-    
+
     //print 'hello, world<br />';
 
-    //include_once 'user.php';
-    //user::Prepare();
-    //$u = new user();
+    //include_once 'users.php';
+    //users::Prepare();
+    //$u = new users();
     //print $u->ToJson() . '<br />';
 }
 
-date_default_timezone_set('UTC');
-date_default_timezone_set("Asia/Chongqing");
+//date_default_timezone_set('UTC');
+date_default_timezone_set("Asia/Shanghai");
 //@@ini_set('session.save_path', '/var/tmp');
 //@@$sessionpath = session_save_path();
 //@@print $sessionpath . '<br />';
