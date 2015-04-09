@@ -11,9 +11,10 @@ trait BinaryDownloader
         $file = fopen($filename, 'rb');
         fseek($file, 0, SEEK_END);
         $length = ftell($file);
+        fseek($file, 0, SEEK_SET);
         $content = fread($file, $length);
         fclose($file);
-        return $content;
+        return array('length' => $length, 'content' => $content);
     }
 
     public function downloadSlice($type, $offset, $count)
