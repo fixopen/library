@@ -135,8 +135,10 @@ trait Facade
                 $child = array_shift($request['paths']);
                 $childObject = self::IsPrimaryKey($child);
                 if ($childObject) {
-                    $offset = $request['params']['offset'];
-                    $length = $request['headers']['Content-Length'];
+                    $offset = -1;
+                    $length = -1;
+//                    $offset = $request['params']['offset'];
+//                    $length = $request['headers']['Content-Length'];
                     if ($offset != -1 && $length != -1) {
                         $childObject->uploadSlice('', $request['body'], $offset, $length);
                     } else {
@@ -153,8 +155,10 @@ trait Facade
                 if ($childObject) {
                     $grandson = array_shift($request['paths']);
                     if ($grandson == 'cover') {
-                        $offset = $request['params']['offset'];
-                        $length = $request['headers']['Content-Length'];
+                        $offset = -1;
+                        $length = -1;
+//                        $offset = $request['params']['offset'];
+//                        $length = $request['headers']['Content-Length'];
                         if ($offset != -1 && $length != -1) {
                             $childObject->uploadSlice('cover', $request['body'], $offset, $length);
                         } else {
@@ -184,23 +188,25 @@ trait Facade
                 $child = array_shift($request['paths']);
                 $childObject = self::IsPrimaryKey($child);
                 if ($childObject) {
-                    $offset = $request['params']['offset'];
-                    $length = $request['headers']['Content-Length'];
-                    $range = $request['headers']['Range'];
-                    if ($range) {
-                        //bytes=startPos-stopPos, ...
-                        $areas = explode(',', $range);
-                        foreach ($areas as $area) {
-                            $pair = explode('-', $area);
-                            if (count($pair) == 2) {
-                                $startPos = intval($pair[0]);
-                                $stopPos = intval($pair[1]);
-                                $offset = $startPos;
-                                $length = $stopPos - $startPos + 1;
-                            }
-                        }
-
-                    }
+                    $offset = -1;
+                    $length = -1;
+//                    $offset = $request['params']['offset'];
+//                    $length = $request['headers']['Content-Length'];
+//                    $range = $request['headers']['Range'];
+//                    if ($range) {
+//                        //bytes=startPos-stopPos, ...
+//                        $areas = explode(',', $range);
+//                        foreach ($areas as $area) {
+//                            $pair = explode('-', $area);
+//                            if (count($pair) == 2) {
+//                                $startPos = intval($pair[0]);
+//                                $stopPos = intval($pair[1]);
+//                                $offset = $startPos;
+//                                $length = $stopPos - $startPos + 1;
+//                            }
+//                        }
+//
+//                    }
                     if ($offset != -1 && $length != -1) {
                         $request['response']['body'] = $childObject->downloadSlice('', $offset, $length);
                     } else {
@@ -217,23 +223,25 @@ trait Facade
                 if ($childObject) {
                     $grandson = array_shift($request['paths']);
                     if ($grandson == 'cover') {
-                        $offset = $request['params']['offset'];
-                        $length = $request['headers']['Content-Length'];
-                        $range = $request['headers']['Range'];
-                        if ($range) {
-                            //bytes=startPos-stopPos, ...
-                            $areas = explode(',', $range);
-                            foreach ($areas as $area) {
-                                $pair = explode('-', $area);
-                                if (count($pair) == 2) {
-                                    $startPos = intval($pair[0]);
-                                    $stopPos = intval($pair[1]);
-                                    $offset = $startPos;
-                                    $length = $stopPos - $startPos + 1;
-                                }
-                            }
-
-                        }
+                        $offset = -1;
+                        $length = -1;
+//                        $offset = $request['params']['offset'];
+//                        $length = $request['headers']['Content-Length'];
+//                        $range = $request['headers']['Range'];
+//                        if ($range) {
+//                            //bytes=startPos-stopPos, ...
+//                            $areas = explode(',', $range);
+//                            foreach ($areas as $area) {
+//                                $pair = explode('-', $area);
+//                                if (count($pair) == 2) {
+//                                    $startPos = intval($pair[0]);
+//                                    $stopPos = intval($pair[1]);
+//                                    $offset = $startPos;
+//                                    $length = $stopPos - $startPos + 1;
+//                                }
+//                            }
+//
+//                        }
                         if ($offset != -1 && $length != -1) {
                             $request['response']['body'] = $childObject->downloadSlice('cover', $offset, $length);
                         } else {
