@@ -103,6 +103,7 @@ class books
     private $resourceId = ''; //bigint,
     private $lastUpdateTime = 'now'; //timestamp(4) without time zone,
     private $mimeType = '';
+    private $isBan = FALSE;
 
     public function getName()
     {
@@ -202,6 +203,7 @@ class books
     public function setAuthorizationEndTime($authorizationEndTime)
     {
         $this->authorizationEndTime = $authorizationEndTime;
+        $this->lastUpdateTime = 'now';
     }
 
     public function getKeywords()
@@ -262,6 +264,17 @@ class books
     public function setMimeType($mimeType)
     {
         $this->mimeType = $mimeType;
+    }
+
+    public function isIsBan()
+    {
+        return $this->isBan;
+    }
+
+    public function setIsBan($isBan)
+    {
+        $this->isBan = $isBan;
+        $this->lastUpdateTime = 'now';
     }
 
 }

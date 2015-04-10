@@ -71,6 +71,9 @@ trait DataAccess
                 case 'timestamp':
                     $result = "TIMESTAMP '" . $v . "'";
                     break;
+                case 'bool':
+                    $result = $v ? 'TRUE' : 'FALSE';
+                    break;
             }
         }
         return $result;
@@ -102,7 +105,7 @@ trait DataAccess
             if (array_key_exists($key, $row)) {
                 $type = self::GetTypeByName($key);
                 $value = $row[$key];
-                if (!is_string($value) && ($value == NULL)) {
+                if (!is_string($value) && ($value === NULL)) {
                     $this->$key = NULL;
                 } else {
                     switch ($type) {

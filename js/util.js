@@ -147,11 +147,7 @@ g.getTemplate = function (type) {
     return result
 }
 
-g.ajaxProcess = function (method, url, data, postProcess, headers) {
-    if (!postProcess) {
-        postProcess = data
-        data = null
-    }
+g.ajaxProcess = function (method, url, headers, data, postProcess) {
     var xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
@@ -247,24 +243,24 @@ g.uploader = {
     }
 }
 
-g.getData = function (url, postProcess, headers) {
-    g.ajaxProcess('GET', url, postProcess, headers)
+g.getData = function (url, headers, postProcess) {
+    g.ajaxProcess('GET', url, headers, null, postProcess)
 }
 
-g.putData = function (url, data, postProcess, headers) {
-    g.ajaxProcess('PUT', url, data, postProcess, headers)
+g.putData = function (url, headers, data, postProcess) {
+    g.ajaxProcess('PUT', url, headers, data, postProcess)
 }
 
-g.patchData = function (url, data, postProcess, headers) {
-    g.ajaxProcess('PATCH', url, data, postProcess, headers)
+g.patchData = function (url, headers, data, postProcess) {
+    g.ajaxProcess('PATCH', url, headers, data, postProcess)
 }
 
-g.postData = function (url, data, postProcess, headers) {
-    g.ajaxProcess('POST', url, data, postProcess, headers)
+g.postData = function (url, headers, data, postProcess) {
+    g.ajaxProcess('POST', url, headers, data, postProcess)
 }
 
-g.deleteData = function (url, postProcess, headers) {
-    g.ajaxProcess('DELETE', url, postProcess, headers)
+g.deleteData = function (url, headers, postProcess) {
+    g.ajaxProcess('DELETE', url, headers, null, postProcess)
 }
 
 g.bind = function (element, data) {
@@ -359,7 +355,7 @@ g.GenericProcessor = function (config) {
             } else {
                 this.saveUri = this.data.substr(0, uriLength)
             }
-            g.getData(this.data, saveData.bind(this))
+            g.getData(this.data, null, saveData.bind(this))
         }
         if (config.dataPostprocess) {
             if (Array.isArray(this.data)) {
@@ -456,7 +452,7 @@ g.GenericProcessor = function (config) {
                         postfix = '/' + item.id
                     }
                     var uri = self.saveUri + postfix
-                    saveFunction(uri, item, function (result) {
+                    saveFunction(uri, null, item, function (result) {
                         if (self.saveDoneProcess) {
                             self.saveDoneProcess(result)
                         }
@@ -467,7 +463,7 @@ g.GenericProcessor = function (config) {
                     postfix = '/' + self.data.id
                 }
                 var uri = self.saveUri + postfix
-                saveFunction(uri, self.data, function (result) {
+                saveFunction(uri, null, self.data, function (result) {
                     if (self.saveDoneProcess) {
                         self.saveDoneProcess(result)
                     }

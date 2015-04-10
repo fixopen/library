@@ -358,6 +358,7 @@ trait PathProcess
                 if ($first == 'count') {
                     $result['stats'] = 'count(*)';
                     $result['method'] = $first;
+                    $result['item'] = '';
                 }
             }
         }
@@ -382,12 +383,13 @@ trait PathProcess
             case 'GET':
                 $calc = self::parseStatisticsInfo($request['paths']);
                 if ($calc['method'] != '') {
-                    $v = self::Stats($request['filter'], $calc['stats']);
+                    $v = self::Stats($request['params']['filter'], $calc['stats']);
                     $body = '{"method":' . self::JsonQuote($v) . '}';
                     if ($calc['item'] != '') {
                         $body = '{"item":' . $body . '}';
                     }
-                    $request['response']['body'] = $body;
+                    //$request['response']['body'] = $body;
+                    $request['response']['body'] = '{"value": ' . self::JsonQuote($v) . '}';
                 } else {
                     $request['response']['code'] = 400; //bad request
                 }

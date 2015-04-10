@@ -39,7 +39,10 @@ trait Facade
             //print 'error';
             $classChildrenProcess = self::GetClassChildrenProcess($child);
             if ($classChildrenProcess) {
+                //print 'class method is ' . $classChildrenProcess . '<br />';
+                //print_r($request);
                 $request = call_user_func(__CLASS__ . '::' . $classChildrenProcess, $request);
+                //print_r($request);
             } else {
                 $request['response']['code'] = 404; //resource not found
             }
@@ -345,12 +348,11 @@ trait Facade
 
         $request['temp']['parent'] = $parent;
 
-        $requestContentType = $request['headers']['Content-Type'];
-        $acceptContentType = $request['headers']['Accept'];
         switch ($request['method']) {
             case 'POST':
             case 'PUT':
             case 'PATCH':
+                $requestContentType = $request['headers']['Content-Type'];
                 if (strpos($requestContentType, 'application/json') === 0) {
                     //normal
                     self::normalPush($request);
@@ -360,6 +362,7 @@ trait Facade
                 }
                 break;
             case 'GET':
+                $acceptContentType = $request['headers']['Accept'];
                 if (strpos($acceptContentType, 'application/json') === 0) {
                     //normal
                     self::normalPull($request);
@@ -369,7 +372,8 @@ trait Facade
                 }
                 break;
             case 'DELETE':
-                if (strpos($requestContentType, 'application/json') === 0) {
+                $acceptContentType = $request['headers']['Accept'];
+                if (strpos($acceptContentType, 'application/json') === 0) {
                     //normal delete
                     self::normalRemove($request);
                 } else {

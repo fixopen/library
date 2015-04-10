@@ -13,10 +13,14 @@ trait Statistics
     public static function Stats($filter, $calc)
     {
         $result = -1;
-        $whereClause = ' WHERE ' . $filter;
-        if (empty($filter)) {
-            $whereClause = '';
+        $whereClause = '';
+        if (!empty($filter)) {
+            $whereClause = ' WHERE ' . self::ConvertJsonToWhere($filter);
         }
+        //$whereClause = ' WHERE ' . $filter;
+        //if (empty($filter)) {
+        //    $whereClause = '';
+        //}
         $query = 'SELECT ' . $calc . ' FROM ' . self::Mark(self::$tableName) . $whereClause;
         $r = Database::GetInstance()->query($query);
         if ($r) {

@@ -15,23 +15,54 @@
     <!--
     <link href="css/global.css" rel="stylesheet">
     -->
+    <style type="text/css">
+        td {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        td > select {
+            width: 90%;
+        }
+        .mainContent tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+        .first {
+            width: 15%;
+            padding-right: 10px;
+            text-align: end;
+        }
+        .first-value {
+            width: 30%;
+        }
+        .second {
+            width: 15%;
+            padding-right: 10px;
+            text-align: end;
+        }
+        .second-value {
+            width: 40%;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-lg-3" style="text-align: center; color: #ffffff; background-color: darkblue; font-size: x-large">
-            朝阳区数字图书馆<br />
+        <div class="col-lg-3"
+             style="text-align: center; color: #ffffff; background-color: darkblue; font-size: x-large">
+            朝阳区数字图书馆<br/>
             管理系统
         </div>
         <div class="col-lg-9" style="text-align: right; color: #ffffff; background-color: blue; font-size: 2.55ex">
-            <br />
-            <br />
+            <br/>
+            <br/>
             ${name}管理员 | <span>退出</span>
             <span>2015年4月3日 星期四</span>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-3" style="cursor: pointer; background-color: #4d4d4d; color: #ffffff; line-height: 200%; font-size: x-large; padding-top: 60px; padding-bottom: 60px">
+    <div class="row" style="background-color: #eeeeee;">
+        <div class="col-lg-3"
+             style="cursor: pointer; background-color: #4d4d4d; color: #ffffff; line-height: 200%; font-size: x-large; padding-top: 60px; padding-bottom: 60px">
             <ul style="list-style: none">
                 <li id="firstPage">管理首页</li>
                 <li id="bookList">
@@ -55,9 +86,11 @@
                 <li id="stats">统计信息</li>
             </ul>
         </div>
-        <div class="col-lg-9" style="background-color: #eeeeee; padding: 0">
-            <div id="contentTitle" style="background-color: #cccccc; color: blue; padding-top: 60px; padding-left: 20px; font-size: x-large"></div>
-            <div id="mainContainer" style="padding-top: 30px; padding-bottom: 60px; padding-left: 20px; padding-right: 20px;"></div>
+        <div class="col-lg-9" style="padding: 0; line-height: 200%">
+            <div id="contentTitle"
+                 style="background-color: #cccccc; color: blue; padding-top: 60px; padding-left: 20px; font-size: x-large"></div>
+            <div id="mainContainer"
+                 style="padding-top: 30px; padding-bottom: 60px; padding-left: 20px; padding-right: 20px;"></div>
         </div>
     </div>
     <div class="row">
@@ -72,64 +105,100 @@
     <div style="background-color: #ffffff;">借阅机总数：145台 | 正常运行数：142台</div>
 </template>
 <template id="bookFilter">
-    <label for="publisher">出 版 社:</label><input id="publisher" />
-    <label for="isbn">I S B N:</label><input id="isbn" /><br />
-    <label for="bookName">图书名称:</label><input id="bookName" />
-    <label for="bookId">图书 ID:</label><input id="bookId" /><br />
-    <label for="bookClassifier">书库分类:</label><input id="bookClassifier" />
-    <label for="bookStandardClassifier">中图分类:</label><input id="bookStandardClassifier" /><br />
-    <label for="author">作者名称:</label><input id="author" />
-    <label for="bookState">上下架状态:</label><input id="bookState" />
+    <table style="width: 100%;">
+        <!--
+        <caption>filter</caption>
+        <colgroup>
+            <col class="first" span="1"/>
+            <col class="first-value" span="1"/>
+            <col class="second" span="1"/>
+            <col class="second-value" span="1"/>
+        </colgroup>
+        -->
+        <tbody>
+        <tr>
+            <th class="first"><label for="bookId">图书 ID</label></th>
+            <td class="first-value"><input id="bookId"/></td>
+            <th class="second"><label for="bookName">图书名称</label></th>
+            <td class="second-value"><input id="bookName"/></td>
+        </tr>
+        <tr>
+            <th class="first"><label for="author">作者名称</label></th>
+            <td class="first-value"><input id="author"/></td>
+            <th class="second"><label for="publisher">出 版 社</label></th>
+            <td class="second-value"><input id="publisher"></td>
+        </tr>
+        <tr>
+            <th class="first"><label for="bookStandardClassifier">中图分类</label></th>
+            <td class="first-value"><select id="bookStandardClassifier"></select></td>
+            <th class="second"><label for="bookClassifier">书库分类</label></th>
+            <td class="second-value"><select id="bookClassifier"></select></td>
+        </tr>
+        <tr>
+            <th class="first"><label>下架状态</label></th>
+            <td class="first-value"><input name="bookState" type="radio" value="isBan" />下架 <input name="bookState" type="radio" value="normal" />正常</td>
+            <th class="second"><label for="drmDuration">DRM时间设置</label></th>
+            <td class="second-value"><input id="drmDuration" placeholder="天数"><button class="btn btn-danger">设置</button></td>
+        </tr>
+        </tbody>
+    </table>
 </template>
 <template id="tableFramework">
-    <table border="1">
+    <table class="mainContent" border="1" style="width: 100%">
+        <!--
+        <colgroup id="cols"></colgroup>
+        -->
         <thead id="header"></thead>
         <tbody id="body"></tbody>
     </table>
     <ul id="pageIndex"></ul>
 </template>
+<template id="bookItemColumn">
+    <col id="tableBookId" />
+</template>
 <template id="bookItemHeader">
     <tr>
-        <th>图书ID</th>
-        <th>图书名称</th>
-        <th>作者名称</th>
-        <th>出版社</th>
-        <th>书库分类</th>
-        <th>中图分类</th>
-        <th>ISBN</th>
-        <th>上下架状态</th>
-        <th>图书管理</th>
+        <th style="width: 10%">图书ID</th>
+        <th style="width: 10%">图书名称</th>
+        <th style="width: 8%">作者名称</th>
+        <th style="width: 8%">出版社</th>
+        <th style="width: 10%">书库分类</th>
+        <th style="width: 10%">中图分类</th>
+        <th style="width: 12%">ISBN</th>
+        <th style="width: 8%">下架状态</th>
+        <th style="width: 14%">图书管理</th>
     </tr>
 </template>
 <template id="bookItem">
     <tr>
-        <td>${id}</td>
-        <td>${name}</td>
-        <td>${author}</td>
-        <td>${publisher}</td>
-        <td>${classifier}</td>
-        <td>${standardClassifier}</td>
-        <td>${ISBN}</td>
-        <td>${state}</td>
-        <td>
-            <button>图书借阅详情</button><button>下架</button><button>删除</button>
+        <td style="width: 10%">${id}</td>
+        <td style="width: 10%">${name}</td>
+        <td style="width: 8%">${author}</td>
+        <td style="width: 8%">${publisher}</td>
+        <td style="width: 10%">${firstLevelClassify}</td>
+        <td style="width: 10%">${standardClassify}</td>
+        <td style="width: 12%">${isbn}</td>
+        <td style="width: 8%">${state}</td>
+        <td style="width: 14%">
+            <button>图书借阅详情</button>
+            <button>下架</button>
+            <button>删除</button>
         </td>
     </tr>
 </template>
 <template id="deviceFilter">
-    <label for="deviceNo">编号:</label><input id="deviceNo" />
-    <label for="deviceAddress">借阅机位置:</label><input id="deviceAddress" /><br />
-    <label for="deviceId">借阅机ID:</label><input id="deviceId" />
-    <label for="deviceIp">借阅机IP:</label><input id="deviceIp" /><br />
-    <label for="setupTime">安装时间:</label><input id="setupTime" />
-    <label for="deviceState">状态:</label><input id="deviceState" />
+    <label for="deviceNo">编号:</label><input id="deviceNo"/>
+    <label for="deviceAddress">借阅机位置:</label><input id="deviceAddress"/><br/>
+    <label for="deviceId">借阅机ID:</label><input id="deviceId"/>
+    <label for="deviceIp">借阅机IP:</label><input id="deviceIp"/><br/>
+    <label for="setupTime">安装时间:</label><input id="setupTime"/>
+    <label for="deviceState">状态:</label><input id="deviceState"/>
 </template>
 <template id="deviceItemHeader">
     <tr>
         <th>借阅机ID</th>
         <th>编号</th>
         <th>借阅机位置</th>
-        <th>借阅机IP</th>
         <th>安装时间</th>
         <th>远端控制帐号</th>
         <th>远端控制密码</th>
@@ -142,10 +211,9 @@
         <td>${id}</td>
         <td>${no}</td>
         <td>${address}</td>
-        <td>${ip}</td>
         <td>${setupTime}</td>
-        <td>${controller}</td>
-        <td>${controllerPassword}</td>
+        <td>${controlNo}</td>
+        <td>${controlPassword}</td>
         <td>${state}</td>
         <td>
             <button>图书借阅详情</button>
@@ -153,9 +221,10 @@
     </tr>
 </template>
 <template id="userFilter">
-    <label for="userNo">用户编号:</label><input id="userNo" /><br />
-    注册时间:<label for="registerStartTime">从</label><input id="registerStartTime" /><label for="registerStopTime">到</label><input id="registerStopTime" /><br />
-    <label for="userState">状态:</label><input id="userState" />
+    <label for="userNo">用户编号:</label><input id="userNo"/><br/>
+    注册时间:<label for="registerStartTime">从</label><input id="registerStartTime"/><label
+        for="registerStopTime">到</label><input id="registerStopTime"/><br/>
+    <label for="userState">状态:</label><input id="userState"/>
 </template>
 <template id="userItemHeader">
     <tr>
@@ -188,9 +257,15 @@
         <tr>
             <th>图书编号</th>
             <th>图书名称</th>
-            <th>关注数量<button>Up\Down</button></th>
-            <th>阅读数量<button>Up\Down</button></th>
-            <th>下载数量<button>Up\Down</button></th>
+            <th>关注数量
+                <button>Up\Down</button>
+            </th>
+            <th>阅读数量
+                <button>Up\Down</button>
+            </th>
+            <th>下载数量
+                <button>Up\Down</button>
+            </th>
         </tr>
         </thead>
         <tbody>
