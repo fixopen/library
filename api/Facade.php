@@ -7,6 +7,7 @@ trait Facade
     {
         $childObject = FALSE;
         $child = array_shift($request['paths']);
+        $request['temp']['child'] = $child;
         $classChildrenProcess = self::GetClassChildrenProcess($child);
         if ($classChildrenProcess) {
             $request = call_user_func(__CLASS__ . '::' . $classChildrenProcess, $request);
@@ -75,6 +76,20 @@ trait Facade
                             break;
                         case 'PATCH':
                             self::SingleUpdate($request, $childObject);
+                            break;
+                    }
+                } else {
+                    switch ($request['method']) {
+                        case 'POST':
+                            self::SingleInsert($request, $request['temp']['child']);
+                            break;
+                        case 'PUT':
+                            $request['response']['code'] = 400; //bad request, resource exist
+                            $request['response']['body'] = '{"state": "resource not exist"}';
+                            break;
+                        case 'PATCH':
+                            $request['response']['code'] = 400; //bad request, resource exist
+                            $request['response']['body'] = '{"state": "resource not exist"}';
                             break;
                     }
                 }
