@@ -249,6 +249,20 @@ trait DataAccess
         return self::GetData($query, __CLASS__);
     }
 
+    public static function GroupSelect($groupColumnName)
+    {
+        $result = array();
+        $query = 'SELECT ' . self::Mark($groupColumnName) . ' FROM ' . self::Mark(self::$tableName) . ' GROUP BY ' . self::Mark($groupColumnName);
+        //print $query . '<br />';
+        $r = Database::GetInstance()->query($query);
+        if ($r) {
+            foreach ($r as $row) {
+                $result[] = '"' . $row[0] . '"';
+            }
+        }
+        return $result;
+    }
+
     public function Insert()
     {
         $result = 0;

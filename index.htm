@@ -21,25 +21,31 @@
             white-space: nowrap;
             overflow: hidden;
         }
+
         td > select {
             width: 90%;
         }
+
         .mainContent tr:nth-child(even) {
             background-color: #ffffff;
         }
+
         .first {
             width: 15%;
             padding-right: 10px;
             text-align: end;
         }
+
         .first-value {
             width: 30%;
         }
+
         .second {
             width: 15%;
             padding-right: 10px;
             text-align: end;
         }
+
         .second-value {
             width: 40%;
         }
@@ -53,7 +59,8 @@
             朝阳区数字图书馆<br/>
             管理系统
         </div>
-        <div class="col-lg-9" style="text-align: right; color: #ffffff; padding-top: 48px; background-color: #0091ff; font-size: 13px; height: 100%;">
+        <div class="col-lg-9"
+             style="text-align: right; color: #ffffff; padding-top: 48px; background-color: #0091ff; font-size: 13px; height: 100%;">
             ${name}管理员 | <span>退出</span>
             <span style="margin-left: 25px">2015年4月3日 星期四</span>
         </div>
@@ -62,8 +69,12 @@
         <div class="col-lg-3"
              style="cursor: pointer; height: 100%; background-color: #373d48; color: #ffffff; line-height: 200%; font-size: x-large; padding-top: 60px; padding-bottom: 60px">
             <ul style="list-style: none; font-size: 16px">
-                <li id="firstPage" style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -66px; padding-left: 24px">管理首页</li>
-                <li id="bookList" style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -124px; padding-left: 24px">
+                <li id="firstPage"
+                    style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -66px; padding-left: 24px">
+                    管理首页
+                </li>
+                <li id="bookList"
+                    style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -124px; padding-left: 24px">
                     数字图书管理
                     <!--
                     <ul>
@@ -73,8 +84,12 @@
                     </ul>
                     -->
                 </li>
-                <li id="deviceList" style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -180px; padding-left: 24px">借阅机管理</li>
-                <li id="userManagement"  style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -240px; padding-left: 24px">
+                <li id="deviceList"
+                    style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -180px; padding-left: 24px">
+                    借阅机管理
+                </li>
+                <li id="userManagement"
+                    style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -240px; padding-left: 24px">
                     用户管理
                     <!--
                     <ul style="list-style: none">
@@ -83,8 +98,14 @@
                     </ul>
                     -->
                 </li>
-                <li id="stats" style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -300px; padding-left: 24px">统计信息</li>
-                <li id="administratorManagement" style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -360px; padding-left: 24px">修改密码</li>
+                <li id="stats"
+                    style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -300px; padding-left: 24px">
+                    统计信息
+                </li>
+                <li id="administratorManagement"
+                    style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -360px; padding-left: 24px">
+                    修改密码
+                </li>
             </ul>
         </div>
         <div class="col-lg-9" style="padding: 0; height: 100%; line-height: 200%">
@@ -101,9 +122,11 @@
     </div>
 </div>
 <template id="firstPageContent">
-    <div style="color: darkblue">用户总数：394857名</div>
-    <div style="background-color: #ffffff;">入库图书：100000册 | 上架图书：98374册</div>
-    <div style="background-color: #ffffff;">借阅机总数：145台 | 正常运行数：142台</div>
+    <div>
+        <div style="color: darkblue">用户总数：${userCount}名</div>
+        <div style="background-color: #ffffff;">入库图书：${bookCount}册 | 上架图书：${normalBookCount}册</div>
+        <div style="background-color: #ffffff;">借阅机总数：${deviceCount}台 | 正常运行数：${liveDeviceCount}台</div>
+    </div>
 </template>
 <template id="bookFilter">
     <table style="width: 100%;">
@@ -137,9 +160,14 @@
         </tr>
         <tr>
             <th class="first"><label>下架状态</label></th>
-            <td class="first-value"><input name="bookState" type="radio" value="isBan" />下架 <input name="bookState" type="radio" value="normal" />正常</td>
+            <td class="first-value">
+                <input name="bookState" type="radio" value="isBan"/>下架
+                <input name="bookState" type="radio" value="normal"/>正常
+            </td>
             <th class="second"><label for="drmDuration">DRM时间设置</label></th>
-            <td class="second-value"><input id="drmDuration" placeholder="天数"><button class="btn btn-danger">设置</button></td>
+            <td class="second-value"><input id="drmDuration" placeholder="天数">
+                <button class="btn btn-danger">设置</button>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -155,7 +183,7 @@
     <ul id="pageIndex"></ul>
 </template>
 <template id="bookItemColumn">
-    <col id="tableBookId" />
+    <col id="tableBookId"/>
 </template>
 <template id="bookItemHeader">
     <tr>

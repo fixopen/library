@@ -38,6 +38,7 @@ trait Facade
         } else {
             //print 'error';
             $classChildrenProcess = self::GetClassChildrenProcess($child);
+            //print 'class method is ' . $classChildrenProcess . '<br />';
             if ($classChildrenProcess) {
                 //print 'class method is ' . $classChildrenProcess . '<br />';
                 //print_r($request);

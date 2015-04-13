@@ -5,7 +5,10 @@ class books
 
     private static $tableName = 'book';
 
-    private static $classSpecSubresource = array('updateSince' => 'updateSinceProc');
+    private static $classSpecSubresource = array(
+        'updateSince' => 'updateSinceProc',
+        'groups' => 'groupsProc'
+    );
 
     public static function updateSinceProc(array &$request)
     {
@@ -33,6 +36,43 @@ class books
                         $syncInfo[] = $book->toSyncJson();
                     }
                     $request['response']['body'] = '[' . implode(', ', $syncInfo) . ']';
+                } else {
+                    $request['response']['code'] = 400; //bad request
+                    $request['response']['body'] = '{"state": "must include [time] path segment"}';
+                }
+                break;
+            case 'DELETE':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            default:
+                break;
+        }
+        return $request;
+    }
+
+    public static function groupsProc(array &$request)
+    {
+        $count = count($request['paths']);
+        switch ($request['method']) {
+            case 'POST':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'PUT':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'PATCH':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'GET':
+                if ($count == 1) {
+                    $groupName = array_shift($request['paths']);
+                    //SELECT $groupName from self::tableName GROUP BY $groupName
+                    $groups = self::GroupSelect($groupName);
+                    $request['response']['body'] = '[' . implode(', ', $groups) . ']';
                 } else {
                     $request['response']['code'] = 400; //bad request
                     $request['response']['body'] = '{"state": "must include [time] path segment"}';

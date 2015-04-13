@@ -9,6 +9,24 @@ window.addEventListener('load', function (e) {
     }]
     var doc = document
     var data = {
+        fillSelect : function(selectId, optionArray, useAll) {
+            var s = doc.getElementById(selectId)
+            if (useAll) {
+                var option = doc.createElement('option')
+                option.textContent = '全部'
+                option.label = '全部'
+                option.value = '全部'
+                option.selected = true
+            }
+            s.appendChild(option);
+            for (var i = 0, c = optionArray.length; i < c; ++i) {
+                var option = doc.createElement('option')
+                option.textContent = optionArray[i]
+                option.label = optionArray[i]
+                option.value = optionArray[i]
+                s.appendChild(option);
+            }
+        },
         baseInfo: {
             isInit: false,
             userCount: 0,
@@ -19,10 +37,28 @@ window.addEventListener('load', function (e) {
             pageSize: 10,
             total: -1,
             currentPage: 0,
+            standardClassifierIsInit: false,
+            standardClassifier: [],
+            classifierIsInit: false,
+            classifier: [],
             content: [],
             container: null,
             setContainer: function(c) {
                 data.books.container = c
+            },
+            getStandardClassifier: function() {
+                var uri = '/api/books/groups/standardClassify'
+                g.getData(uri, genericHeaders, function (d) {
+                    data.books.standardClassifier = d
+                    data.books.standardClassifierIsInit = true
+                })
+            },
+            getClassifier: function() {
+                var uri = '/api/books/groups/firstLevelClassify'
+                g.getData(uri, genericHeaders, function (d) {
+                    data.books.classifier = d
+                    data.books.classifierIsInit = true
+                })
             },
             getFilter: function() {
                 var result = null
@@ -326,7 +362,7 @@ window.addEventListener('load', function (e) {
     firstPage.addEventListener('click', function (event) {
         contentTitle.textContent = '管理首页'
         mainContainer.innerHTML = ''
-        var firstPageContent = doc.getElementById('firstPageContent').content.cloneNode(true)
+        var firstPageContent = doc.getElementById('firstPageContent').content.cloneNode(true).children[0]
         var baseInfo = data.baseInfo
         if (!baseInfo.isInit) {
             g.getData('/api/devices/statistics/count', genericHeaders, function(d) {
@@ -355,13 +391,21 @@ window.addEventListener('load', function (e) {
         mainContainer.innerHTML = ''
         var filter = doc.getElementById('bookFilter').content.cloneNode(true)
         mainContainer.appendChild(filter)
+        var books = data.books
+        if (!books.standardClassifierIsInit) {
+            books.getStandardClassifier()
+        }
+        if (!books.classifierIsInit) {
+            books.getClassifier()
+        }
+        data.fillSelect('bookStandardClassifier', books.standardClassifier, true)
+        data.fillSelect('bookClassifier', books.classifier, true)
         var hr = doc.createElement('hr')
         mainContainer.appendChild(hr)
         var table = doc.getElementById('tableFramework').content.cloneNode(true)
         var header = doc.getElementById('bookItemHeader').content.cloneNode(true)
         table.querySelector('#header').appendChild(header)
         var tableBody = table.querySelector('#body')
-        var books = data.books
         books.setContainer(tableBody)
         books.loadData(1)
         books.render()
