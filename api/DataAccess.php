@@ -251,18 +251,25 @@ trait DataAccess
 
     public function Insert()
     {
+        $result = 0;
         if ($this->id == 0) {
             $this->id = IdGenerator::GetNewId();
         }
         $nameValues = $this->GetNameValues();
         $command = 'INSERT INTO ' . self::Mark(self::$tableName) . ' ( ' . implode(', ', array_keys($nameValues)) . ' ) VALUES ( ' . implode(', ', array_values($nameValues)) . ' )';
-        Database::GetInstance()->exec($command);
+        $r = Database::GetInstance()->exec($command);
+        if ($r == 1) {
+            //ok
+            $result = $this->id;
+        } else {
+            $result = $command . '<br />';
+        }
         //if (isset($seqName)) {
         //    $this->id = Database::GetInstance()->lastInsertId($seqName);
         //} else {
         //    $this->id = Database::GetInstance()->lastInsertId();
         //}
-        return $this->id;
+        return $result;
     }
 
     public function Delete()

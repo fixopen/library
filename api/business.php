@@ -19,6 +19,7 @@ class business
     //id bigint NOT NULL,
     private $userId = 0; //bigint,
     private $deviceId = 0; //bigint,
+    private $bookId = 0; //bigint,
     private $time = NULL; //timestamp(4) without time zone,
     private $action = ''; //actiontype
 
@@ -40,6 +41,16 @@ class business
     public function setDeviceId($deviceId)
     {
         $this->deviceId = $deviceId;
+    }
+
+    public function getBookId()
+    {
+        return $this->bookId;
+    }
+
+    public function setBookId($bookId)
+    {
+        $this->bookId = $bookId;
     }
 
     public function getTime()

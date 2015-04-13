@@ -30,11 +30,12 @@ trait NormalFacadeImpl
         if ($data) {
             $data->setId($id);
             $r = $data->Insert();
-            if ($r) {
+            if (intval($r) == $r) {
                 $request['response']['code'] = 201; //created
                 $request['response']['body'] = '{ "newId" : ' . $r . ' }';
             } else {
                 $request['response']['code'] = 500; //Internal server error
+                $request['response']['body'] = '{"state": "[' . $r . '] execute error"}';
             }
         } else {
             $request['response']['code'] = 400; //bad request
