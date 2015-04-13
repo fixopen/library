@@ -12,7 +12,7 @@ window.addEventListener('load', function (e) {
         baseInfo: {
             isInit: false,
             userCount: 0,
-            bookCount: 0, notBanBookCount: 0,
+            bookCount: 0, normalBookCount: 0,
             deviceCount: 0, liveDeviceCount: 0
         },
         books: {
@@ -332,17 +332,17 @@ window.addEventListener('load', function (e) {
             g.getData('/api/devices/statistics/count', genericHeaders, function(d) {
                 baseInfo.deviceCount = d.value
             })
-            g.getData('/api/books/statistics/count', genericHeaders, function(d) {
-                baseInfo.bookCount = d.value
-            })
-            g.getData('/api/users/statistics/count', genericHeaders, function(d) {
-                baseInfo.userCount = d.value
-            })
             g.getData('/api/devices/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isOnline: true})), genericHeaders, function(d) {
                 baseInfo.liveDeviceCount = d.value
             })
+            g.getData('/api/books/statistics/count', genericHeaders, function(d) {
+                baseInfo.bookCount = d.value
+            })
             g.getData('/api/books/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isBan: true})), genericHeaders, function(d) {
-                baseInfo.notBanBookCount = d.value
+                baseInfo.normalBookCount = d.value
+            })
+            g.getData('/api/users/statistics/count', genericHeaders, function(d) {
+                baseInfo.userCount = d.value
             })
             baseInfo.isInit = true
         }

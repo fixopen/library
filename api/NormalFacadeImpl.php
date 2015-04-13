@@ -30,7 +30,7 @@ trait NormalFacadeImpl
         if ($data) {
             $data->setId($id);
             $r = $data->Insert();
-            if (intval($r) == $r) {
+            if (is_int($r) && ($r != -1)) {
                 $request['response']['code'] = 201; //created
                 $request['response']['body'] = '{ "newId" : ' . $r . ' }';
             } else {
