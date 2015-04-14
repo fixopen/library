@@ -3,13 +3,18 @@
  */
 
 window.addEventListener('load', function (e) {
-    var genericHeaders = [{'name': 'Content-Type', 'value': 'application/json'}, {
-        'name': 'Accept',
-        'value': 'application/json'
-    }]
+    var genericHeaders = [
+        {
+            'name': 'Content-Type',
+            'value': 'application/json'
+        }, {
+            'name': 'Accept',
+            'value': 'application/json'
+        }
+    ]
     var doc = document
     var data = {
-        fillSelect : function(selectId, optionArray, useAll) {
+        fillSelect: function (selectId, optionArray, useAll) {
             var s = doc.getElementById(selectId)
             if (useAll) {
                 var option = doc.createElement('option')
@@ -43,24 +48,24 @@ window.addEventListener('load', function (e) {
             classifier: [],
             content: [],
             container: null,
-            setContainer: function(c) {
+            setContainer: function (c) {
                 data.books.container = c
             },
-            getStandardClassifier: function() {
+            getStandardClassifier: function () {
                 var uri = '/api/books/groups/standardClassify'
                 g.getData(uri, genericHeaders, function (d) {
                     data.books.standardClassifier = d
                     data.books.standardClassifierIsInit = true
                 })
             },
-            getClassifier: function() {
+            getClassifier: function () {
                 var uri = '/api/books/groups/firstLevelClassify'
                 g.getData(uri, genericHeaders, function (d) {
                     data.books.classifier = d
                     data.books.classifierIsInit = true
                 })
             },
-            getFilter: function() {
+            getFilter: function () {
                 var result = null
                 var bookId = doc.getElementById('bookId')
                 var bookName = doc.getElementById('bookName')
@@ -105,7 +110,7 @@ window.addEventListener('load', function (e) {
                 }
                 return result
             },
-            getTotal: function(filter) {
+            getTotal: function (filter) {
                 var uri = '/api/books/statistics/count'
                 if (filter) {
                     uri += '?filter=' + filter
@@ -124,7 +129,7 @@ window.addEventListener('load', function (e) {
                 if (books.currentPage != pageNo) {
                     books.currentPage = pageNo
                     var offset = books.pageSize * (books.currentPage - 1)
-                    var orderBy = encodeURIComponent(JSON.stringify({id : 'asc'}))
+                    var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
                     g.getData('/api/books?filter=' + filter + '&offset=' + offset + '&count=' + books.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         books.content = d
                     })
@@ -150,16 +155,16 @@ window.addEventListener('load', function (e) {
                 books.render()
             }
         },
-        devices : {
+        devices: {
             pageSize: 10,
             total: -1,
             currentPage: 0,
             content: [],
             container: null,
-            setContainer: function(c) {
+            setContainer: function (c) {
                 data.devices.container = c
             },
-            getFilter: function() {
+            getFilter: function () {
                 var result = null
                 var bookId = doc.getElementById('bookId')
                 var bookName = doc.getElementById('bookName')
@@ -204,7 +209,7 @@ window.addEventListener('load', function (e) {
                 }
                 return result
             },
-            getTotal: function(filter) {
+            getTotal: function (filter) {
                 var uri = '/api/devices/statistics/count'
                 if (filter) {
                     uri += '?filter=' + filter
@@ -223,7 +228,7 @@ window.addEventListener('load', function (e) {
                 if (devices.currentPage != pageNo) {
                     devices.currentPage = pageNo
                     var offset = devices.pageSize * (devices.currentPage - 1)
-                    var orderBy = encodeURIComponent(JSON.stringify({id : 'asc'}))
+                    var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
                     g.getData('/api/devices?filter=' + filter + '&offset=' + offset + '&count=' + devices.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         devices.content = d
                     })
@@ -257,10 +262,10 @@ window.addEventListener('load', function (e) {
             currentPage: 0,
             content: [],
             container: null,
-            setContainer: function(c) {
+            setContainer: function (c) {
                 data.users.container = c
             },
-            getFilter: function() {
+            getFilter: function () {
                 var result = null
                 var bookId = doc.getElementById('bookId')
                 var bookName = doc.getElementById('bookName')
@@ -305,7 +310,7 @@ window.addEventListener('load', function (e) {
                 }
                 return result
             },
-            getTotal: function(filter) {
+            getTotal: function (filter) {
                 var uri = '/api/devices/statistics/count'
                 if (filter) {
                     uri += '?filter=' + filter
@@ -324,7 +329,7 @@ window.addEventListener('load', function (e) {
                 if (users.currentPage != pageNo) {
                     users.currentPage = pageNo
                     var offset = users.pageSize * (users.currentPage - 1)
-                    var orderBy = encodeURIComponent(JSON.stringify({id : 'asc'}))
+                    var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
                     g.getData('/api/users?filter=' + filter + '&offset=' + offset + '&count=' + users.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         users.content = d
                     })
@@ -365,19 +370,19 @@ window.addEventListener('load', function (e) {
         var firstPageContent = doc.getElementById('firstPageContent').content.cloneNode(true).children[0]
         var baseInfo = data.baseInfo
         if (!baseInfo.isInit) {
-            g.getData('/api/devices/statistics/count', genericHeaders, function(d) {
+            g.getData('/api/devices/statistics/count', genericHeaders, function (d) {
                 baseInfo.deviceCount = d.value
             })
-            g.getData('/api/devices/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isOnline: true})), genericHeaders, function(d) {
+            g.getData('/api/devices/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isOnline: true})), genericHeaders, function (d) {
                 baseInfo.liveDeviceCount = d.value
             })
-            g.getData('/api/books/statistics/count', genericHeaders, function(d) {
+            g.getData('/api/books/statistics/count', genericHeaders, function (d) {
                 baseInfo.bookCount = d.value
             })
-            g.getData('/api/books/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isBan: true})), genericHeaders, function(d) {
+            g.getData('/api/books/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isBan: true})), genericHeaders, function (d) {
                 baseInfo.normalBookCount = d.value
             })
-            g.getData('/api/users/statistics/count', genericHeaders, function(d) {
+            g.getData('/api/users/statistics/count', genericHeaders, function (d) {
                 baseInfo.userCount = d.value
             })
             baseInfo.isInit = true
