@@ -111,8 +111,10 @@ trait DataAccess
                     switch ($type) {
                         case 'int2':
                         case 'int4':
-                        case 'int8':
                             $value = intval($value);
+                            break;
+                        case 'int8':
+                            //$value = $value;
                             break;
                         default:
                             break;
