@@ -479,9 +479,14 @@ window.addEventListener('load', function (e) {
         device.controlPassword = controlPassword.value.trim()
         device.ipAddress = ipAddress.value.trim()
         g.postData('/api/devices/' + device.no, genericHeaders, device, function(d) {
-            alert('借阅机创建成功')
-            $('#createDevice').modal('hide')
-            //add device to data.devices.content
+            var title = doc.querySelector('#createDevice h4')
+            title.textContent = '借阅机创建成功'
+            title.style.color = 0x0000FF
+            setTimeout(function() {
+                $('#createDevice').modal('hide')
+                //add device to data.devices.content
+            }, 2000)
+            //alert('借阅机创建成功')
         })
     }, false)
 }, false)

@@ -76,9 +76,10 @@ CREATE TABLE book (
     keywords character varying(256),
     abstract text,
     "order" bigint,
-    "resourceId" bigint,
     "lastUpdateTime" timestamp(4) without time zone,
-    "mimeType" character varying(32)
+    "mimeType" character varying(32),
+    "resourceId" character varying(32),
+    "isBan" boolean DEFAULT false
 );
 
 
@@ -93,7 +94,8 @@ CREATE TABLE business (
     "userId" bigint,
     "deviceId" bigint,
     "time" timestamp(4) without time zone,
-    action actiontype
+    action actiontype,
+    "bookId" bigint
 );
 
 
@@ -112,7 +114,8 @@ CREATE TABLE device (
     "controlNo" character varying(32),
     "controlPassword" character varying(32),
     "sessionId" character varying(32),
-    "lastOperationTime" bigint
+    "lastOperationTime" bigint,
+    "ipAddress" name
 );
 
 
@@ -150,25 +153,29 @@ ALTER TABLE public."user" OWNER TO postgres;
 -- Data for Name: administrator; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO administrator VALUES (1, 'admin', 'admin', '305815268', 1428120930);
+INSERT INTO administrator VALUES (1, 'admin', 'admin', '757728436', 1428371079);
 
 
 --
 -- Data for Name: book; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO book VALUES (29154, '错币', '陈一夫', '陈一夫', '九州出版社', '2013/09/', '978-7-5108-2102-8', 'I247.54', '小说', '财经小说', '2015-12-31 00:00:00', '长篇小说--中国--现代', '五一支行行长龚梅为了阮大头非法融资而来的二亿美元存款，与至大支行进行着斗智、斗色、斗狠的残酷竞争。中央银行的康处长自打弃官作了职业诗人之后，除了写诗、打工之外，捉奸便成了他生活的一部分。他发现五一支行的小职员谭白虎和民营老板阮大头都与漂亮老婆龚梅似乎有着某种暧昧。突然，一个持枪、戴口罩的歹徒出现了，几声枪响之后，商战的残酷、猜疑的无奈都伴随着三个生命在银行营业厅的结束而消失。', NULL, '2015-04-07 16:40:22.7699', 'application/pdf', NULL, false);
+INSERT INTO book VALUES (106, '做人做事做生意——解读李', '言诚', '言诚', '湖南人民出版社', '', '978-7-5438-4777-4', 'F715-49', '经济', '财经人物', '2017-05-23 00:00:00', '商业经营--心理交往--通俗读物', '本书详细解读了李嘉诚经商不败的奥秘，内容主要包括：未学做事，先学做人；最适合做生意的人；商界新人必备素养；成功需要自我修炼等。', NULL, '2015-04-07 18:15:22.1985', 'text/plain', NULL, false);
 
 
 --
 -- Data for Name: business; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO business VALUES (-426508288, NULL, NULL, '2015-04-15 00:00:00', 'Follow', 29154);
 
 
 --
 -- Data for Name: device; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO device VALUES (93658045677568, 'd12345', 'ccj', NULL, NULL, 'ywu32412342352', '2345346', NULL, NULL, '100.38.24.31');
 
 
 --
@@ -237,6 +244,21 @@ ALTER TABLE ONLY "systemParameter"
 
 ALTER TABLE ONLY "user"
     ADD CONSTRAINT user_pk PRIMARY KEY (id);
+
+
+--
+-- Name: fki_business_book_fk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_business_book_fk ON business USING btree ("bookId");
+
+
+--
+-- Name: business_book_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY business
+    ADD CONSTRAINT business_book_fk FOREIGN KEY ("bookId") REFERENCES book(id);
 
 
 --
