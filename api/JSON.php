@@ -25,14 +25,15 @@ trait JSON
 
     public function ToJson()
     {
-        $fields = array();
-        foreach ($this as $key => $value) {
-            if ($key[0] == '_') {
-                continue;
-            }
-            $fields[] = self::JsonMark($key) . ': ' . self::JsonQuote($value);
-        }
-        return '{' . implode(', ', $fields) . '}';
+//        $fields = array();
+//        foreach ($this as $key => $value) {
+//            if ($key[0] == '_') {
+//                continue;
+//            }
+//            $fields[] = self::JsonMark($key) . ': ' . self::JsonQuote($value);
+//        }
+//        return '{' . implode(', ', $fields) . '}';
+        return json_encode($this);
     }
 
     public static function ToArrayJson(array $values)

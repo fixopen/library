@@ -24,6 +24,7 @@ class devices
     private $lastUpdateTime = NULL;
     private $controlNo = '';
     private $controlPassword = '';
+    private $ipAddress = NULL;
     private $sessionId = NULL;
 
     public static function IsPrimaryKey($no)
@@ -99,6 +100,16 @@ class devices
     public function setControlPassword($controlPassword)
     {
         $this->controlPassword = $controlPassword;
+    }
+
+    public function getIpAddress()
+    {
+        return $this->ipAddress;
+    }
+
+    public function setIpAddress($ipAddress)
+    {
+        $this->ipAddress = $ipAddress;
     }
 
     public function getSessionId()

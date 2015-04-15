@@ -463,4 +463,25 @@ window.addEventListener('load', function (e) {
         var firstPageContent = doc.getElementById('statsContent').content.cloneNode(true)
         mainContainer.appendChild(firstPageContent)
     }, false)
+    var createDevice = doc.querySelector('#createDevice .btn-primary')
+    createDevice.addEventListener('click', function(e) {
+        var device = {}
+        var no = doc.getElementById('newDeviceNo')
+        var address = doc.getElementById('newDeviceAddress')
+        var setupTime = doc.getElementById('newDeviceSetupTime')
+        var controlNo = doc.getElementById('newDeviceControlNo')
+        var controlPassword = doc.getElementById('newDeviceControlPassword')
+        var ipAddress = doc.getElementById('newDeviceIPAddress')
+        device.no = no.value.trim()
+        device.address = address.value.trim()
+        device.setupTime = setupTime.value.trim()
+        device.controlNo = controlNo.value.trim()
+        device.controlPassword = controlPassword.value.trim()
+        device.ipAddress = ipAddress.value.trim()
+        g.postData('/api/devices/' + device.no, genericHeaders, device, function(d) {
+            alert('借阅机创建成功')
+            $('#createDevice').modal('hide')
+            //add device to data.devices.content
+        })
+    }, false)
 }, false)
