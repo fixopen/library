@@ -14,6 +14,14 @@ window.addEventListener('load', function (e) {
     ]
     var doc = document
     var data = {
+        currentItem: null,
+        switchTo: function(item) {
+            if (data.currentItem) {
+                data.currentItem.removeClass('active-menu-item')
+            }
+            data.currentItem = item
+            data.currentItem.addClass('active-menu-item')
+        },
         fillSelect: function (selectId, optionArray, useAll) {
             var s = doc.getElementById(selectId)
             if (useAll) {
@@ -32,6 +40,15 @@ window.addEventListener('load', function (e) {
                 s.appendChild(option);
             }
         },
+        fillRadio: function(radioName, value) {
+            var radios = doc.querySelectorAll('input[name="' + radioName + '"]')
+            for (var i = 0, c = radios.length; i < c; ++i) {
+                if (radios.item(i).value == value) {
+                    radios.item(i).checked = true
+                    break
+                }
+            }
+        },
         baseInfo: {
             isInit: false,
             userCount: 0,
@@ -46,6 +63,7 @@ window.addEventListener('load', function (e) {
             standardClassifier: [],
             classifierIsInit: false,
             classifier: [],
+            drmDuration: 0,
             content: [],
             container: null,
             setContainer: function (c) {
@@ -365,6 +383,8 @@ window.addEventListener('load', function (e) {
     var mainContainer = doc.getElementById('mainContainer')
     var firstPage = doc.getElementById('firstPage')
     firstPage.addEventListener('click', function (event) {
+        data.switchTo(firstPage)
+
         contentTitle.textContent = '管理首页'
         mainContainer.innerHTML = ''
         var firstPageContent = doc.getElementById('firstPageContent').content.cloneNode(true).children[0]
@@ -392,6 +412,8 @@ window.addEventListener('load', function (e) {
     }, false)
     var bookList = doc.getElementById('bookList')
     bookList.addEventListener('click', function (event) {
+        data.switchTo(bookList)
+
         contentTitle.textContent = '数字图书管理'
         mainContainer.innerHTML = ''
         var filter = doc.getElementById('bookFilter').content.cloneNode(true)
@@ -403,8 +425,32 @@ window.addEventListener('load', function (e) {
         if (!books.classifierIsInit) {
             books.getClassifier()
         }
+        g.getData('/api/systemParameters?filter=' + encodeURIComponent(JSON.stringify({name: 'drmDuration'})), genericHeaders, function(d) {
+            if (d.length == 1) {
+                var param = d[0]
+                books.drmDuration = param.value
+            } else {
+                books.drmDuration = 90
+                alert('DRM duration use default value : 90')
+            }
+        })
         data.fillSelect('bookStandardClassifier', books.standardClassifier, true)
         data.fillSelect('bookClassifier', books.classifier, true)
+        data.fillRadio('bookState', 'normal')
+        var drmDuration = doc.getElementById('drmDuration')
+        drmDuration.value = books.drmDuration
+        var setDrmDuration = doc.getElementById('setDrmDuration')
+        setDrmDuration.addEventListener('click', function(e) {
+            var drmDuration = doc.getElementById('drmDuration')
+            var v = drmDuration.value.trim()
+            if (parseInt(v) == v) {
+                g.patchData('/api/systemParameters/drmDuration', genericHeaders, {value: v}, function(r) {
+                    alert('设置成功')
+                })
+            } else {
+                alert('必须填写正确的天数')
+            }
+        }, false)
         var hr = doc.createElement('hr')
         mainContainer.appendChild(hr)
         var table = doc.getElementById('tableFramework').content.cloneNode(true)
@@ -419,6 +465,8 @@ window.addEventListener('load', function (e) {
     }, false)
     var deviceList = doc.getElementById('deviceList')
     deviceList.addEventListener('click', function (event) {
+        data.switchTo(deviceList)
+
         contentTitle.textContent = '借阅机管理'
         mainContainer.innerHTML = ''
         var filter = doc.getElementById('deviceFilter').content.cloneNode(true)
@@ -438,10 +486,14 @@ window.addEventListener('load', function (e) {
     }, false)
     var userManagement = doc.getElementById('userManagement')
     userManagement.addEventListener('click', function (event) {
+        data.switchTo(userManagement)
+
         contentTitle.textContent = '用户管理'
         mainContainer.innerHTML = ''
         var filter = doc.getElementById('userFilter').content.cloneNode(true)
         mainContainer.appendChild(filter)
+        var hr = doc.createElement('hr')
+        mainContainer.appendChild(hr)
         var table = doc.getElementById('tableFramework').content.cloneNode(true)
         var header = doc.getElementById('userItemHeader').content.cloneNode(true)
         table.querySelector('#header').appendChild(header)
@@ -451,13 +503,17 @@ window.addEventListener('load', function (e) {
     }, false)
     var administratorManagement = doc.getElementById('administratorManagement')
     administratorManagement.addEventListener('click', function (event) {
+        data.switchTo(administratorManagement)
+
         contentTitle.textContent = '管理员信息'
         mainContainer.innerHTML = ''
-        var firstPageContent = doc.getElementById('firstPageContent').content.cloneNode(true)
-        mainContainer.appendChild(firstPageContent)
+        var admin = doc.getElementById('administratorInfo').content.cloneNode(true)
+        mainContainer.appendChild(admin)
     }, false)
     var stats = doc.getElementById('stats')
     stats.addEventListener('click', function (event) {
+        data.switchTo(stats)
+
         contentTitle.textContent = '统计信息'
         mainContainer.innerHTML = ''
         var firstPageContent = doc.getElementById('statsContent').content.cloneNode(true)

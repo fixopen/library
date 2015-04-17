@@ -276,22 +276,38 @@ g.deleteData = function (url, headers, postProcess) {
 }
 
 g.bind = function (element, data) {
-    element.innerHTML = element.innerHTML.replace('%7B', '{').replace('%7D', '}').replace(/\$\{(\w+)\}/g, function (all, variable) {
-        if (!variable) {
-            return ""
+    if (element.innerHTML) {
+        element.innerHTML = element.innerHTML.replace('%7B', '{').replace('%7D', '}').replace(/\$\{(\w+)\}/g, function (all, variable) {
+            if (!variable) {
+                return ""
+            }
+            // var parts = variable.split('.')
+            // for (var i = 0, c = parts.length; i < c; ++i) {
+            // 	if(data)
+            // 		data = data[parts[i]]
+            // 	else{
+            // 		data=''
+            // 		break
+            // 	}
+            // }
+            // return data
+            return data[variable];
+        })
+    } else {
+        var children = element.childNodes
+        for (var i = 0, c = children.length; i < c; ++i) {
+            var child = children.item(i)
+            if (child.innerHTML) {
+                child.innerHTML = child.innerHTML.replace('%7B', '{').replace('%7D', '}').replace(/\$\{(\w+)\}/g, function (all, variable) {
+                    var result = ''
+                    if (variable) {
+                        result = data[variable]
+                    }
+                    return result
+                })
+            }
         }
-        // var parts = variable.split('.')
-        // for (var i = 0, c = parts.length; i < c; ++i) {
-        // 	if(data)
-        // 		data = data[parts[i]]
-        // 	else{
-        // 		data=''
-        // 		break
-        // 	}
-        // }
-        // return data
-        return data[variable];
-    })
+    }
     return element
 }
 

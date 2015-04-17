@@ -26,6 +26,21 @@
             width: 90%;
         }
 
+        .menu-item {
+            color: #ffffff;
+            background-repeat: no-repeat;
+            background-image: url('images/icons.png');
+            padding-left: 24px;
+        }
+
+        .menu-item:hover {
+            color: #0091ff;
+        }
+
+        .active-menu-item {
+            color: #0091ff;
+        }
+
         .mainContent tr:nth-child(even) {
             background-color: #ffffff;
         }
@@ -49,6 +64,16 @@
         .second-value {
             width: 40%;
         }
+
+        .filter-title {
+            width: 30%;
+            padding-right: 10px;
+            text-align: end;
+        }
+
+        .filter-title-value {
+            width: 70%;
+        }
     </style>
 </head>
 <body>
@@ -70,10 +95,12 @@
              style="cursor: pointer; height: 100%; background-color: #373d48; color: #ffffff; line-height: 200%; font-size: x-large; padding-top: 60px; padding-bottom: 60px">
             <ul style="list-style: none; font-size: 16px">
                 <li id="firstPage"
+                    class="menu-item"
                     style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -66px; padding-left: 24px">
                     管理首页
                 </li>
                 <li id="bookList"
+                    class="menu-item"
                     style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -124px; padding-left: 24px">
                     数字图书管理
                     <!--
@@ -85,10 +112,12 @@
                     -->
                 </li>
                 <li id="deviceList"
+                    class="menu-item"
                     style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -180px; padding-left: 24px">
                     借阅机管理
                 </li>
                 <li id="userManagement"
+                    class="menu-item"
                     style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -240px; padding-left: 24px">
                     用户管理
                     <!--
@@ -99,10 +128,12 @@
                     -->
                 </li>
                 <li id="stats"
+                    class="menu-item"
                     style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -300px; padding-left: 24px">
                     统计信息
                 </li>
                 <li id="administratorManagement"
+                    class="menu-item"
                     style="background-repeat: no-repeat; background-image: url('images/icons.png'); background-position: 0 -360px; padding-left: 24px">
                     修改密码
                 </li>
@@ -188,7 +219,7 @@
             </td>
             <th class="second"><label for="drmDuration">DRM时间设置</label></th>
             <td class="second-value"><input id="drmDuration" placeholder="天数">
-                <button class="btn btn-danger">设置</button>
+                <button id="setDrmDuration" class="btn btn-danger">设置</button>
             </td>
         </tr>
         </tbody>
@@ -238,15 +269,41 @@
     </tr>
 </template>
 <template id="deviceFilter">
-    <label for="deviceNo">编号:</label><input id="deviceNo"/>
-    <label for="deviceAddress">借阅机位置:</label><input id="deviceAddress"/><br/>
-    <label for="deviceId">借阅机ID:</label><input id="deviceId"/>
-    <label for="deviceIp">借阅机IP:</label><input id="deviceIp"/><br/>
-    <label for="setupTime">安装时间:</label><input id="setupTime"/>
-    <label for="deviceState">状态:</label><input id="deviceState"/><br />
     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createDevice">
-        Launch create device modal
+        创建借阅机
     </button>
+    <hr/>
+    <table style="width: 100%;">
+        <!--
+        <caption>filter</caption>
+        <colgroup>
+            <col class="first" span="1"/>
+            <col class="first-value" span="1"/>
+            <col class="second" span="1"/>
+            <col class="second-value" span="1"/>
+        </colgroup>
+        -->
+        <tbody>
+        <tr>
+            <th class="first"><label for="deviceNo">编号</label></th>
+            <td class="first-value"><input id="deviceNo"/></td>
+            <th class="second"><label for="deviceAddress">借阅机位置</label></th>
+            <td class="second-value"><input id="deviceAddress"/></td>
+        </tr>
+        <tr>
+            <th class="first"><label for="deviceId">借阅机ID</label></th>
+            <td class="first-value"><input id="deviceId"/></td>
+            <th class="second"><label for="deviceIp">借阅机IP</label></th>
+            <td class="second-value"><input id="deviceIp"></td>
+        </tr>
+        <tr>
+            <th class="first"><label for="setupTime">安装时间</label></th>
+            <td class="first-value"><input type="date" id="setupTime"></td>
+            <th class="second"><label>状态</label></th>
+            <td class="second-value"><input type="radio" name="deviceState" id="heartbeat">心跳 <input type="radio" name="deviceState" id="offline">离线</td>
+        </tr>
+        </tbody>
+    </table>
 </template>
 <template id="deviceItemHeader">
     <tr>
@@ -275,10 +332,32 @@
     </tr>
 </template>
 <template id="userFilter">
-    <label for="userNo">用户编号:</label><input id="userNo"/><br/>
-    注册时间:<label for="registerStartTime">从</label><input id="registerStartTime"/><label
-        for="registerStopTime">到</label><input id="registerStopTime"/><br/>
-    <label for="userState">状态:</label><input id="userState"/>
+    <table style="width: 100%;">
+        <!--
+        <caption>filter</caption>
+        <colgroup>
+            <col class="first" span="1"/>
+            <col class="first-value" span="1"/>
+            <col class="second" span="1"/>
+            <col class="second-value" span="1"/>
+        </colgroup>
+        -->
+        <tbody>
+        <tr>
+            <th class="filter-title"><label for="userNo">用户编号</label></th>
+            <td class="filter-title-value"><input id="userNo"/></td>
+        </tr>
+        <tr>
+            <th class="filter-title"><label for="deviceId">注册时间</label></th>
+            <td class="filter-title-value">
+                <label for="registerStartTime">从</label>
+                <input type="date" id="registerStartTime"/>
+                <label for="registerStopTime">到</label>
+                <input type="date" id="registerStopTime"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </template>
 <template id="userItemHeader">
     <tr>
@@ -333,11 +412,40 @@
         </tbody>
     </table>
 </template>
+<template id="administratorInfo">
+    <table>
+        <tbody>
+        <tr>
+            <th>登录名</th>
+            <td>admin</td>
+        </tr>
+        <tr>
+            <th>旧密码</th>
+            <td><input id="oldPassword"></td>
+        </tr>
+        <tr>
+            <th>新密码</th>
+            <td><input id="newPassword"></td>
+        </tr>
+        <tr>
+            <th>确认新密码</th>
+            <td><input id="retryNewPassword"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button id="setPassword">重置密码</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</template>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.easyui.min.js"></script>
 <script src="js/util.js"></script>
+<!--
 <script src="js/tree.js"></script>
+-->
 <script src="js/index.js"></script>
 </body>
 </html>

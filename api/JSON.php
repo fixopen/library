@@ -16,6 +16,7 @@ trait JSON
         } else if (is_bool($v)) {
             $result = $v ? 'true' : 'false';
         } else if (is_string($v)) {
+            $v = preg_replace('/\"/', '\\"', $v);
             $result = '"' . $v . '"';
         } else {
             $result .= $v;
@@ -25,15 +26,15 @@ trait JSON
 
     public function ToJson()
     {
-//        $fields = array();
-//        foreach ($this as $key => $value) {
-//            if ($key[0] == '_') {
-//                continue;
-//            }
-//            $fields[] = self::JsonMark($key) . ': ' . self::JsonQuote($value);
-//        }
-//        return '{' . implode(', ', $fields) . '}';
-        return json_encode($this);
+        $fields = array();
+        foreach ($this as $key => $value) {
+            if ($key[0] == '_') {
+                continue;
+            }
+            $fields[] = self::JsonMark($key) . ': ' . self::JsonQuote($value);
+        }
+        return '{' . implode(', ', $fields) . '}';
+        //return json_encode($this);
     }
 
     public static function ToArrayJson(array $values)
