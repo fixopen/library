@@ -49,6 +49,17 @@ window.addEventListener('load', function (e) {
                 }
             }
         },
+        getRadio: function(radioName) {
+            var result = null
+            var radios = doc.querySelectorAll('input[name="' + radioName + '"]')
+            for (var i = 0, c = radios.length; i < c; ++i) {
+                if (radios.item(i).checked == true) {
+                    result = radios.item(i).value
+                    break
+                }
+            }
+            return result
+        },
         baseInfo: {
             isInit: false,
             userCount: 0,
@@ -110,12 +121,12 @@ window.addEventListener('load', function (e) {
                     hasCondition = true
                 }
                 var bookStandardClassifierValue = bookStandardClassifier.value
-                if (bookStandardClassifierValue != '') {
+                if (bookStandardClassifierValue != '全部') {
                     filter.standardClassify = bookStandardClassifierValue
                     hasCondition = true
                 }
                 var bookClassifierValue = bookClassifier.value
-                if (bookClassifierValue != '') {
+                if (bookClassifierValue != '全部') {
                     filter.firstLevelClassify = bookClassifierValue
                     //secondLevelClassify
                     hasCondition = true
@@ -184,43 +195,41 @@ window.addEventListener('load', function (e) {
             },
             getFilter: function () {
                 var result = null
-                var bookId = doc.getElementById('bookId')
-                var bookName = doc.getElementById('bookName')
-                var author = doc.getElementById('author')
-                var publisher = doc.getElementById('publisher')
-                var bookStandardClassifier = doc.getElementById('bookStandardClassifier')
-                var bookClassifier = doc.getElementById('bookClassifier')
-                var bookState = 0; //radio group
+                var deviceNo = doc.getElementById('deviceNo')
+                var deviceAddress = doc.getElementById('deviceAddress')
+                var deviceId = doc.getElementById('deviceId')
+                var deviceIp = doc.getElementById('deviceIp')
+                var setupTime = doc.getElementById('setupTime')
+                var deviceState = data.getRadio('deviceState')
                 var hasCondition = false
                 var filter = {}
-                var bookIdValue = bookId.value
-                if (bookIdValue != '') {
-                    filter.id = bookIdValue
+                var deviceNoValue = deviceNo.value
+                if (deviceNoValue != '') {
+                    filter.no = deviceNoValue
                     hasCondition = true
                 }
-                var bookNameValue = bookName.value
-                if (bookNameValue != '') {
-                    filter.name = bookNameValue
+                var deviceAddressValue = deviceAddress.value
+                if (deviceAddressValue != '') {
+                    filter.address = deviceAddressValue
                     hasCondition = true
                 }
-                var publisherValue = publisher.value
-                if (publisherValue != '') {
-                    filter.publisher = publisherValue
+                var deviceIdValue = deviceId.value
+                if (deviceIdValue != '') {
+                    filter.id = deviceIdValue
                     hasCondition = true
                 }
-                var bookStandardClassifierValue = bookStandardClassifier.value
-                if (bookStandardClassifierValue != '') {
-                    filter.standardClassify = bookStandardClassifierValue
+                var deviceIpValue = deviceIp.value
+                if (deviceIpValue != '') {
+                    filter.ipAddress = deviceIpValue
                     hasCondition = true
                 }
-                var bookClassifierValue = bookClassifier.value
-                if (bookClassifierValue != '') {
-                    filter.firstLevelClassify = bookClassifierValue
-                    //secondLevelClassify
+                var setupTimeValue = setupTime.value
+                if (setupTimeValue != '') {
+                    filter.setupTime = setupTimeValue
                     hasCondition = true
                 }
-                var stateValue = bookState
-                filter.isBan = stateValue
+                var stateValue = deviceState
+                filter.isOnline = stateValue
                 hasCondition = true
                 if (hasCondition) {
                     result = encodeURIComponent(JSON.stringify(filter))
@@ -285,44 +294,26 @@ window.addEventListener('load', function (e) {
             },
             getFilter: function () {
                 var result = null
-                var bookId = doc.getElementById('bookId')
-                var bookName = doc.getElementById('bookName')
-                var author = doc.getElementById('author')
-                var publisher = doc.getElementById('publisher')
-                var bookStandardClassifier = doc.getElementById('bookStandardClassifier')
-                var bookClassifier = doc.getElementById('bookClassifier')
-                var bookState = 0; //radio group
+                var userNo = doc.getElementById('userNo')
+                var registerStartTime = doc.getElementById('registerStartTime')
+                var registerStopTime = doc.getElementById('registerStopTime')
                 var hasCondition = false
                 var filter = {}
-                var bookIdValue = bookId.value
-                if (bookIdValue != '') {
-                    filter.id = bookIdValue
+                var userNoValue = userNo.value
+                if (userNoValue != '') {
+                    filter.no = userNoValue
                     hasCondition = true
                 }
-                var bookNameValue = bookName.value
-                if (bookNameValue != '') {
-                    filter.name = bookNameValue
+                var registerStartTimeValue = registerStartTime.value
+                if (registerStartTimeValue != '') {
+                    //@@filter.registerTime >= registerStartTimeValue
                     hasCondition = true
                 }
-                var publisherValue = publisher.value
-                if (publisherValue != '') {
-                    filter.publisher = publisherValue
+                var registerStopTimeValue = registerStopTime.value
+                if (registerStopTimeValue != '') {
+                    //@@filter.registerTime <= registerStopTimeValue
                     hasCondition = true
                 }
-                var bookStandardClassifierValue = bookStandardClassifier.value
-                if (bookStandardClassifierValue != '') {
-                    filter.standardClassify = bookStandardClassifierValue
-                    hasCondition = true
-                }
-                var bookClassifierValue = bookClassifier.value
-                if (bookClassifierValue != '') {
-                    filter.firstLevelClassify = bookClassifierValue
-                    //secondLevelClassify
-                    hasCondition = true
-                }
-                var stateValue = bookState
-                filter.isBan = stateValue
-                hasCondition = true
                 if (hasCondition) {
                     result = encodeURIComponent(JSON.stringify(filter))
                 }
@@ -516,8 +507,8 @@ window.addEventListener('load', function (e) {
 
         contentTitle.textContent = '统计信息'
         mainContainer.innerHTML = ''
-        var firstPageContent = doc.getElementById('statsContent').content.cloneNode(true)
-        mainContainer.appendChild(firstPageContent)
+        var statsInfo = doc.getElementById('statsContent').content.cloneNode(true)
+        mainContainer.appendChild(statsInfo)
     }, false)
     var createDevice = doc.querySelector('#createDevice .btn-primary')
     createDevice.addEventListener('click', function(e) {
@@ -545,4 +536,5 @@ window.addEventListener('load', function (e) {
             //alert('借阅机创建成功')
         })
     }, false)
+    firstPage.dispatchEvent(doc.createEvent('click'))
 }, false)
