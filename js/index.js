@@ -168,7 +168,7 @@ window.addEventListener('load', function (e) {
             //render
             render: function () {
                 var books = data.books
-                while (books.container.length > 0) {
+                while (books.container.rows.length > 0) {
                     books.container.deleteRow(-1);
                 }
                 var contents = books.content
