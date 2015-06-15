@@ -168,6 +168,9 @@ window.addEventListener('load', function (e) {
             //render
             render: function () {
                 var books = data.books
+                while (books.container.length > 0) {
+                    books.container.deleteRow(-1);
+                }
                 var contents = books.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('bookItem').content.cloneNode(true).children[0]
