@@ -269,6 +269,9 @@ window.addEventListener('load', function (e) {
             //render
             render: function () {
                 var devices = data.devices
+                while (devices.container.rows.length > 0) {
+                    devices.container.deleteRow(-1);
+                }
                 var contents = devices.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('deviceItem').content.cloneNode(true).children[0]
@@ -286,6 +289,7 @@ window.addEventListener('load', function (e) {
                 var devices = data.devices
                 devices.loadData(pageNo)
                 devices.render()
+                g.renderPageNavigator('pageIndex', devices.pageSize, devices.currentPage, devices.total, devices.handler)
             }
         },
         users: {
@@ -352,6 +356,9 @@ window.addEventListener('load', function (e) {
             //render
             render: function () {
                 var users = data.users
+                while (users.container.rows.length > 0) {
+                    users.container.deleteRow(-1);
+                }
                 var contents = users.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('deviceItem').content.cloneNode(true).children[0]
@@ -369,6 +376,7 @@ window.addEventListener('load', function (e) {
                 var users = data.users
                 users.loadData(pageNo)
                 users.render()
+                g.renderPageNavigator('pageIndex', users.pageSize, users.currentPage, users.total, users.handler)
             }
         },
         actionStats: {
@@ -545,5 +553,7 @@ window.addEventListener('load', function (e) {
             //alert('借阅机创建成功')
         })
     }, false)
-    firstPage.dispatchEvent(doc.createEvent('click'))
+    var e = doc.createEvent('Event')
+    e.initEvent('click', false, false)
+    firstPage.dispatchEvent(e)
 }, false)
