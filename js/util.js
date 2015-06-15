@@ -516,3 +516,47 @@ g.GenericProcessor = function (config) {
         }
     }
 }
+
+g.renderPageNavigator = function (id, pageSize, currentPage, total, handler) {
+    var pageIndexContainer = document.getElementById(id)
+    pageIndexContainer.innerHTML = ''
+
+    var c = document.getElementById('pageIndexTemplate').content.cloneNode(true)
+    var firstItemTemplate = c.querySelector('.first-page')
+    var firstItem = g.dataToElement({}, firstItemTemplate);
+    pageIndexContainer.appendChild(firstItem)
+
+    var itemTemplate = c.querySelector('.page-item')
+    var totalPage = Math.ceil(total / pageSize)
+    var beginPageNo = 1
+    if (currentPage > 5) {
+        if (currentPage > totalPage - 5) {
+            beginPageNo = totalPage - 10
+        } else {
+            beginPageNo = currentPage - 5
+        }
+    }
+    if (beginPageNo < 1) {
+        beginPageNo = 1
+    }
+    var endPageNo = beginPageNo + 9
+    for (var i = beginPageNo; i <= Math.min(endPageNo, totalPage); ++i) {
+        var item = g.dataToElement({pageno: i}, itemTemplate)
+        if (i == currentPage) {
+            item.className = 'active'
+        }
+        pageIndexContainer.appendChild(item)
+    }
+
+    var lastItemTemplate = c.querySelector('.last-page')
+    var lastItem = g.dataToElement({pageno: totalPage}, lastItemTemplate)
+    pageIndexContainer.appendChild(lastItem)
+
+    var anchors = pageIndexContainer.querySelectorAll('a')
+    for (var i = 0, c = anchors.length; i < c; ++i) {
+        anchors.item(i).addEventListener('click', function (e) {
+            var pageNo = e.target.attributes['data-pageno'].value
+            handler(pageNo)
+        })
+    }
+}
