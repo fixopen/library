@@ -412,9 +412,13 @@ window.addEventListener('load', function (e) {
 
         contentTitle.textContent = '数字图书管理'
         mainContainer.innerHTML = ''
-        var filter = doc.getElementById('bookFilter').content.cloneNode(true)
-        mainContainer.appendChild(filter)
         var books = data.books
+        var filter = doc.getElementById('bookFilter').content.cloneNode(true)
+        filter.addEventListener('change', function(e) {
+            books.total = -1
+            books.handler(1)
+        }, false)
+        mainContainer.appendChild(filter)
         if (!books.standardClassifierIsInit) {
             books.getStandardClassifier()
         }
