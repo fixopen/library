@@ -140,7 +140,10 @@ trait DataAccess
     public static function ConvertJsonToWhere($filter)
     {
         $where = array();
+        //print $filter . '<br />';
         $filterJson = json_decode($filter);
+        //print_r($filterJson);
+        //print 'hello';
         //print_r($filterJson);
         foreach ($filterJson as $key => $value) {
             if (is_null($value)) {

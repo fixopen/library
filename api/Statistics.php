@@ -14,7 +14,10 @@ trait Statistics
     {
         $result = -1;
         $whereClause = '';
+        //print 'filter is<br />';
+        //print 'filter is ' . $filter . '<br />';
         if (!empty($filter)) {
+            //print 'filter is ' . $filter . '<br />';
             $whereClause = ' WHERE ' . self::ConvertJsonToWhere($filter);
         }
         //$whereClause = ' WHERE ' . $filter;
@@ -22,6 +25,7 @@ trait Statistics
         //    $whereClause = '';
         //}
         $query = 'SELECT ' . $calc . ' FROM ' . self::Mark(self::$tableName) . $whereClause;
+        print $query . '<br />';
         $r = Database::GetInstance()->query($query);
         if ($r) {
             foreach ($r as $row) {

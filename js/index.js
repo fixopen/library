@@ -137,6 +137,7 @@ window.addEventListener('load', function (e) {
                 if (hasCondition) {
                     result = encodeURIComponent(JSON.stringify(filter))
                 }
+                alert(result)
                 return result
             },
             getTotal: function (filter) {
