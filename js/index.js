@@ -67,7 +67,7 @@ window.addEventListener('load', function (e) {
             deviceCount: 0, liveDeviceCount: 0
         },
         books: {
-            pageSize: 10,
+            pageSize: 4,
             total: -1,
             currentPage: 0,
             standardClassifierIsInit: false,
@@ -137,7 +137,7 @@ window.addEventListener('load', function (e) {
                 if (hasCondition) {
                     result = encodeURIComponent(JSON.stringify(filter))
                 }
-                alert(result)
+                //alert(result)
                 return result
             },
             getTotal: function (filter) {
