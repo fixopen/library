@@ -186,6 +186,7 @@ window.addEventListener('load', function (e) {
                 var books = data.books
                 books.loadData(pageNo)
                 books.render()
+                g.renderPageNavigator('pageIndex', books.pageSize, books.currentPage, books.total, books.handler)
             }
         },
         devices: {
