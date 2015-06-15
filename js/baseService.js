@@ -713,7 +713,7 @@ g.renderPageNavigator = function (id, pageSize, currentPage, total, handler) {
     var pageIndexContainer = document.getElementById(id)
     pageIndexContainer.innerHTML = ''
 
-    var c = document.getElementById('pageIndexTemplate')
+    var c = document.getElementById('pageIndexTemplate').content.cloneNode(true)
     var firstItemTemplate = c.querySelector('.first-page')
     var firstItem = g.dataToElement({}, firstItemTemplate);
     pageIndexContainer.appendChild(firstItem)
