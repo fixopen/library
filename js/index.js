@@ -62,6 +62,21 @@ window.addEventListener('load', function (e) {
             }
             return result
         },
+        do: function(title, filterTemplate, headerTemplate, currentData) {
+            contentTitle.textContent = title
+            mainContainer.innerHTML = ''
+            var filter = doc.getElementById(filterTemplate).content.cloneNode(true)
+            mainContainer.appendChild(filter)
+            var hr = doc.createElement('hr')
+            mainContainer.appendChild(hr)
+            var table = doc.getElementById('tableFramework').content.cloneNode(true)
+            var header = doc.getElementById(headerTemplate).content.cloneNode(true)
+            table.querySelector('#header').appendChild(header)
+            var tableBody = table.querySelector('#body')
+            currentData.setContainer(tableBody)
+            currentData.handler(1)
+            mainContainer.appendChild(table)
+        },
         baseInfo: {
             isInit: false,
             userCount: 0,
@@ -180,7 +195,10 @@ window.addEventListener('load', function (e) {
                     }
                     g.bind(body, contents[i])
                     body.querySelector('.biz').addEventListener('click', function(e){
-                        data.actionStats.do('图书借阅详情', 'bizBookId', 'bookId', e.target.dataset.id)
+                        var actionStats = data.actionStats
+                        actionStats.reset()
+                        actionStats.setProp('book', e.target.dataset.id)
+                        actionStats.do()
                     }, false)
                     body.querySelector('.ban').addEventListener('click', function(e){
                         g.patchData('/api/books/' + e.target.dataset.id, genericHeaders, {"isBan": true}, function(r) {
@@ -200,6 +218,58 @@ window.addEventListener('load', function (e) {
                 books.loadData(pageNo)
                 books.render()
                 g.renderPageNavigator('pageIndex', books.pageSize, books.currentPage, books.total, books.handler)
+            },
+            do: function() {
+                contentTitle.textContent = '数字图书管理'
+                mainContainer.innerHTML = ''
+                var books = data.books
+                var filter = doc.getElementById('bookFilter').content.cloneNode(true)
+                filter.addEventListener('change', function(e) {
+                    books.total = -1
+                    books.handler(1)
+                }, false)
+                mainContainer.appendChild(filter)
+                if (!books.standardClassifierIsInit) {
+                    books.getStandardClassifier()
+                }
+                if (!books.classifierIsInit) {
+                    books.getClassifier()
+                }
+                g.getData('/api/systemParameters?filter=' + encodeURIComponent(JSON.stringify({name: 'drmDuration'})), genericHeaders, function(d) {
+                    if (d.length == 1) {
+                        var param = d[0]
+                        books.drmDuration = param.value
+                    } else {
+                        books.drmDuration = 90
+                        alert('DRM duration use default value : 90')
+                    }
+                })
+                data.fillSelect('bookStandardClassifier', books.standardClassifier, true)
+                data.fillSelect('bookClassifier', books.classifier, true)
+                data.fillRadio('bookState', 'normal')
+                var drmDuration = doc.getElementById('drmDuration')
+                drmDuration.value = books.drmDuration
+                var setDrmDuration = doc.getElementById('setDrmDuration')
+                setDrmDuration.addEventListener('click', function(e) {
+                    var drmDuration = doc.getElementById('drmDuration')
+                    var v = drmDuration.value.trim()
+                    if (parseInt(v) == v) {
+                        g.patchData('/api/systemParameters/drmDuration', genericHeaders, {value: v}, function(r) {
+                            alert('设置成功')
+                        })
+                    } else {
+                        alert('必须填写正确的天数')
+                    }
+                }, false)
+                var hr = doc.createElement('hr')
+                mainContainer.appendChild(hr)
+                var table = doc.getElementById('tableFramework').content.cloneNode(true)
+                var header = doc.getElementById('bookItemHeader').content.cloneNode(true)
+                table.querySelector('#header').appendChild(header)
+                var tableBody = table.querySelector('#body')
+                books.setContainer(tableBody)
+                books.handler(1)
+                mainContainer.appendChild(table)
             }
         },
         devices: {
@@ -294,7 +364,10 @@ window.addEventListener('load', function (e) {
                     }
                     g.bind(body, contents[i])
                     body.querySelector('button').addEventListener('click', function(e){
-                        data.actionStats.do('借阅机图书借阅详情', 'bizDeviceId', 'deviceId', e.target.dataset.id)
+                        var actionStats = data.actionStats
+                        actionStats.reset()
+                        actionStats.setProp('device', e.target.dataset.id)
+                        actionStats.do()
                     }, false)
                     devices.container.appendChild(body)
                 }
@@ -304,6 +377,9 @@ window.addEventListener('load', function (e) {
                 devices.loadData(pageNo)
                 devices.render()
                 g.renderPageNavigator('pageIndex', devices.pageSize, devices.currentPage, devices.total, devices.handler)
+            },
+            do: function() {
+                data.do('借阅机管理', 'deviceFilter', 'deviceItemHeader', data.devices)
             }
         },
         users: {
@@ -373,7 +449,7 @@ window.addEventListener('load', function (e) {
                 }
                 var contents = users.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
-                    var body = doc.getElementById('deviceItem').content.cloneNode(true).children[0]
+                    var body = doc.getElementById('userItem').content.cloneNode(true).children[0]
                     contents[i].state = '心跳'
                     var currentTime = new Date()
                     currentTime = currentTime.getTime() / 1000
@@ -382,7 +458,10 @@ window.addEventListener('load', function (e) {
                     }
                     g.bind(body, contents[i])
                     body.querySelector('button').addEventListener('click', function(e){
-                        data.actionStats.do('用户图书借阅详情', 'bizUserId', 'userId', e.target.dataset.id)
+                        var actionStats = data.actionStats
+                        actionStats.reset()
+                        actionStats.setProp('user', e.target.dataset.id)
+                        actionStats.do()
                     }, false)
                     users.container.appendChild(body)
                 }
@@ -392,6 +471,9 @@ window.addEventListener('load', function (e) {
                 users.loadData(pageNo)
                 users.render()
                 g.renderPageNavigator('pageIndex', users.pageSize, users.currentPage, users.total, users.handler)
+            },
+            do: function() {
+                data.do('用户管理', 'userFilter', 'userItemHeader', data.users)
             }
         },
         actionStats: {
@@ -406,6 +488,24 @@ window.addEventListener('load', function (e) {
             startTime: null,
             stopTime: null,
             action: null,
+            currentProps: null,
+            props: {
+                user: {
+                    title: '用户图书借阅详情',
+                    readonlyFilterItem: 'bizUserId',
+                    attributeName: 'userId'
+                },
+                device: {
+                    title: '借阅机图书借阅详情',
+                    readonlyFilterItem: 'bizDeviceId',
+                    attributeName: 'deviceId'
+                },
+                book: {
+                    title: '图书借阅详情',
+                    readonlyFilterItem: 'bizBookId',
+                    attributeName: 'bookId'
+                }
+            },
             setContainer: function (c) {
                 data.users.container = c
             },
@@ -420,6 +520,11 @@ window.addEventListener('load', function (e) {
                 actionStats.startTime = null
                 actionStats.stopTime = null
                 actionStats.action = null
+            },
+            setProp: function(name, value) {
+                var actionStats = data.actionStats
+                actionStats.currentProps = name
+                actionStats[actionStats.props[name].attributeName] = value
             },
             getFilter: function() {
                 var result = null
@@ -497,11 +602,13 @@ window.addEventListener('load', function (e) {
                 actionStats.render()
                 g.renderPageNavigator('pageIndex', actionStats.pageSize, actionStats.currentPage, actionStats.total, actionStats.handler)
             },
-            do: function(title, fixedInput, filterAttributeName, value) {
-                contentTitle.textContent = title
+            do: function() {
+                var actionStats = data.actionStats
+                var prop = actionStats.props[actionStats.currentProps]
+                contentTitle.textContent = prop.title
                 mainContainer.innerHTML = ''
                 var filter = doc.getElementById('statsFilter').content.cloneNode(true)
-                filter.querySelector('#' + fixedInput).setAttribute('readonly', 'readonly')
+                filter.querySelector('#' + prop.readonlyFilterItem).setAttribute('readonly', 'readonly')
                 mainContainer.appendChild(filter)
                 var hr = doc.createElement('hr')
                 mainContainer.appendChild(hr)
@@ -510,8 +617,6 @@ window.addEventListener('load', function (e) {
                 table.querySelector('#header').appendChild(header)
                 var tableBody = table.querySelector('#body')
                 var actionStats = data.actionStats
-                actionStats.reset()
-                actionStats[filterAttributeName] = value
                 actionStats.setContainer(tableBody)
                 actionStats.handler(1)
                 mainContainer.appendChild(table)
@@ -550,97 +655,17 @@ window.addEventListener('load', function (e) {
     var bookList = doc.getElementById('bookList')
     bookList.addEventListener('click', function (event) {
         data.switchTo(bookList)
-
-        contentTitle.textContent = '数字图书管理'
-        mainContainer.innerHTML = ''
-        var books = data.books
-        var filter = doc.getElementById('bookFilter').content.cloneNode(true)
-        filter.addEventListener('change', function(e) {
-            books.total = -1
-            books.handler(1)
-        }, false)
-        mainContainer.appendChild(filter)
-        if (!books.standardClassifierIsInit) {
-            books.getStandardClassifier()
-        }
-        if (!books.classifierIsInit) {
-            books.getClassifier()
-        }
-        g.getData('/api/systemParameters?filter=' + encodeURIComponent(JSON.stringify({name: 'drmDuration'})), genericHeaders, function(d) {
-            if (d.length == 1) {
-                var param = d[0]
-                books.drmDuration = param.value
-            } else {
-                books.drmDuration = 90
-                alert('DRM duration use default value : 90')
-            }
-        })
-        data.fillSelect('bookStandardClassifier', books.standardClassifier, true)
-        data.fillSelect('bookClassifier', books.classifier, true)
-        data.fillRadio('bookState', 'normal')
-        var drmDuration = doc.getElementById('drmDuration')
-        drmDuration.value = books.drmDuration
-        var setDrmDuration = doc.getElementById('setDrmDuration')
-        setDrmDuration.addEventListener('click', function(e) {
-            var drmDuration = doc.getElementById('drmDuration')
-            var v = drmDuration.value.trim()
-            if (parseInt(v) == v) {
-                g.patchData('/api/systemParameters/drmDuration', genericHeaders, {value: v}, function(r) {
-                    alert('设置成功')
-                })
-            } else {
-                alert('必须填写正确的天数')
-            }
-        }, false)
-        var hr = doc.createElement('hr')
-        mainContainer.appendChild(hr)
-        var table = doc.getElementById('tableFramework').content.cloneNode(true)
-        var header = doc.getElementById('bookItemHeader').content.cloneNode(true)
-        table.querySelector('#header').appendChild(header)
-        var tableBody = table.querySelector('#body')
-        books.setContainer(tableBody)
-        books.loadData(1)
-        books.render()
-        mainContainer.appendChild(table)
-        g.renderPageNavigator('pageIndex', books.pageSize, books.currentPage, books.total, books.handler)
+        data.books.do()
     }, false)
     var deviceList = doc.getElementById('deviceList')
     deviceList.addEventListener('click', function (event) {
         data.switchTo(deviceList)
-
-        contentTitle.textContent = '借阅机管理'
-        mainContainer.innerHTML = ''
-        var filter = doc.getElementById('deviceFilter').content.cloneNode(true)
-        mainContainer.appendChild(filter)
-        var hr = doc.createElement('hr')
-        mainContainer.appendChild(hr)
-        var table = doc.getElementById('tableFramework').content.cloneNode(true)
-        var header = doc.getElementById('deviceItemHeader').content.cloneNode(true)
-        table.querySelector('#header').appendChild(header)
-        var tableBody = table.querySelector('#body')
-        var devices = data.devices
-        devices.setContainer(tableBody)
-        devices.loadData(1)
-        devices.render()
-        mainContainer.appendChild(table)
-        g.renderPageNavigator('pageIndex', devices.pageSize, devices.currentPage, devices.total, devices.handler)
+        data.devices.do()
     }, false)
     var userManagement = doc.getElementById('userManagement')
     userManagement.addEventListener('click', function (event) {
         data.switchTo(userManagement)
-
-        contentTitle.textContent = '用户管理'
-        mainContainer.innerHTML = ''
-        var filter = doc.getElementById('userFilter').content.cloneNode(true)
-        mainContainer.appendChild(filter)
-        var hr = doc.createElement('hr')
-        mainContainer.appendChild(hr)
-        var table = doc.getElementById('tableFramework').content.cloneNode(true)
-        var header = doc.getElementById('userItemHeader').content.cloneNode(true)
-        table.querySelector('#header').appendChild(header)
-        var body = doc.getElementById('userItem').content.cloneNode(true)
-        table.querySelector('#body').appendChild(body)
-        mainContainer.appendChild(table)
+        data.users.do()
     }, false)
     var administratorManagement = doc.getElementById('administratorManagement')
     administratorManagement.addEventListener('click', function (event) {
