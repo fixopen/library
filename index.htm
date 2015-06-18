@@ -262,9 +262,9 @@
         <td style="width: 12%">${isbn}</td>
         <td style="width: 8%">${state}</td>
         <td style="width: 14%">
-            <button>图书借阅详情</button>
-            <button>下架</button>
-            <button>删除</button>
+            <button class="biz" data-id="${id}">图书借阅详情</button>
+            <button class="ban" data-id="${id}">下架</button>
+            <button class="remove" data-id="${id}">删除</button>
         </td>
     </tr>
 </template>
@@ -327,7 +327,7 @@
         <td>${controlPassword}</td>
         <td>${state}</td>
         <td>
-            <button>图书借阅详情</button>
+            <button data-id="${id}">图书借阅详情</button>
         </td>
     </tr>
 </template>
@@ -375,8 +375,53 @@
         <td>${registerTime}</td>
         <td>${state}</td>
         <td>
-            <button>图书借阅详情</button>
+            <button data-id="${id}">图书借阅详情</button>
         </td>
+    </tr>
+</template>
+<template id="statsFilter">
+    <table style="width: 100%;">
+        <tbody>
+        <tr>
+            <th class="filter-title"><label for="bizUserId">用户ID</label></th>
+            <td class="filter-title-value"><input id="bizUserId"/></td>
+            <th class="filter-title"><label for="bizDeviceId">借阅机ID</label></th>
+            <td class="filter-title-value"><input id="bizDeviceId"/></td>
+        </tr>
+        <tr>
+            <th class="filter-title"><label for="bizBookId">书籍ID</label></th>
+            <td class="filter-title-value"><input id="bizBookId"/></td>
+            <th class="filter-title"><label for="bizAction">类型</label></th>
+            <td class="filter-title-value"><input id="bizAction"/></td>
+        </tr>
+        <tr>
+            <th class="filter-title"><label>时间</label></th>
+            <td class="filter-title-value" colspan="3">
+                <label for="startTime">从</label>
+                <input type="date" id="startTime"/>
+                <label for="stopTime">到</label>
+                <input type="date" id="stopTime"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</template>
+<template id="statsItemHeader">
+    <tr>
+        <th>用户ID</th>
+        <th>图书ID</th>
+        <th>借阅机ID</th>
+        <th>时间</th>
+        <th>类型</th>
+    </tr>
+</template>
+<template id="statsItem">
+    <tr>
+        <td>${userId}</td>
+        <td>${bookId}</td>
+        <td>${deviceId}</td>
+        <td>${time}</td>
+        <td>${action}</td>
     </tr>
 </template>
 <template id="pageIndexTemplate">

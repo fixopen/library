@@ -13,6 +13,8 @@ window.addEventListener('load', function (e) {
         }
     ]
     var doc = document
+    var contentTitle = doc.getElementById('contentTitle')
+    var mainContainer = doc.getElementById('mainContainer')
     var data = {
         currentItem: null,
         switchTo: function(item) {
@@ -149,7 +151,6 @@ window.addEventListener('load', function (e) {
                     data.books.total = d.value
                 })
             },
-            //load data
             loadData: function (pageNo) {
                 var books = data.books
                 var filter = books.getFilter()
@@ -165,7 +166,6 @@ window.addEventListener('load', function (e) {
                     })
                 }
             },
-            //render
             render: function () {
                 var books = data.books
                 while (books.container.rows.length > 0) {
@@ -179,6 +179,19 @@ window.addEventListener('load', function (e) {
                         contents[i].state = '下架'
                     }
                     g.bind(body, contents[i])
+                    body.querySelector('.biz').addEventListener('click', function(e){
+                        data.actionStats.do('图书借阅详情', 'bizBookId', 'bookId', e.target.dataset.id)
+                    }, false)
+                    body.querySelector('.ban').addEventListener('click', function(e){
+                        g.patchData('/api/books/' + e.target.dataset.id, genericHeaders, {"isBan": true}, function(r) {
+                            //
+                        })
+                    }, false)
+                    body.querySelector('.remove').addEventListener('click', function(e){
+                        g.deleteData('/api/books/' + e.target.dataset.id, genericHeaders, function(r) {
+                            //
+                        })
+                    }, false)
                     books.container.appendChild(body)
                 }
             },
@@ -250,7 +263,6 @@ window.addEventListener('load', function (e) {
                     data.devices.total = d.value
                 })
             },
-            //load data
             loadData: function (pageNo) {
                 var devices = data.devices
                 var filter = devices.getFilter()
@@ -266,7 +278,6 @@ window.addEventListener('load', function (e) {
                     })
                 }
             },
-            //render
             render: function () {
                 var devices = data.devices
                 while (devices.container.rows.length > 0) {
@@ -282,6 +293,9 @@ window.addEventListener('load', function (e) {
                         contents[i].state = '下线'
                     }
                     g.bind(body, contents[i])
+                    body.querySelector('button').addEventListener('click', function(e){
+                        data.actionStats.do('借阅机图书借阅详情', 'bizDeviceId', 'deviceId', e.target.dataset.id)
+                    }, false)
                     devices.container.appendChild(body)
                 }
             },
@@ -337,7 +351,6 @@ window.addEventListener('load', function (e) {
                     data.users.total = d.value
                 })
             },
-            //load data
             loadData: function (pageNo) {
                 var users = data.users
                 var filter = users.getFilter()
@@ -353,7 +366,6 @@ window.addEventListener('load', function (e) {
                     })
                 }
             },
-            //render
             render: function () {
                 var users = data.users
                 while (users.container.rows.length > 0) {
@@ -369,6 +381,9 @@ window.addEventListener('load', function (e) {
                         contents[i].state = '下线'
                     }
                     g.bind(body, contents[i])
+                    body.querySelector('button').addEventListener('click', function(e){
+                        data.actionStats.do('用户图书借阅详情', 'bizUserId', 'userId', e.target.dataset.id)
+                    }, false)
                     users.container.appendChild(body)
                 }
             },
@@ -380,11 +395,129 @@ window.addEventListener('load', function (e) {
             }
         },
         actionStats: {
-            //
+            pageSize: 10,
+            total: -1,
+            currentPage: 0,
+            content: [],
+            container: null,
+            userId: 0,
+            deviceId: 0,
+            bookId: 0,
+            startTime: null,
+            stopTime: null,
+            action: null,
+            setContainer: function (c) {
+                data.users.container = c
+            },
+            reset: function() {
+                var actionStats = data.actionStats
+                actionStats.total = -1
+                actionStats.currentPage = 0
+                actionStats.content = []
+                actionStats.userId = 0
+                actionStats.deviceId = 0
+                actionStats.bookId = 0
+                actionStats.startTime = null
+                actionStats.stopTime = null
+                actionStats.action = null
+            },
+            getFilter: function() {
+                var result = null
+                var actionStats = data.actionStats
+                var filter = {}
+                var hasFilter = false
+                if (actionStats.userId != 0) {
+                    filter.userId = actionStats.userId
+                    hasFilter = false
+                }
+                if (actionStats.deviceId != 0) {
+                    filter.deviceId = actionStats.deviceId
+                    hasFilter = false
+                }
+                if (actionStats.bookId != 0) {
+                    filter.bookId = actionStats.bookId
+                    hasFilter = false
+                }
+                if (actionStats.startTime != null) {
+                    filter.startTime = actionStats.startTime
+                    hasFilter = false
+                }
+                if (actionStats.stopTime != null) {
+                    filter.stopTime = actionStats.stopTime
+                    hasFilter = false
+                }
+                if (actionStats.action != null) {
+                    filter.action = actionStats.action
+                    hasFilter = false
+                }
+                if (hasFilter) {
+                    result = encodeURIComponent(JSON.stringify(filter))
+                }
+                return result
+            },
+            getTotal: function (filter) {
+                var uri = '/api/business/statistics/count'
+                if (filter) {
+                    uri += '?filter=' + filter
+                }
+                g.getData(uri, genericHeaders, function (d) {
+                    data.users.total = d.value
+                })
+            },
+            loadData: function (pageNo) {
+                var actionStats = data.actionStats
+                var filter = actionStats.getFilter()
+                if (actionStats.total == -1) {
+                    actionStats.getTotal(filter)
+                }
+                if (actionStats.currentPage != pageNo) {
+                    actionStats.currentPage = pageNo
+                    var offset = actionStats.pageSize * (actionStats.currentPage - 1)
+                    var orderBy = encodeURIComponent(JSON.stringify({id: 'desc'}))
+                    g.getData('/api/users?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
+                        actionStats.content = d
+                    })
+                }
+            },
+            render: function () {
+                var actionStats = data.actionStats
+                while (actionStats.container.rows.length > 0) {
+                    actionStats.container.deleteRow(-1);
+                }
+                var contents = actionStats.content
+                for (var i = 0, c = contents.length; i < c; ++i) {
+                    var body = doc.getElementById('statsItem').content.cloneNode(true).children[0]
+                    g.bind(body, contents[i])
+                    actionStats.container.appendChild(body)
+                }
+            },
+            handler: function (pageNo) {
+                var actionStats = data.actionStats
+                actionStats.loadData(pageNo)
+                actionStats.render()
+                g.renderPageNavigator('pageIndex', actionStats.pageSize, actionStats.currentPage, actionStats.total, actionStats.handler)
+            },
+            do: function(title, fixedInput, filterAttributeName, value) {
+                contentTitle.textContent = title
+                mainContainer.innerHTML = ''
+                var filter = doc.getElementById('statsFilter').content.cloneNode(true)
+                filter.querySelector('#' + fixedInput).setAttribute('readonly', 'readonly')
+                mainContainer.appendChild(filter)
+                var hr = doc.createElement('hr')
+                mainContainer.appendChild(hr)
+                var table = doc.getElementById('tableFramework').content.cloneNode(true)
+                var header = doc.getElementById('statsItemHeader').content.cloneNode(true)
+                table.querySelector('#header').appendChild(header)
+                var tableBody = table.querySelector('#body')
+                var actionStats = data.actionStats
+                actionStats.reset()
+                actionStats[filterAttributeName] = value
+                actionStats.setContainer(tableBody)
+                actionStats.handler(1)
+                mainContainer.appendChild(table)
+            }
         }
     }
-    var contentTitle = doc.getElementById('contentTitle')
-    var mainContainer = doc.getElementById('mainContainer')
     var firstPage = doc.getElementById('firstPage')
     firstPage.addEventListener('click', function (event) {
         data.switchTo(firstPage)
