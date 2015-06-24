@@ -517,8 +517,8 @@ g.GenericProcessor = function (config) {
     }
 }
 
-g.renderPageNavigator = function (id, pageSize, currentPage, total, handler) {
-    var pageIndexContainer = document.getElementById(id)
+g.renderPageNavigator = function (pageIndexContainer, pageSize, currentPage, total, handler) {
+    //var pageIndexContainer = document.getElementById(id)
     pageIndexContainer.innerHTML = ''
 
     var c = document.getElementById('pageIndexTemplate').content.cloneNode(true)

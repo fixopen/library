@@ -62,17 +62,25 @@ window.addEventListener('load', function (e) {
             }
             return result
         },
-        do: function(title, filterTemplate, headerTemplate, currentData) {
+        do: function(title, filterTemplate, headerTemplate, currentData, filterPostProcessor) {
             contentTitle.textContent = title
             mainContainer.innerHTML = ''
             var filter = doc.getElementById(filterTemplate).content.cloneNode(true)
+            filter.addEventListener('change', function(e) {
+                currentData.total = -1
+                currentData.handler(1)
+            }, false)
             mainContainer.appendChild(filter)
+            if (filterPostProcessor) {
+                filterPostProcessor()
+            }
             var hr = doc.createElement('hr')
             mainContainer.appendChild(hr)
             var table = doc.getElementById('tableFramework').content.cloneNode(true)
             var header = doc.getElementById(headerTemplate).content.cloneNode(true)
             table.querySelector('#header').appendChild(header)
             var tableBody = table.querySelector('#body')
+            currentData.pageIndexContainer = table.querySelector('#pageIndex')
             currentData.setContainer(tableBody)
             currentData.handler(1)
             mainContainer.appendChild(table)
@@ -94,6 +102,7 @@ window.addEventListener('load', function (e) {
             drmDuration: 0,
             content: [],
             container: null,
+            pageIndexContainer: null,
             setContainer: function (c) {
                 data.books.container = c
             },
@@ -217,7 +226,7 @@ window.addEventListener('load', function (e) {
                 var books = data.books
                 books.loadData(pageNo)
                 books.render()
-                g.renderPageNavigator('pageIndex', books.pageSize, books.currentPage, books.total, books.handler)
+                g.renderPageNavigator(books.pageIndexContainer, books.pageSize, books.currentPage, books.total, books.handler)
             },
             do: function() {
                 contentTitle.textContent = '数字图书管理'
@@ -267,6 +276,7 @@ window.addEventListener('load', function (e) {
                 var header = doc.getElementById('bookItemHeader').content.cloneNode(true)
                 table.querySelector('#header').appendChild(header)
                 var tableBody = table.querySelector('#body')
+                books.pageIndexContainer = table.querySelector('#pageIndex')
                 books.setContainer(tableBody)
                 books.handler(1)
                 mainContainer.appendChild(table)
@@ -278,6 +288,7 @@ window.addEventListener('load', function (e) {
             currentPage: 0,
             content: [],
             container: null,
+            pageIndexContainer: null,
             setContainer: function (c) {
                 data.devices.container = c
             },
@@ -376,10 +387,12 @@ window.addEventListener('load', function (e) {
                 var devices = data.devices
                 devices.loadData(pageNo)
                 devices.render()
-                g.renderPageNavigator('pageIndex', devices.pageSize, devices.currentPage, devices.total, devices.handler)
+                g.renderPageNavigator(devices.pageIndexContainer, devices.pageSize, devices.currentPage, devices.total, devices.handler)
             },
             do: function() {
-                data.do('借阅机管理', 'deviceFilter', 'deviceItemHeader', data.devices)
+                data.do('借阅机管理', 'deviceFilter', 'deviceItemHeader', data.devices, function() {
+                    data.fillRadio('deviceState', 'heartbeat')
+                })
             }
         },
         users: {
@@ -388,6 +401,7 @@ window.addEventListener('load', function (e) {
             currentPage: 0,
             content: [],
             container: null,
+            pageIndexContainer: null,
             setContainer: function (c) {
                 data.users.container = c
             },
@@ -470,7 +484,7 @@ window.addEventListener('load', function (e) {
                 var users = data.users
                 users.loadData(pageNo)
                 users.render()
-                g.renderPageNavigator('pageIndex', users.pageSize, users.currentPage, users.total, users.handler)
+                g.renderPageNavigator(users.pageIndexContainer, users.pageSize, users.currentPage, users.total, users.handler)
             },
             do: function() {
                 data.do('用户管理', 'userFilter', 'userItemHeader', data.users)
@@ -482,6 +496,7 @@ window.addEventListener('load', function (e) {
             currentPage: 0,
             content: [],
             container: null,
+            pageIndexContainer: null,
             userId: 0,
             deviceId: 0,
             bookId: 0,
@@ -600,7 +615,7 @@ window.addEventListener('load', function (e) {
                 var actionStats = data.actionStats
                 actionStats.loadData(pageNo)
                 actionStats.render()
-                g.renderPageNavigator('pageIndex', actionStats.pageSize, actionStats.currentPage, actionStats.total, actionStats.handler)
+                g.renderPageNavigator(actionStats.pageIndexContainer, actionStats.pageSize, actionStats.currentPage, actionStats.total, actionStats.handler)
             },
             do: function() {
                 var actionStats = data.actionStats
@@ -617,6 +632,7 @@ window.addEventListener('load', function (e) {
                 table.querySelector('#header').appendChild(header)
                 var tableBody = table.querySelector('#body')
                 var actionStats = data.actionStats
+                actionStats.pageIndexContainer = table.querySelector('#pageIndex')
                 actionStats.setContainer(tableBody)
                 actionStats.handler(1)
                 mainContainer.appendChild(table)

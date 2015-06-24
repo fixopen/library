@@ -137,6 +137,11 @@ trait DataAccess
         $this->id = $id;
     }
 
+    private static function specFilter($name, $value)
+    {
+        return '';
+    }
+
     public static function ConvertJsonToWhere($filter)
     {
         $where = array();
@@ -146,10 +151,15 @@ trait DataAccess
         //print 'hello';
         //print_r($filterJson);
         foreach ($filterJson as $key => $value) {
-            if (is_null($value)) {
-                $where[] = self::Mark($key) . ' IS NULL';
+            $condition = self::specFilter($key, $value);
+            if ($condition == '') {
+                if (is_null($value)) {
+                    $where[] = self::Mark($key) . ' IS NULL';
+                } else {
+                    $where[] = self::Mark($key) . ' = ' . self::DatabaseQuote($value, self::GetTypeByName($key));
+                }
             } else {
-                $where[] = self::Mark($key) . ' = ' . self::DatabaseQuote($value, self::GetTypeByName($key));
+                $where[] = $condition;
             }
         }
         //print_r($where);

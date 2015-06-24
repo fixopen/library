@@ -14,6 +14,7 @@ class devices
         NormalFacadeImpl,
         Facade {
         DataAccess::IsPrimaryKey as isPrimary;
+        DataAccess::specFilter as commonSpecFilter;
         JSON::ToJson as privateToJson;
     }
 
@@ -26,6 +27,22 @@ class devices
     private $controlPassword = '';
     private $ipAddress = NULL;
     private $sessionId = NULL;
+
+    private static function specFilter($name, $value) {
+        $result = self::commonSpecFilter($name, $value);
+        if ($name === 'isOnline') {
+            $now = time();
+            $sepator = $now - 30 * 60;
+            if ($value === 'heartbeat') {
+                $result = '"lastOperationTime" > ' . $sepator;
+            } else if ($value == 'offline') {
+                $result = '"lastOperationTime" < ' . $sepator;
+            } else {
+                //still empty
+            }
+        }
+        return $result;
+    }
 
     public static function IsPrimaryKey($no)
     {
