@@ -163,11 +163,11 @@ g.ajaxProcess = function (method, url, headers, data, postProcess) {
     var xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-            var result = null
+            var result = {meta: {code: xhr.status, text: xhr.statusText}, data: null}
             if (xhr.responseText[0] == '{' || xhr.responseText[0] == '[') {
-                result = JSON.parse(xhr.responseText)
+                result.data = JSON.parse(xhr.responseText)
             } else {
-                result = xhr.responseText
+                result.data = xhr.responseText
             }
             postProcess(result)
         }

@@ -116,8 +116,10 @@ window.addEventListener('load', function (e) {
             getClassifier: function () {
                 var uri = '/api/books/groups/firstLevelClassify'
                 g.getData(uri, genericHeaders, function (d) {
-                    data.books.classifier = d
-                    data.books.classifierIsInit = true
+                    if (d.meta.code == 200) {
+                        data.books.classifier = d.data
+                        data.books.classifierIsInit = true
+                    }
                 })
             },
             getFilter: function () {
@@ -172,7 +174,9 @@ window.addEventListener('load', function (e) {
                     uri += '?filter=' + filter
                 }
                 g.getData(uri, genericHeaders, function (d) {
-                    data.books.total = d.value
+                    if (d.meta.code == 200) {
+                        data.books.total = d.data.value
+                    }
                 })
             },
             loadData: function (pageNo) {
@@ -186,7 +190,9 @@ window.addEventListener('load', function (e) {
                     var offset = books.pageSize * (books.currentPage - 1)
                     var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
                     g.getData('/api/books?filter=' + filter + '&offset=' + offset + '&count=' + books.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
-                        books.content = d
+                        if (d.meta.code == 200) {
+                            books.content = d.data
+                        }
                     })
                 }
             },
@@ -245,12 +251,14 @@ window.addEventListener('load', function (e) {
                     books.getClassifier()
                 }
                 g.getData('/api/systemParameters?filter=' + encodeURIComponent(JSON.stringify({name: 'drmDuration'})), genericHeaders, function(d) {
-                    if (d.length == 1) {
-                        var param = d[0]
-                        books.drmDuration = param.value
-                    } else {
-                        books.drmDuration = 90
-                        alert('DRM duration use default value : 90')
+                    if (d.meta.code == 200) {
+                        if (d.data.length == 1) {
+                            var param = d.data[0]
+                            books.drmDuration = param.value
+                        } else {
+                            books.drmDuration = 90
+                            alert('DRM duration use default value : 90')
+                        }
                     }
                 })
                 data.fillSelect('bookStandardClassifier', books.standardClassifier, true)
@@ -264,7 +272,9 @@ window.addEventListener('load', function (e) {
                     var v = drmDuration.value.trim()
                     if (parseInt(v) == v) {
                         g.patchData('/api/systemParameters/drmDuration', genericHeaders, {value: v}, function(r) {
-                            alert('设置成功')
+                            if (r.meta.code < 400) {
+                                alert('设置成功')
+                            }
                         })
                     } else {
                         alert('必须填写正确的天数')
@@ -341,7 +351,9 @@ window.addEventListener('load', function (e) {
                     uri += '?filter=' + filter
                 }
                 g.getData(uri, genericHeaders, function (d) {
-                    data.devices.total = d.value
+                    if (d.meta.code == 200) {
+                        data.devices.total = d.data.value
+                    }
                 })
             },
             loadData: function (pageNo) {
@@ -355,7 +367,9 @@ window.addEventListener('load', function (e) {
                     var offset = devices.pageSize * (devices.currentPage - 1)
                     var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
                     g.getData('/api/devices?filter=' + filter + '&offset=' + offset + '&count=' + devices.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
-                        devices.content = d
+                        if (d.meta.code == 200) {
+                            devices.content = d.data
+                        }
                     })
                 }
             },
@@ -438,7 +452,9 @@ window.addEventListener('load', function (e) {
                     uri += '?filter=' + filter
                 }
                 g.getData(uri, genericHeaders, function (d) {
-                    data.users.total = d.value
+                    if (d.meta.code == 200) {
+                        data.users.total = d.data.value
+                    }
                 })
             },
             loadData: function (pageNo) {
@@ -452,7 +468,9 @@ window.addEventListener('load', function (e) {
                     var offset = users.pageSize * (users.currentPage - 1)
                     var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
                     g.getData('/api/users?filter=' + filter + '&offset=' + offset + '&count=' + users.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
-                        users.content = d
+                        if (d.meta.code == 200) {
+                            users.content = d.data
+                        }
                     })
                 }
             },
@@ -581,7 +599,9 @@ window.addEventListener('load', function (e) {
                     uri += '?filter=' + filter
                 }
                 g.getData(uri, genericHeaders, function (d) {
-                    data.users.total = d.value
+                    if (d.meta.code == 200) {
+                        data.users.total = d.data.value
+                    }
                 })
             },
             loadData: function (pageNo) {
@@ -595,7 +615,9 @@ window.addEventListener('load', function (e) {
                     var offset = actionStats.pageSize * (actionStats.currentPage - 1)
                     var orderBy = encodeURIComponent(JSON.stringify({id: 'desc'}))
                     g.getData('/api/users?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
-                        actionStats.content = d
+                        if (d.meta.code == 200) {
+                            actionStats.content = d.data
+                        }
                     })
                 }
             },
@@ -690,6 +712,36 @@ window.addEventListener('load', function (e) {
         contentTitle.textContent = '管理员信息'
         mainContainer.innerHTML = ''
         var admin = doc.getElementById('administratorInfo').content.cloneNode(true)
+        var setPassword = admin.querySelector('#setPassword')
+        setPassword.addEventListener('click', function(e) {
+            var oldPassword = admin.querySelector('#oldPassword')
+            var u = {name: "admin", password: oldPassword.value.trim()}
+            g.getData('/api/administrators?filter=' + encodeURIComponent(JSON.stringify(u)), genericHeaders, function(d) {
+                if (d.meta.code == 200) {
+                    if (d.data.length == 1) {
+                        var newPassword = admin.querySelector('#newPassword')
+                        var retryNewPassword = admin.querySelector('#retryNewPassword')
+                        if (newPassword.value == retryNewPassword.value) {
+                            u.password = newPassword.value
+                            g.patchData('/api/administrators/' + u.name, genericHeaders, u, function(d) {
+                                if (d.meta.code < 400) {
+                                    alert('Your password changed!')
+                                    oldPassword.value = ''
+                                    newPassword.value = ''
+                                    retryNewPassword.value = ''
+                                }
+                            })
+                        } else {
+                            alert('new password not same')
+                        }
+                    } else {
+                        alert('server internal error')
+                    }
+                } else {
+                    alert('old password incorrect')
+                }
+            })
+        }, false)
         mainContainer.appendChild(admin)
     }, false)
     var stats = doc.getElementById('stats')
