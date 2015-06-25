@@ -89,7 +89,33 @@ window.addEventListener('load', function (e) {
             isInit: false,
             userCount: 0,
             bookCount: 0, normalBookCount: 0,
-            deviceCount: 0, liveDeviceCount: 0
+            deviceCount: 0, liveDeviceCount: 0,
+            do: function() {
+                contentTitle.textContent = '管理首页'
+                mainContainer.innerHTML = ''
+                var firstPageContent = doc.getElementById('firstPageContent').content.cloneNode(true).children[0]
+                var baseInfo = data.baseInfo
+                if (!baseInfo.isInit) {
+                    g.getData('/api/devices/statistics/count', genericHeaders, function (d) {
+                        baseInfo.deviceCount = d.value
+                    })
+                    g.getData('/api/devices/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isOnline: true})), genericHeaders, function (d) {
+                        baseInfo.liveDeviceCount = d.value
+                    })
+                    g.getData('/api/books/statistics/count', genericHeaders, function (d) {
+                        baseInfo.bookCount = d.value
+                    })
+                    g.getData('/api/books/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isBan: true})), genericHeaders, function (d) {
+                        baseInfo.normalBookCount = d.value
+                    })
+                    g.getData('/api/users/statistics/count', genericHeaders, function (d) {
+                        baseInfo.userCount = d.value
+                    })
+                    baseInfo.isInit = true
+                }
+                g.bind(firstPageContent, baseInfo)
+                mainContainer.appendChild(firstPageContent)
+            }
         },
         books: {
             pageSize: 4,
@@ -659,36 +685,58 @@ window.addEventListener('load', function (e) {
                 actionStats.handler(1)
                 mainContainer.appendChild(table)
             }
+        },
+        admin: {
+            do: function() {
+                contentTitle.textContent = '管理员信息'
+                mainContainer.innerHTML = ''
+                var changePasswordPanel = doc.getElementById('administratorInfo').content.cloneNode(true)
+                var setPassword = changePasswordPanel.querySelector('#setPassword')
+                setPassword.addEventListener('click', function(e) {
+                    var oldPassword = changePasswordPanel.querySelector('#oldPassword')
+                    var u = {name: "admin", password: oldPassword.value.trim()}
+                    g.getData('/api/administrators?filter=' + encodeURIComponent(JSON.stringify(u)), genericHeaders, function (d) {
+                        if (d.meta.code == 200) {
+                            if (d.data.length == 1) {
+                                var newPassword = changePasswordPanel.querySelector('#newPassword')
+                                var retryNewPassword = changePasswordPanel.querySelector('#retryNewPassword')
+                                if (newPassword.value == retryNewPassword.value) {
+                                    u.password = newPassword.value
+                                    g.patchData('/api/administrators/' + u.name, genericHeaders, u, function (d) {
+                                        if (d.meta.code < 400) {
+                                            alert('Your password changed!')
+                                            oldPassword.value = ''
+                                            newPassword.value = ''
+                                            retryNewPassword.value = ''
+                                        }
+                                    })
+                                } else {
+                                    alert('new password not same')
+                                }
+                            } else {
+                                alert('server internal error')
+                            }
+                        } else {
+                            alert('old password incorrect')
+                        }
+                    })
+                }, false)
+                mainContainer.appendChild(changePasswordPanel)
+            }
+        },
+        bookStats: {
+            do: function() {
+                contentTitle.textContent = '统计信息'
+                mainContainer.innerHTML = ''
+                var statsInfo = doc.getElementById('statsContent').content.cloneNode(true)
+                mainContainer.appendChild(statsInfo)
+            }
         }
     }
     var firstPage = doc.getElementById('firstPage')
     firstPage.addEventListener('click', function (event) {
         data.switchTo(firstPage)
-
-        contentTitle.textContent = '管理首页'
-        mainContainer.innerHTML = ''
-        var firstPageContent = doc.getElementById('firstPageContent').content.cloneNode(true).children[0]
-        var baseInfo = data.baseInfo
-        if (!baseInfo.isInit) {
-            g.getData('/api/devices/statistics/count', genericHeaders, function (d) {
-                baseInfo.deviceCount = d.value
-            })
-            g.getData('/api/devices/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isOnline: true})), genericHeaders, function (d) {
-                baseInfo.liveDeviceCount = d.value
-            })
-            g.getData('/api/books/statistics/count', genericHeaders, function (d) {
-                baseInfo.bookCount = d.value
-            })
-            g.getData('/api/books/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isBan: true})), genericHeaders, function (d) {
-                baseInfo.normalBookCount = d.value
-            })
-            g.getData('/api/users/statistics/count', genericHeaders, function (d) {
-                baseInfo.userCount = d.value
-            })
-            baseInfo.isInit = true
-        }
-        g.bind(firstPageContent, baseInfo)
-        mainContainer.appendChild(firstPageContent)
+        data.baseInfo.do()
     }, false)
     var bookList = doc.getElementById('bookList')
     bookList.addEventListener('click', function (event) {
@@ -708,50 +756,12 @@ window.addEventListener('load', function (e) {
     var administratorManagement = doc.getElementById('administratorManagement')
     administratorManagement.addEventListener('click', function (event) {
         data.switchTo(administratorManagement)
-
-        contentTitle.textContent = '管理员信息'
-        mainContainer.innerHTML = ''
-        var admin = doc.getElementById('administratorInfo').content.cloneNode(true)
-        var setPassword = admin.querySelector('#setPassword')
-        setPassword.addEventListener('click', function(e) {
-            var oldPassword = admin.querySelector('#oldPassword')
-            var u = {name: "admin", password: oldPassword.value.trim()}
-            g.getData('/api/administrators?filter=' + encodeURIComponent(JSON.stringify(u)), genericHeaders, function(d) {
-                if (d.meta.code == 200) {
-                    if (d.data.length == 1) {
-                        var newPassword = admin.querySelector('#newPassword')
-                        var retryNewPassword = admin.querySelector('#retryNewPassword')
-                        if (newPassword.value == retryNewPassword.value) {
-                            u.password = newPassword.value
-                            g.patchData('/api/administrators/' + u.name, genericHeaders, u, function(d) {
-                                if (d.meta.code < 400) {
-                                    alert('Your password changed!')
-                                    oldPassword.value = ''
-                                    newPassword.value = ''
-                                    retryNewPassword.value = ''
-                                }
-                            })
-                        } else {
-                            alert('new password not same')
-                        }
-                    } else {
-                        alert('server internal error')
-                    }
-                } else {
-                    alert('old password incorrect')
-                }
-            })
-        }, false)
-        mainContainer.appendChild(admin)
+        data.admin.do()
     }, false)
     var stats = doc.getElementById('stats')
     stats.addEventListener('click', function (event) {
         data.switchTo(stats)
-
-        contentTitle.textContent = '统计信息'
-        mainContainer.innerHTML = ''
-        var statsInfo = doc.getElementById('statsContent').content.cloneNode(true)
-        mainContainer.appendChild(statsInfo)
+        data.bookStats.do()
     }, false)
     var createDevice = doc.querySelector('#createDevice .btn-primary')
     createDevice.addEventListener('click', function(e) {
