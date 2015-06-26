@@ -23,6 +23,55 @@ class business
     private $time = NULL; //timestamp(4) without time zone,
     private $action = ''; //actiontype
 
+    private static $classSpecSubresource = array('top' => 'topProc');
+
+    public static function topProc(array &$request)
+    {
+        $count = count($request['paths']);
+        switch ($request['method']) {
+            case 'POST':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+                break;
+            case 'PUT':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+                break;
+            case 'PATCH':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'GET':
+                if ($count == 1) {
+                    $dir = array_shift($request['paths']);
+                    switch ($dir) {
+                        case 'follow':
+                            $query = 'SELECT count(*) FROM "business" WHERE "action" = ' . "'Follow' GROUP BY " . '"bookId" ORDER BY "count" LIMIT 10';
+                            break;
+                        case 'view':
+                            break;
+                        case 'download':
+                            break;
+                        default:
+                            $request['code'] = 400; //bad request
+                            break;
+                    }
+                } else {
+                    $request['code'] = 400; //bad request
+                }
+                break;
+            case 'DELETE':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            default:
+                break;
+        }
+        return $request;
+    }
+
     public function getUserId()
     {
         return $this->userId;

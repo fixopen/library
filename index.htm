@@ -432,6 +432,30 @@
     <li class="page-item"><a href="javascript:void(0)" data-pageno="${pageno}">${pageno}</a></li>
     <li class="last-page"><a href="javascript:void(0)" data-pageno="${pageno}">&raquo;</a></li>
 </template>
+<template id="bookStatsHeader">
+    <tr>
+        <th>图书编号</th>
+        <th>图书名称</th>
+        <th>关注数量
+            <button>Up\Down</button>
+        </th>
+        <th>阅读数量
+            <button>Up\Down</button>
+        </th>
+        <th>下载数量
+            <button>Up\Down</button>
+        </th>
+    </tr>
+</template>
+<template id="bookStatsItem">
+    <tr>
+        <td>${id}</td>
+        <td>${name}</td>
+        <td>${followCount}</td>
+        <td>${readCount}</td>
+        <td>${downloadCount}</td>
+    </tr>
+</template>
 <template id="statsContent">
     <table border="1">
         <thead>

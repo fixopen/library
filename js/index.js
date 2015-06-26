@@ -97,19 +97,19 @@ window.addEventListener('load', function (e) {
                 var baseInfo = data.baseInfo
                 if (!baseInfo.isInit) {
                     g.getData('/api/devices/statistics/count', genericHeaders, function (d) {
-                        baseInfo.deviceCount = d.value
+                        baseInfo.deviceCount = d.data.value
                     })
                     g.getData('/api/devices/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isOnline: true})), genericHeaders, function (d) {
-                        baseInfo.liveDeviceCount = d.value
+                        baseInfo.liveDeviceCount = d.data.value
                     })
                     g.getData('/api/books/statistics/count', genericHeaders, function (d) {
-                        baseInfo.bookCount = d.value
+                        baseInfo.bookCount = d.data.value
                     })
                     g.getData('/api/books/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isBan: true})), genericHeaders, function (d) {
-                        baseInfo.normalBookCount = d.value
+                        baseInfo.normalBookCount = d.data.value
                     })
                     g.getData('/api/users/statistics/count', genericHeaders, function (d) {
-                        baseInfo.userCount = d.value
+                        baseInfo.userCount = d.data.value
                     })
                     baseInfo.isInit = true
                 }
@@ -135,7 +135,7 @@ window.addEventListener('load', function (e) {
             getStandardClassifier: function () {
                 var uri = '/api/books/groups/standardClassify'
                 g.getData(uri, genericHeaders, function (d) {
-                    data.books.standardClassifier = d
+                    data.books.standardClassifier = d.data
                     data.books.standardClassifierIsInit = true
                 })
             },
@@ -725,10 +725,66 @@ window.addEventListener('load', function (e) {
             }
         },
         bookStats: {
+            followBooks: [],
+            isFollowBooksGet: false,
+            viewBooks: [],
+            isViewBooksGet: false,
+            downloadBooks: [],
+            isDownloadBooksGet: false,
+            currentBookType: 'download', //follow, view
+            total: 10,
+            container: null,
+            currentPage: 1,
+            pageIndexContainer: null,
+            setContainer: function (c) {
+                data.bookStats.container = c
+            },
+            handler: function (pageNo) {
+                var bookStats = data.bookStats
+                switch (bookStats.currentBookType) {
+                    case 'follow':
+                        if (!bookStats.isFollowBooksGet) {
+                            g.getData('/api/business/top/follow', genericHeaders, function(d){
+                                if (d.meta.code == 200) {
+                                    bookStats.followBooks = d.data
+                                    bookStats.isFollowBooksGet = true
+                                }
+                            })
+                        }
+                        break
+                    case 'view':
+                        if (!bookStats.isViewBooksGet) {
+                            g.getData('/api/business/top/view', genericHeaders, function(d){
+                                if (d.meta.code == 200) {
+                                    bookStats.viewBooks = d.data
+                                    bookStats.isViewBooksGet = true
+                                }
+                            })
+                        }
+                        break
+                    case 'download':
+                        if (!bookStats.isDownloadBooksGet) {
+                            g.getData('/api/business/top/download', genericHeaders, function(d){
+                                if (d.meta.code == 200) {
+                                    bookStats.downloadBooks = d.data
+                                    bookStats.isDownloadBooksGet = true
+                                }
+                            })
+                        }
+                        break
+                    default:
+                        break
+                }
+                bookStats.render()
+            },
             do: function() {
+                var bookStats = data.bookStats
+                bookStats.currentBookType = 'download'
+                data.do('统计信息', '', 'bookStatsHeader', bookStats)
                 contentTitle.textContent = '统计信息'
                 mainContainer.innerHTML = ''
                 var statsInfo = doc.getElementById('statsContent').content.cloneNode(true)
+                g.bind(statsInfo, bookStats.downloadBooks)
                 mainContainer.appendChild(statsInfo)
             }
         }
