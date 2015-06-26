@@ -105,7 +105,7 @@ window.addEventListener('load', function (e) {
                     g.getData('/api/books/statistics/count', genericHeaders, function (d) {
                         baseInfo.bookCount = d.data.value
                     })
-                    g.getData('/api/books/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isBan: true})), genericHeaders, function (d) {
+                    g.getData('/api/books/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isBan: false})), genericHeaders, function (d) {
                         baseInfo.normalBookCount = d.data.value
                     })
                     g.getData('/api/users/statistics/count', genericHeaders, function (d) {
