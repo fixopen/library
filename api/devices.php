@@ -33,9 +33,9 @@ class devices
         if ($name === 'isOnline') {
             $now = time();
             $sepator = $now - 30 * 60;
-            if ($value === 'heartbeat') {
+            if ($value === 'heartbeat' || $value === TRUE) {
                 $result = '"lastOperationTime" > ' . $sepator;
-            } else if ($value == 'offline') {
+            } else if ($value == 'offline' || $value === FALSE) {
                 $result = '"lastOperationTime" < ' . $sepator;
             } else {
                 //still empty
