@@ -265,11 +265,15 @@ window.addEventListener('load', function (e) {
                 mainContainer.innerHTML = ''
                 var books = data.books
                 var filter = doc.getElementById('bookFilter').content.cloneNode(true)
-                filter.addEventListener('change', function(e) {
+                mainContainer.appendChild(filter)
+                //filter.addEventListener('change', function(e) {
+                //    books.total = -1
+                //    books.handler(1)
+                //}, false)
+                mainContainer.addEventListener('change', function(e) {
                     books.total = -1
                     books.handler(1)
                 }, false)
-                mainContainer.appendChild(filter)
                 if (!books.standardClassifierIsInit) {
                     books.getStandardClassifier()
                 }
@@ -693,13 +697,13 @@ window.addEventListener('load', function (e) {
                 var changePasswordPanel = doc.getElementById('administratorInfo').content.cloneNode(true)
                 var setPassword = changePasswordPanel.querySelector('#setPassword')
                 setPassword.addEventListener('click', function(e) {
-                    var oldPassword = changePasswordPanel.querySelector('#oldPassword')
+                    var oldPassword = document.querySelector('#oldPassword')
                     var u = {name: "admin", password: oldPassword.value.trim()}
                     g.getData('/api/administrators?filter=' + encodeURIComponent(JSON.stringify(u)), genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             if (d.data.length == 1) {
-                                var newPassword = changePasswordPanel.querySelector('#newPassword')
-                                var retryNewPassword = changePasswordPanel.querySelector('#retryNewPassword')
+                                var newPassword = document.querySelector('#newPassword')
+                                var retryNewPassword = document.querySelector('#retryNewPassword')
                                 if (newPassword.value == retryNewPassword.value) {
                                     u.password = newPassword.value
                                     g.patchData('/api/administrators/' + u.name, genericHeaders, u, function (d) {
@@ -722,6 +726,7 @@ window.addEventListener('load', function (e) {
                     })
                 }, false)
                 mainContainer.appendChild(changePasswordPanel)
+                //var n = changePasswordPanel.querySelector('#oldPassword')
             }
         },
         bookStats: {
