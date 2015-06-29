@@ -86,8 +86,8 @@
         </div>
         <div class="col-lg-9"
              style="text-align: right; color: #ffffff; padding-top: 48px; background-color: #0091ff; font-size: 13px; height: 100%;">
-            ${name}管理员 | <span>退出</span>
-            <span style="margin-left: 25px">2015年4月3日 星期四</span>
+            admin 管理员 | <span>退出</span>
+            <span style="margin-left: 25px" id="timeNow" ></span>
         </div>
     </div>
     <div class="row" style="background-color: #fff; height: 582px;">
@@ -182,7 +182,7 @@
     </div>
 </template>
 <template id="bookFilter">
-    <table style="width: 100%;">
+    <table style="width: 100%;" id="mainContainerTable">
         <!--
         <caption>filter</caption>
         <colgroup>

@@ -3,7 +3,10 @@
 class Database {
 
     public static function GetInstance() {
+        //print 'hello, world';
+        //print self::$db == NULL;
         if (self::$db == NULL) {
+            //print "2";
             self::$db = new PDO(self::$driver
                 . ':host=' . self::$host
                 . ';port=' . self::$port
@@ -16,10 +19,13 @@ class Database {
                 	PDO::ATTR_EMULATE_PREPARES => FALSE,
                 	PDO::ATTR_STRINGIFY_FETCHES => FALSE));
             //print_r(self::$db);
+            //print "3";
             self::$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
             self::$db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, FALSE);
-            //print_r(self::$db);
+            //print "4";
+            //print self::$db == NULL;
         }
+        //print_r(self::$db);
         return self::$db;
     }
 

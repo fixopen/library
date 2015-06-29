@@ -36,7 +36,7 @@ trait Facade
             $childObject->ObjectChildrenProcess($grandson, $request);
             //print_r($request);
         } else {
-            //print 'error';
+            //print 'error<br />';
             $classChildrenProcess = self::GetClassChildrenProcess($child);
             //print 'class method is ' . $classChildrenProcess . '<br />';
             if ($classChildrenProcess) {
@@ -365,7 +365,7 @@ trait Facade
             case 'GET':
                 $acceptContentType = $request['headers']['Accept'];
                 if (strpos($acceptContentType, 'application/json') === 0) {
-                    //normal
+                    //print 'normal pull';
                     self::normalPull($request);
                 } else {
                     //binary downloader

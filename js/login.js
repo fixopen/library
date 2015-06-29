@@ -14,17 +14,19 @@ window.addEventListener('load', function (e) {
     }, false)
     var login = doc.getElementById('login')
     login.addEventListener('click', function(e) {
-        var name = doc.getElementById('name')
-        var password = doc.getElementById('password')
-        g.postData('/api/administrators/' + name.value.trim + '/sessions', [
+        var name = doc.getElementById('name').value
+        var password = doc.getElementById('password').value
+        g.postData('/api/administrators/' + name + '/sessions', [
             {name: 'Content-Type', value: 'application/json'},
             {name: 'Accept', value: 'application/json'}
-        ], {password: password.value.trim}, function(r) {
-            if (r.state) {
-                //error
-            } else {
+        ], {password: password}, function(r) {
+            if (r.meta.code == 200) {
                 //ok
-                location.href = 'index.htm?name=' + r.name
+                location.href = 'index.htm?name=' + r.data.name
+            } else {
+                //error
+                alert("账号密码错误");
+                //location.href = 'index.htm?name=' + r.name
             }
         })
     }, false)

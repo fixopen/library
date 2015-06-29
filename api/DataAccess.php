@@ -10,7 +10,10 @@ trait DataAccess
         if (count(self::$types) == 0) {
             $queryStmt = 'SELECT * FROM ' . self::Mark(self::$tableName) . ' LIMIT 1';
             //print $queryStmt . '<br />';
-            $r = Database::GetInstance()->query($queryStmt, PDO::FETCH_ASSOC);
+            $dbConn = Database::GetInstance();
+            //print 'get conn';
+            $r = $dbConn->query($queryStmt, PDO::FETCH_ASSOC);
+            //print 'ok<br />';
             if ($r) {
                 $columnCount = $r->columnCount();
                 //print $columnCount . '<br />';
@@ -25,6 +28,8 @@ trait DataAccess
     public static function GetTypeByName($columnName) {
         $result = FALSE;
         self::GetTableType();
+        //print 'get table type finally<br />';
+        //print_r(self::$types);
         if (array_key_exists($columnName, self::$types)) {
             $result = self::$types[$columnName];
         }
@@ -168,7 +173,10 @@ trait DataAccess
 
     public static function ConstructNameValueFilter($name, $value)
     {
-        return self::Mark($name) . ' = ' . self::DatabaseQuote($value, self::GetTypeByName($name));
+        //print $name . $value . '<br />';
+        $type = self::GetTypeByName($name);
+        //print $name . $value . '<br />';
+        return self::Mark($name) . ' = ' . self::DatabaseQuote($value, $type);
     }
 
     public static function ConstructMapFilter($foreignName, $mapTable, $pairName, $pairValue)
@@ -187,6 +195,7 @@ trait DataAccess
     }
 
     private static function GetOneData($query, $className) {
+        //print $query . ' :: ' . $className . '<br />';
         $result = FALSE;
         $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
         if ($r) {
@@ -221,8 +230,11 @@ trait DataAccess
 
     public static function GetOne($name, $value)
     {
+        //print $name . $value . '<br />';
         $whereClause = ' WHERE ' . self::ConstructNameValueFilter($name, $value);
+        //print $name . $value . '<br />';
         $query = 'SELECT ' . implode(', ', self::GetMarkedColumnNames()) . ' FROM ' . self::Mark(self::$tableName) . $whereClause . ' LIMIT 1';
+        //print $name . $value . '<br />';
         return self::GetOneData($query, __CLASS__);
     }
 

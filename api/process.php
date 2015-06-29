@@ -137,7 +137,7 @@ date_default_timezone_set("Asia/Shanghai");
 //@@print $sessionpath . '<br />';
 //@@session_start();
 
-set_error_handler("error_function", E_WARNING);
+//set_error_handler("error_function", E_WARNING);
 
 //usage: /api/contacts?filter=<condition>&orderBy=<orderInfo>&offset=<n>&count=<n>
 //《condition》：{"fieldName": value, ...}
@@ -147,6 +147,7 @@ $request = QueryParser::ParseQuery();
 testBed();
 //print_r($request);
 $tableName = array_shift($request['paths']);
+//print $tableName . '<br />';
 $tableName::Process($request, NULL);
 writeResponse($request['response']);
 ?>
