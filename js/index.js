@@ -65,17 +65,19 @@ window.addEventListener('load', function (e) {
         do: function(title, filterTemplate, headerTemplate, currentData, filterPostProcessor) {
             contentTitle.textContent = title
             mainContainer.innerHTML = ''
-            var filter = doc.getElementById(filterTemplate).content.cloneNode(true).children[0]
-            filter.addEventListener('change', function(e) {
-                currentData.total = -1
-                currentData.handler(1)
-            }, false)
-            mainContainer.appendChild(filter)
+            if (filterTemplate != '') {
+                var filter = doc.getElementById(filterTemplate).content.cloneNode(true).children[0]
+                filter.addEventListener('change', function(e) {
+                    currentData.total = -1
+                    currentData.handler(1)
+                }, false)
+                mainContainer.appendChild(filter)
+                var hr = doc.createElement('hr')
+                mainContainer.appendChild(hr)
+            }
             if (filterPostProcessor) {
                 filterPostProcessor()
             }
-            var hr = doc.createElement('hr')
-            mainContainer.appendChild(hr)
             var table = doc.getElementById('tableFramework').content.cloneNode(true)
             var header = doc.getElementById(headerTemplate).content.cloneNode(true)
             table.querySelector('#header').appendChild(header)
@@ -782,11 +784,11 @@ window.addEventListener('load', function (e) {
                 var bookStats = data.bookStats
                 bookStats.currentBookType = 'download'
                 data.do('统计信息', '', 'bookStatsHeader', bookStats)
-                contentTitle.textContent = '统计信息'
-                mainContainer.innerHTML = ''
-                var statsInfo = doc.getElementById('statsContent').content.cloneNode(true).children[0]
-                g.bind(statsInfo, bookStats.downloadBooks)
-                mainContainer.appendChild(statsInfo)
+                //contentTitle.textContent = '统计信息'
+                //mainContainer.innerHTML = ''
+                //var statsInfo = doc.getElementById('statsContent').content.cloneNode(true).children[0]
+                //g.bind(statsInfo, bookStats.downloadBooks)
+                //mainContainer.appendChild(statsInfo)
             }
         }
     }
