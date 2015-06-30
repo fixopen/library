@@ -672,7 +672,7 @@ window.addEventListener('load', function (e) {
                 var prop = actionStats.props[actionStats.currentProps]
                 contentTitle.textContent = prop.title
                 mainContainer.innerHTML = ''
-                var filter = doc.getElementById('statsFilter').content.cloneNode(true)
+                var filter = doc.getElementById('statsFilter').content.cloneNode(true).children[0]
                 filter.querySelector('#' + prop.readonlyFilterItem).setAttribute('readonly', 'readonly')
                 mainContainer.appendChild(filter)
                 var hr = doc.createElement('hr')
@@ -741,6 +741,9 @@ window.addEventListener('load', function (e) {
             pageIndexContainer: null,
             setContainer: function (c) {
                 data.bookStats.container = c
+            },
+            render: function() {
+                //
             },
             handler: function (pageNo) {
                 var bookStats = data.bookStats
