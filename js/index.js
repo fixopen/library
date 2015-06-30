@@ -12,8 +12,8 @@ window.addEventListener('load', function (e) {
             'value': 'application/json'
         }
     ]
-    var doc = document
     $('#timeNow').prepend(Date())
+    var doc = document
     var contentTitle = doc.getElementById('contentTitle')
     var mainContainer = doc.getElementById('mainContainer')
     var data = {
@@ -66,7 +66,7 @@ window.addEventListener('load', function (e) {
         do: function(title, filterTemplate, headerTemplate, currentData, filterPostProcessor) {
             contentTitle.textContent = title
             mainContainer.innerHTML = ''
-            if (filterTemplate != '') {
+            if( filterTemplate != "" ){
                 var filter = doc.getElementById(filterTemplate).content.cloneNode(true).children[0]
                 filter.addEventListener('change', function(e) {
                     currentData.total = -1
@@ -267,12 +267,16 @@ window.addEventListener('load', function (e) {
                 contentTitle.textContent = '数字图书管理'
                 mainContainer.innerHTML = ''
                 var books = data.books
-                var filter = doc.getElementById('bookFilter').content.cloneNode(true).children[0]
-                filter.addEventListener('change', function(e) {
+                var filter = doc.getElementById('bookFilter').content.cloneNode(true)
+                mainContainer.appendChild(filter)
+                //filter.addEventListener('change', function(e) {
+                //    books.total = -1
+                //    books.handler(1)
+                //}, false)
+                mainContainer.addEventListener('change', function(e) {
                     books.total = -1
                     books.handler(1)
                 }, false)
-                mainContainer.appendChild(filter)
                 if (!books.standardClassifierIsInit) {
                     books.getStandardClassifier()
                 }
@@ -693,7 +697,7 @@ window.addEventListener('load', function (e) {
             do: function() {
                 contentTitle.textContent = '管理员信息'
                 mainContainer.innerHTML = ''
-                var changePasswordPanel = doc.getElementById('administratorInfo').content.cloneNode(true).children[0]
+                var changePasswordPanel = doc.getElementById('administratorInfo').content.cloneNode(true)
                 var setPassword = changePasswordPanel.querySelector('#setPassword')
                 setPassword.addEventListener('click', function(e) {
                     var oldPassword = document.querySelector('#oldPassword')
@@ -787,9 +791,34 @@ window.addEventListener('load', function (e) {
                 data.do('统计信息', '', 'bookStatsHeader', bookStats)
                 //contentTitle.textContent = '统计信息'
                 //mainContainer.innerHTML = ''
-                //var statsInfo = doc.getElementById('statsContent').content.cloneNode(true).children[0]
+                //var statsInfo = doc.getElementById('statsContent').content.cloneNode(true)
                 //g.bind(statsInfo, bookStats.downloadBooks)
                 //mainContainer.appendChild(statsInfo)
+            },
+            render : function(){
+                var dataInfo = null
+                switch (data.bookStats.currentBookType) {
+                    case 'follow':
+                        dataInfo = data.bookStats.followBooks
+                        break
+                    case 'view':
+                        dataInfo = data.bookStats.viewBooks
+                        break
+                    case 'download':
+                        dataInfo = data.bookStats.downloadBooks
+                        break
+                    default:
+                        break
+                }
+                while (data.bookStats.container.rows.length > 0) {
+                    data.bookStats.container.deleteRow(-1);
+                }
+                for (var i = 0, c = dataInfo.length; i < c; ++i) {
+                    var body = doc.getElementById('bookStatsItem').content.cloneNode(true).children[0]
+                    g.bind(body, dataInfo[i])
+                    data.bookStats.container.appendChild(body)
+                }
+
             }
         }
     }
