@@ -749,7 +749,19 @@ window.addEventListener('load', function (e) {
                 data.bookStats.container = c
             },
             render: function () {
-                //
+                var d = null
+                switch (bookStats.currentBookType) {
+                    case 'follow':
+                        d = data.bookStats.followBooks
+                        break
+                    case 'view':
+                        break
+                    case 'download':
+                        break
+                    default:
+                        break
+                }
+                d
             },
             handler: function (pageNo) {
                 var bookStats = data.bookStats
