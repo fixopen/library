@@ -158,7 +158,7 @@ window.addEventListener('load', function (e) {
                 var publisher = doc.getElementById('publisher')
                 var bookStandardClassifier = doc.getElementById('bookStandardClassifier')
                 var bookClassifier = doc.getElementById('bookClassifier')
-                var bookState = 0; //radio group
+                var bookState = data.getRadio('bookState')
                 var hasCondition = false
                 var filter = {}
                 var bookIdValue = bookId.value
@@ -245,12 +245,18 @@ window.addEventListener('load', function (e) {
                     }, false)
                     body.querySelector('.ban').addEventListener('click', function (e) {
                         g.patchData('/api/books/' + e.target.dataset.id, genericHeaders, {"isBan": true}, function (r) {
-                            //
+                            if (r.meta.code == 200) {
+                                contents.total = -1
+                                books.handler(contents.currentPage)
+                            }
                         })
                     }, false)
                     body.querySelector('.remove').addEventListener('click', function (e) {
                         g.deleteData('/api/books/' + e.target.dataset.id, genericHeaders, function (r) {
-                            //
+                            if (r.meta.code == 200) {
+                                contents.total = -1
+                                books.handler(contents.currentPage)
+                            }
                         })
                     }, false)
                     books.container.appendChild(body)

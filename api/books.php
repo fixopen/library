@@ -125,6 +125,7 @@ class books
         NormalFacadeImpl,
         Facade {
         DataAccess::IsPrimaryKey as isPrimary;
+        DataAccess::specFilter as commonSpecFilter;
     }
 
     private $name = ''; //character varying(256),
@@ -144,6 +145,20 @@ class books
     private $lastUpdateTime = 'now'; //timestamp(4) without time zone,
     private $mimeType = '';
     private $isBan = FALSE;
+
+    private static function specFilter($name, $value) {
+        $result = self::commonSpecFilter($name, $value);
+        if ($name === 'isBan') {
+            if ($value === 'isBan' || $value === TRUE) {
+                $result = '"isBan" = 1';
+            } else if ($value == 'normal' || $value === FALSE) {
+                $result = '"isBan" = 0';
+            } else {
+                //still empty
+            }
+        }
+        return $result;
+    }
 
     public function getName()
     {
