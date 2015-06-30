@@ -66,7 +66,7 @@ window.addEventListener('load', function (e) {
         do: function(title, filterTemplate, headerTemplate, currentData, filterPostProcessor) {
             contentTitle.textContent = title
             mainContainer.innerHTML = ''
-            if( filterTemplate == "" ){
+            if (filterTemplate != '') {
                 var filter = doc.getElementById(filterTemplate).content.cloneNode(true).children[0]
                 filter.addEventListener('change', function(e) {
                     currentData.total = -1
@@ -267,16 +267,12 @@ window.addEventListener('load', function (e) {
                 contentTitle.textContent = '数字图书管理'
                 mainContainer.innerHTML = ''
                 var books = data.books
-                var filter = doc.getElementById('bookFilter').content.cloneNode(true)
-                mainContainer.appendChild(filter)
-                //filter.addEventListener('change', function(e) {
-                //    books.total = -1
-                //    books.handler(1)
-                //}, false)
-                mainContainer.addEventListener('change', function(e) {
+                var filter = doc.getElementById('bookFilter').content.cloneNode(true).children[0]
+                filter.addEventListener('change', function(e) {
                     books.total = -1
                     books.handler(1)
                 }, false)
+                mainContainer.appendChild(filter)
                 if (!books.standardClassifierIsInit) {
                     books.getStandardClassifier()
                 }
@@ -697,7 +693,7 @@ window.addEventListener('load', function (e) {
             do: function() {
                 contentTitle.textContent = '管理员信息'
                 mainContainer.innerHTML = ''
-                var changePasswordPanel = doc.getElementById('administratorInfo').content.cloneNode(true)
+                var changePasswordPanel = doc.getElementById('administratorInfo').content.cloneNode(true).children[0]
                 var setPassword = changePasswordPanel.querySelector('#setPassword')
                 setPassword.addEventListener('click', function(e) {
                     var oldPassword = document.querySelector('#oldPassword')
@@ -791,7 +787,7 @@ window.addEventListener('load', function (e) {
                 data.do('统计信息', '', 'bookStatsHeader', bookStats)
                 //contentTitle.textContent = '统计信息'
                 //mainContainer.innerHTML = ''
-                //var statsInfo = doc.getElementById('statsContent').content.cloneNode(true)
+                //var statsInfo = doc.getElementById('statsContent').content.cloneNode(true).children[0]
                 //g.bind(statsInfo, bookStats.downloadBooks)
                 //mainContainer.appendChild(statsInfo)
             }

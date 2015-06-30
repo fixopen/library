@@ -152,19 +152,21 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="createDevice" tabindex="-1" role="dialog" aria-labelledby="create device" aria-hidden="true">
+<div class="modal fade" id="createDevice" tabindex="-1" role="dialog" aria-labelledby="create device"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">新建借阅机</h4>
             </div>
             <div class="modal-body">
-                <input id="newDeviceNo" type="text" placeholder="编号"><br />
+                <input id="newDeviceNo" type="text" placeholder="编号"><br/>
                 <input id="newDeviceAddress" type="text" placeholder="借阅机位置">
-                <input id="newDeviceSetupTime" type="text" placeholder="安装时间"><br />
+                <input id="newDeviceSetupTime" type="text" placeholder="安装时间"><br/>
                 <input id="newDeviceControlNo" type="text" placeholder="远端控制帐号">
-                <input id="newDeviceControlPassword" type="text" placeholder="远端控制密码"><br />
+                <input id="newDeviceControlPassword" type="text" placeholder="远端控制密码"><br/>
                 <input id="newDeviceIPAddress" type="text" placeholder="IP地址">
             </div>
             <div class="modal-footer">
@@ -226,14 +228,16 @@
     </table>
 </template>
 <template id="tableFramework">
-    <table class="mainContent" border="1" style="width: 100%">
-        <!--
-        <colgroup id="cols"></colgroup>
-        -->
-        <thead id="header"></thead>
-        <tbody id="body"></tbody>
-    </table>
-    <ul id="pageIndex" class="pagination" id='pagicontainer'></ul>
+    <div>
+        <table class="mainContent" border="1" style="width: 100%">
+            <!--
+            <colgroup id="cols"></colgroup>
+            -->
+            <thead id="header"></thead>
+            <tbody id="body"></tbody>
+        </table>
+        <ul id="pageIndex" class="pagination" id='pagicontainer'></ul>
+    </div>
 </template>
 <template id="bookItemColumn">
     <col id="tableBookId"/>
@@ -269,44 +273,46 @@
     </tr>
 </template>
 <template id="deviceFilter">
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createDevice">
-        创建借阅机
-    </button>
-    <hr/>
-    <table style="width: 100%;">
-        <!--
-        <caption>filter</caption>
-        <colgroup>
-            <col class="first" span="1"/>
-            <col class="first-value" span="1"/>
-            <col class="second" span="1"/>
-            <col class="second-value" span="1"/>
-        </colgroup>
-        -->
-        <tbody>
-        <tr>
-            <th class="first"><label for="deviceNo">编号</label></th>
-            <td class="first-value"><input id="deviceNo"/></td>
-            <th class="second"><label for="deviceAddress">借阅机位置</label></th>
-            <td class="second-value"><input id="deviceAddress"/></td>
-        </tr>
-        <tr>
-            <th class="first"><label for="deviceId">借阅机ID</label></th>
-            <td class="first-value"><input id="deviceId"/></td>
-            <th class="second"><label for="deviceIp">借阅机IP</label></th>
-            <td class="second-value"><input id="deviceIp"></td>
-        </tr>
-        <tr>
-            <th class="first"><label for="setupTime">安装时间</label></th>
-            <td class="first-value"><input type="date" id="setupTime"></td>
-            <th class="second"><label>状态</label></th>
-            <td class="second-value">
-                <input type="radio" name="deviceState" value="heartbeat">心跳
-                <input type="radio" name="deviceState" value="offline">离线
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div>
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createDevice">
+            创建借阅机
+        </button>
+        <hr/>
+        <table style="width: 100%;">
+            <!--
+            <caption>filter</caption>
+            <colgroup>
+                <col class="first" span="1"/>
+                <col class="first-value" span="1"/>
+                <col class="second" span="1"/>
+                <col class="second-value" span="1"/>
+            </colgroup>
+            -->
+            <tbody>
+            <tr>
+                <th class="first"><label for="deviceNo">编号</label></th>
+                <td class="first-value"><input id="deviceNo"/></td>
+                <th class="second"><label for="deviceAddress">借阅机位置</label></th>
+                <td class="second-value"><input id="deviceAddress"/></td>
+            </tr>
+            <tr>
+                <th class="first"><label for="deviceId">借阅机ID</label></th>
+                <td class="first-value"><input id="deviceId"/></td>
+                <th class="second"><label for="deviceIp">借阅机IP</label></th>
+                <td class="second-value"><input id="deviceIp"></td>
+            </tr>
+            <tr>
+                <th class="first"><label for="setupTime">安装时间</label></th>
+                <td class="first-value"><input type="date" id="setupTime"></td>
+                <th class="second"><label>状态</label></th>
+                <td class="second-value">
+                    <input type="radio" name="deviceState" value="heartbeat">心跳
+                    <input type="radio" name="deviceState" value="offline">离线
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 <template id="deviceItemHeader">
     <tr>
@@ -428,9 +434,11 @@
     </tr>
 </template>
 <template id="pageIndexTemplate">
-    <li class="first-page"><a href="javascript:void(0)" data-pageNo="1">&laquo;</a></li>
-    <li class="page-item"><a href="javascript:void(0)" data-pageno="${pageno}">${pageno}</a></li>
-    <li class="last-page"><a href="javascript:void(0)" data-pageno="${pageno}">&raquo;</a></li>
+    <ul>
+        <li class="first-page"><a href="javascript:void(0)" data-pageNo="1">&laquo;</a></li>
+        <li class="page-item"><a href="javascript:void(0)" data-pageno="${pageno}">${pageno}</a></li>
+        <li class="last-page"><a href="javascript:void(0)" data-pageno="${pageno}">&raquo;</a></li>
+    </ul>
 </template>
 <template id="bookStatsHeader">
     <tr>
