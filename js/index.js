@@ -17,7 +17,7 @@ window.addEventListener('load', function (e) {
     var mainContainer = doc.getElementById('mainContainer')
     var data = {
         currentItem: null,
-        switchTo: function(item) {
+        switchTo: function (item) {
             if (data.currentItem) {
                 data.currentItem.removeClass('active-menu-item')
             }
@@ -42,7 +42,7 @@ window.addEventListener('load', function (e) {
                 s.appendChild(option);
             }
         },
-        fillRadio: function(radioName, value) {
+        fillRadio: function (radioName, value) {
             var radios = doc.querySelectorAll('input[name="' + radioName + '"]')
             for (var i = 0, c = radios.length; i < c; ++i) {
                 if (radios.item(i).value == value) {
@@ -51,7 +51,7 @@ window.addEventListener('load', function (e) {
                 }
             }
         },
-        getRadio: function(radioName) {
+        getRadio: function (radioName) {
             var result = null
             var radios = doc.querySelectorAll('input[name="' + radioName + '"]')
             for (var i = 0, c = radios.length; i < c; ++i) {
@@ -62,12 +62,12 @@ window.addEventListener('load', function (e) {
             }
             return result
         },
-        do: function(title, filterTemplate, headerTemplate, currentData, filterPostProcessor) {
+        do: function (title, filterTemplate, headerTemplate, currentData, filterPostProcessor) {
             contentTitle.textContent = title
             mainContainer.innerHTML = ''
             if (filterTemplate != '') {
                 var filter = doc.getElementById(filterTemplate).content.cloneNode(true).children[0]
-                filter.addEventListener('change', function(e) {
+                filter.addEventListener('change', function (e) {
                     currentData.total = -1
                     currentData.handler(1)
                 }, false)
@@ -92,7 +92,7 @@ window.addEventListener('load', function (e) {
             userCount: 0,
             bookCount: 0, normalBookCount: 0,
             deviceCount: 0, liveDeviceCount: 0,
-            do: function() {
+            do: function () {
                 contentTitle.textContent = '管理首页'
                 mainContainer.innerHTML = ''
                 var firstPageContent = doc.getElementById('firstPageContent').content.cloneNode(true).children[0]
@@ -237,19 +237,19 @@ window.addEventListener('load', function (e) {
                         contents[i].state = '下架'
                     }
                     g.bind(body, contents[i])
-                    body.querySelector('.biz').addEventListener('click', function(e){
+                    body.querySelector('.biz').addEventListener('click', function (e) {
                         var actionStats = data.actionStats
                         actionStats.reset()
                         actionStats.setProp('book', e.target.dataset.id)
                         actionStats.do()
                     }, false)
-                    body.querySelector('.ban').addEventListener('click', function(e){
-                        g.patchData('/api/books/' + e.target.dataset.id, genericHeaders, {"isBan": true}, function(r) {
+                    body.querySelector('.ban').addEventListener('click', function (e) {
+                        g.patchData('/api/books/' + e.target.dataset.id, genericHeaders, {"isBan": true}, function (r) {
                             //
                         })
                     }, false)
-                    body.querySelector('.remove').addEventListener('click', function(e){
-                        g.deleteData('/api/books/' + e.target.dataset.id, genericHeaders, function(r) {
+                    body.querySelector('.remove').addEventListener('click', function (e) {
+                        g.deleteData('/api/books/' + e.target.dataset.id, genericHeaders, function (r) {
                             //
                         })
                     }, false)
@@ -262,12 +262,12 @@ window.addEventListener('load', function (e) {
                 books.render()
                 g.renderPageNavigator(books.pageIndexContainer, books.pageSize, books.currentPage, books.total, books.handler)
             },
-            do: function() {
+            do: function () {
                 contentTitle.textContent = '数字图书管理'
                 mainContainer.innerHTML = ''
                 var books = data.books
                 var filter = doc.getElementById('bookFilter').content.cloneNode(true).children[0]
-                filter.addEventListener('change', function(e) {
+                filter.addEventListener('change', function (e) {
                     books.total = -1
                     books.handler(1)
                 }, false)
@@ -278,7 +278,7 @@ window.addEventListener('load', function (e) {
                 if (!books.classifierIsInit) {
                     books.getClassifier()
                 }
-                g.getData('/api/systemParameters?filter=' + encodeURIComponent(JSON.stringify({name: 'drmDuration'})), genericHeaders, function(d) {
+                g.getData('/api/systemParameters?filter=' + encodeURIComponent(JSON.stringify({name: 'drmDuration'})), genericHeaders, function (d) {
                     if (d.meta.code == 200) {
                         if (d.data.length == 1) {
                             var param = d.data[0]
@@ -295,11 +295,11 @@ window.addEventListener('load', function (e) {
                 var drmDuration = doc.getElementById('drmDuration')
                 drmDuration.value = books.drmDuration
                 var setDrmDuration = doc.getElementById('setDrmDuration')
-                setDrmDuration.addEventListener('click', function(e) {
+                setDrmDuration.addEventListener('click', function (e) {
                     var drmDuration = doc.getElementById('drmDuration')
                     var v = drmDuration.value.trim()
                     if (parseInt(v) == v) {
-                        g.patchData('/api/systemParameters/drmDuration', genericHeaders, {value: v}, function(r) {
+                        g.patchData('/api/systemParameters/drmDuration', genericHeaders, {value: v}, function (r) {
                             if (r.meta.code < 400) {
                                 alert('设置成功')
                             }
@@ -416,7 +416,7 @@ window.addEventListener('load', function (e) {
                         contents[i].state = '下线'
                     }
                     g.bind(body, contents[i])
-                    body.querySelector('button').addEventListener('click', function(e){
+                    body.querySelector('button').addEventListener('click', function (e) {
                         var actionStats = data.actionStats
                         actionStats.reset()
                         actionStats.setProp('device', e.target.dataset.id)
@@ -431,8 +431,8 @@ window.addEventListener('load', function (e) {
                 devices.render()
                 g.renderPageNavigator(devices.pageIndexContainer, devices.pageSize, devices.currentPage, devices.total, devices.handler)
             },
-            do: function() {
-                data.do('借阅机管理', 'deviceFilter', 'deviceItemHeader', data.devices, function() {
+            do: function () {
+                data.do('借阅机管理', 'deviceFilter', 'deviceItemHeader', data.devices, function () {
                     data.fillRadio('deviceState', 'heartbeat')
                 })
             }
@@ -517,7 +517,7 @@ window.addEventListener('load', function (e) {
                         contents[i].state = '下线'
                     }
                     g.bind(body, contents[i])
-                    body.querySelector('button').addEventListener('click', function(e){
+                    body.querySelector('button').addEventListener('click', function (e) {
                         var actionStats = data.actionStats
                         actionStats.reset()
                         actionStats.setProp('user', e.target.dataset.id)
@@ -532,7 +532,7 @@ window.addEventListener('load', function (e) {
                 users.render()
                 g.renderPageNavigator(users.pageIndexContainer, users.pageSize, users.currentPage, users.total, users.handler)
             },
-            do: function() {
+            do: function () {
                 data.do('用户管理', 'userFilter', 'userItemHeader', data.users)
             }
         },
@@ -570,7 +570,7 @@ window.addEventListener('load', function (e) {
             setContainer: function (c) {
                 data.users.container = c
             },
-            reset: function() {
+            reset: function () {
                 var actionStats = data.actionStats
                 actionStats.total = -1
                 actionStats.currentPage = 0
@@ -582,12 +582,12 @@ window.addEventListener('load', function (e) {
                 actionStats.stopTime = null
                 actionStats.action = null
             },
-            setProp: function(name, value) {
+            setProp: function (name, value) {
                 var actionStats = data.actionStats
                 actionStats.currentProps = name
                 actionStats[actionStats.props[name].attributeName] = value
             },
-            getFilter: function() {
+            getFilter: function () {
                 var result = null
                 var actionStats = data.actionStats
                 var filter = {}
@@ -667,7 +667,7 @@ window.addEventListener('load', function (e) {
                 actionStats.render()
                 g.renderPageNavigator(actionStats.pageIndexContainer, actionStats.pageSize, actionStats.currentPage, actionStats.total, actionStats.handler)
             },
-            do: function() {
+            do: function () {
                 var actionStats = data.actionStats
                 var prop = actionStats.props[actionStats.currentProps]
                 contentTitle.textContent = prop.title
@@ -689,12 +689,12 @@ window.addEventListener('load', function (e) {
             }
         },
         admin: {
-            do: function() {
+            do: function () {
                 contentTitle.textContent = '管理员信息'
                 mainContainer.innerHTML = ''
                 var changePasswordPanel = doc.getElementById('administratorInfo').content.cloneNode(true).children[0]
                 var setPassword = changePasswordPanel.querySelector('#setPassword')
-                setPassword.addEventListener('click', function(e) {
+                setPassword.addEventListener('click', function (e) {
                     var oldPassword = document.querySelector('#oldPassword')
                     var u = {name: "admin", password: oldPassword.value.trim()}
                     g.getData('/api/administrators?filter=' + encodeURIComponent(JSON.stringify(u)), genericHeaders, function (d) {
@@ -742,7 +742,7 @@ window.addEventListener('load', function (e) {
             setContainer: function (c) {
                 data.bookStats.container = c
             },
-            render: function() {
+            render: function () {
                 //
             },
             handler: function (pageNo) {
@@ -750,7 +750,7 @@ window.addEventListener('load', function (e) {
                 switch (bookStats.currentBookType) {
                     case 'follow':
                         if (!bookStats.isFollowBooksGet) {
-                            g.getData('/api/business/top/follow', genericHeaders, function(d){
+                            g.getData('/api/business/top/follow', genericHeaders, function (d) {
                                 if (d.meta.code == 200) {
                                     bookStats.followBooks = d.data
                                     bookStats.isFollowBooksGet = true
@@ -760,7 +760,7 @@ window.addEventListener('load', function (e) {
                         break
                     case 'view':
                         if (!bookStats.isViewBooksGet) {
-                            g.getData('/api/business/top/view', genericHeaders, function(d){
+                            g.getData('/api/business/top/view', genericHeaders, function (d) {
                                 if (d.meta.code == 200) {
                                     bookStats.viewBooks = d.data
                                     bookStats.isViewBooksGet = true
@@ -770,7 +770,7 @@ window.addEventListener('load', function (e) {
                         break
                     case 'download':
                         if (!bookStats.isDownloadBooksGet) {
-                            g.getData('/api/business/top/download', genericHeaders, function(d){
+                            g.getData('/api/business/top/download', genericHeaders, function (d) {
                                 if (d.meta.code == 200) {
                                     bookStats.downloadBooks = d.data
                                     bookStats.isDownloadBooksGet = true
@@ -783,7 +783,7 @@ window.addEventListener('load', function (e) {
                 }
                 bookStats.render()
             },
-            do: function() {
+            do: function () {
                 var bookStats = data.bookStats
                 bookStats.currentBookType = 'download'
                 data.do('统计信息', '', 'bookStatsHeader', bookStats)
@@ -826,7 +826,7 @@ window.addEventListener('load', function (e) {
         data.bookStats.do()
     }, false)
     var createDevice = doc.querySelector('#createDevice .btn-primary')
-    createDevice.addEventListener('click', function(e) {
+    createDevice.addEventListener('click', function (e) {
         var device = {}
         var no = doc.getElementById('newDeviceNo')
         var address = doc.getElementById('newDeviceAddress')
@@ -840,11 +840,11 @@ window.addEventListener('load', function (e) {
         device.controlNo = controlNo.value.trim()
         device.controlPassword = controlPassword.value.trim()
         device.ipAddress = ipAddress.value.trim()
-        g.postData('/api/devices/' + device.no, genericHeaders, device, function(d) {
+        g.postData('/api/devices/' + device.no, genericHeaders, device, function (d) {
             var title = doc.querySelector('#createDevice h4')
             title.textContent = '借阅机创建成功'
             title.style.color = 0x0000FF
-            setTimeout(function() {
+            setTimeout(function () {
                 $('#createDevice').modal('hide')
                 //add device to data.devices.content
             }, 2000)
