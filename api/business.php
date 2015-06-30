@@ -70,54 +70,68 @@ class business
                     switch ($dir) {
                         case 'follow':
                             $query = 'SELECT "bookId", count(*) AS "followCount" FROM "business" WHERE "action" = ' . "'Follow'" . $whereClause . ' GROUP BY "bookId" ORDER BY "followCount" LIMIT 10';
+                            //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
                                     $item = new stdClass();
-                                    $item->bookId = $row['"bookId"'];
-                                    $item->followCount = $row['"followCount"'];
+                                    $item->bookId = $row['bookId'];
+                                    $item->followCount = $row['followCount'];
+                                    $item->viewCount = 0;
+                                    $item->downloadCount = 0;
                                     $result[] = $item;
                                 }
                             }
+                            //print_r($result);
                             $bookIds = array();
                             foreach ($result as $stats) {
                                 $bookIds[] = $stats->bookId;
                             }
+                            //print_r($bookIds);
+                            //print implode(', ', $bookIds) . '<br />';
                             $query = 'SELECT "bookId", count(*) AS "viewCount" FROM "business" WHERE "action" = ' . "'View' AND " . '"bookId" IN (' . implode(', ', $bookIds) . ') GROUP BY "bookId"';
+                            //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
-                                    $bookId = $row['"bookId"'];
+                                    $bookId = $row['bookId'];
                                     foreach ($result as $stats) {
                                         if ($stats->bookId == $bookId) {
-                                            $stats->viewCount = $row['"viewCount"'];
+                                            $stats->viewCount = $row['viewCount'];
                                             break;
                                         }
                                     }
                                 }
                             }
-                            $query = 'SELECT "bookId", count(*) AS "downloadCount" FROM "business" WHERE "action" = ' . "'View' AND " . '"bookId" IN (' . implode(', ', $bookIds) . ') GROUP BY "bookId"';
+                            $query = 'SELECT "bookId", count(*) AS "downloadCount" FROM "business" WHERE "action" = ' . "'Download' AND " . '"bookId" IN (' . implode(', ', $bookIds) . ') GROUP BY "bookId"';
+                            //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
-                                    $bookId = $row['"bookId"'];
+                                    $bookId = $row['bookId'];
                                     foreach ($result as $stats) {
                                         if ($stats->bookId == $bookId) {
-                                            $stats->downloadCount = $row['"downloadCount"'];
+                                            $stats->downloadCount = $row['downloadCount'];
                                             break;
                                         }
                                     }
                                 }
                             }
+                            //print_r($result);
+                            $request['response']['body'] = self::ToArrayJson($result);
+                            //print $request['body'];
                             break;
                         case 'view':
                             $query = 'SELECT "bookId", count(*) AS "viewCount" FROM "business" WHERE "action" = ' . "'View'" . $whereClause . ' GROUP BY "bookId" ORDER BY "viewCount" LIMIT 10';
+                            //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
                                     $item = new stdClass();
-                                    $item->bookId = $row['"bookId"'];
-                                    $item->viewCount = $row['"viewCount"'];
+                                    $item->bookId = $row['bookId'];
+                                    $item->viewCount = $row['viewCount'];
+                                    $item->downloadCount = 0;
+                                    $item->followCount = 0;
                                     $result[] = $item;
                                 }
                             }
@@ -126,40 +140,46 @@ class business
                                 $bookIds[] = $stats->bookId;
                             }
                             $query = 'SELECT "bookId", count(*) AS "followCount" FROM "business" WHERE "action" = ' . "'Follow' AND " . '"bookId" IN (' . implode(', ', $bookIds) . ') GROUP BY "bookId"';
+                            //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
-                                    $bookId = $row['"bookId"'];
+                                    $bookId = $row['bookId'];
                                     foreach ($result as $stats) {
                                         if ($stats->bookId == $bookId) {
-                                            $stats->followCount = $row['"followCount"'];
+                                            $stats->followCount = $row['followCount'];
                                             break;
                                         }
                                     }
                                 }
                             }
-                            $query = 'SELECT "bookId", count(*) AS "downloadCount" FROM "business" WHERE "action" = ' . "'View' AND " . '"bookId" IN (' . implode(', ', $bookIds) . ') GROUP BY "bookId"';
+                            $query = 'SELECT "bookId", count(*) AS "downloadCount" FROM "business" WHERE "action" = ' . "'Download' AND " . '"bookId" IN (' . implode(', ', $bookIds) . ') GROUP BY "bookId"';
+                            //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
-                                    $bookId = $row['"bookId"'];
+                                    $bookId = $row['bookId'];
                                     foreach ($result as $stats) {
                                         if ($stats->bookId == $bookId) {
-                                            $stats->downloadCount = $row['"downloadCount"'];
+                                            $stats->downloadCount = $row['downloadCount'];
                                             break;
                                         }
                                     }
                                 }
                             }
+                            $request['response']['body'] = self::ToArrayJson($result);
                             break;
                         case 'download':
-                            $query = 'SELECT "bookId", count(*) AS "downloadCount" FROM "business" WHERE "action" = ' . "'Download'" . $whereClause . ' GROUP BY "bookId" ORDER BY "downloadCount" LIMIT 10';
+                            $query = 'SELECT "bookId", COUNT(*) AS "downloadCount" FROM "business" WHERE "action" = ' . "'Download'" . $whereClause . ' GROUP BY "bookId" ORDER BY "downloadCount" LIMIT 10';
+                            //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
                                     $item = new stdClass();
-                                    $item->bookId = $row['"bookId"'];
-                                    $item->downloadCount = $row['"downloadCount"'];
+                                    $item->bookId = $row['bookId'];
+                                    $item->downloadCount = $row['downloadCount'];
+                                    $item->viewCount = 0;
+                                    $item->followCount = 0;
                                     $result[] = $item;
                                 }
                             }
@@ -168,32 +188,34 @@ class business
                                 $bookIds[] = $stats->bookId;
                             }
                             $query = 'SELECT "bookId", count(*) AS "viewCount" FROM "business" WHERE "action" = ' . "'View' AND " . '"bookId" IN (' . implode(', ', $bookIds) . ') GROUP BY "bookId"';
+                            //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
-                                    $bookId = $row['"bookId"'];
+                                    $bookId = $row['bookId'];
                                     foreach ($result as $stats) {
                                         if ($stats->bookId == $bookId) {
-                                            $stats->viewCount = $row['"viewCount"'];
+                                            $stats->viewCount = $row['viewCount'];
                                             break;
                                         }
                                     }
                                 }
                             }
                             $query = 'SELECT "bookId", count(*) AS "followCount" FROM "business" WHERE "action" = ' . "'Follow' AND " . '"bookId" IN (' . implode(', ', $bookIds) . ') GROUP BY "bookId"';
+                            //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
-                                    $bookId = $row['"bookId"'];
+                                    $bookId = $row['bookId'];
                                     foreach ($result as $stats) {
                                         if ($stats->bookId == $bookId) {
-                                            $stats->followCount = $row['"followCount"'];
+                                            $stats->followCount = $row['followCount'];
                                             break;
                                         }
                                     }
                                 }
                             }
-                            $request['body'] = self::toArrayJSON($result);
+                            $request['response']['body'] = self::ToArrayJson($result);
                             break;
                         default:
                             $request['code'] = 400; //bad request
@@ -210,6 +232,7 @@ class business
             default:
                 break;
         }
+        //print_r($request);
         return $request;
     }
 
