@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <head lang="en">
     <meta charset="UTF-8">
     <title>朝阳区数字图书馆</title>
@@ -8,7 +8,7 @@
     <link rel="icon" href="images/favicon.ico">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!--
-    <link href="css/non-responsive.css" rel="stylesheet">
+    <link href="css/non-responsive.css" rel="stylesheet"> xmlns="http://www.w3.org/1999/html"
     -->
     <link href="css/easyui.css" rel="stylesheet">
     <link href="css/icon.css" rel="stylesheet">
@@ -86,8 +86,8 @@
         </div>
         <div class="col-lg-9"
              style="text-align: right; color: #ffffff; padding-top: 48px; background-color: #0091ff; font-size: 13px; height: 100%;">
-            ${name}管理员 | <span>退出</span>
-            <span style="margin-left: 25px">2015年4月3日 星期四</span>
+            admin 管理员 | <span id="logout" style="cursor: pointer">退出</span>
+            <span id="timeNow" style="margin-left: 25px"></span>
         </div>
     </div>
     <div class="row" style="background-color: #fff; height: 582px;">
@@ -360,9 +360,9 @@
             <th class="filter-title"><label for="deviceId">注册时间</label></th>
             <td class="filter-title-value">
                 <label for="registerStartTime">从</label>
-                <input type="date" id="registerStartTime"/>
+                <input type="datetime-local" id="registerStartTime"/>
                 <label for="registerStopTime">到</label>
-                <input type="date" id="registerStopTime"/>
+                <input type="datetime" id="registerStopTime"/>
             </td>
         </tr>
         </tbody>
@@ -445,13 +445,13 @@
         <th>图书编号</th>
         <th>图书名称</th>
         <th>关注数量
-            <button>Up\Down</button>
+            <button id="followOrder" data-order="any">Up\Down</button>
         </th>
         <th>阅读数量
-            <button>Up\Down</button>
+            <button id="viewOrder" data-order="any">Up\Down</button>
         </th>
         <th>下载数量
-            <button>Up\Down</button>
+            <button id="downloadOrder" data-order="down">Up\Down</button>
         </th>
     </tr>
 </template>

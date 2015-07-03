@@ -122,6 +122,20 @@ function testBed()
     //$m->iteratorThis();
     //var_dump($m);
 
+    //$t = json_decode('{"name": "zhangsan", "sex": {"id": 4}}');
+    //var_dump((array)$t);
+
+    //class X {
+    //    public $name = 'name';
+    //    public $value = 'value';
+    //    public $next = NULL;
+    //}
+
+    //$x = new X();
+    //var_dump((array)$x);
+    //$j = json_encode($x);
+    //var_dump($j);
+
     //print 'hello, world<br />';
 
     //include_once 'users.php';

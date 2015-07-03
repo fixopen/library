@@ -12,8 +12,18 @@ window.addEventListener('load', function (e) {
             'value': 'application/json'
         }
     ]
-    $('#timeNow').prepend(Date())
     var doc = document
+    $('#timeNow').prepend(Date())
+    var logout = doc.getElementById('logout')
+    logout.addEventListener('click', function (e) {
+        g.deleteData('/api/administrators/admin/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
+            if (r.meta.code < 400) {
+                alert('logout ok!')
+                //clear sessionId
+                location.href = 'login.html'
+            }
+        })
+    }, false)
     var contentTitle = doc.getElementById('contentTitle')
     var mainContainer = doc.getElementById('mainContainer')
     var data = {
@@ -63,13 +73,14 @@ window.addEventListener('load', function (e) {
             }
             return result
         },
-        do: function (title, filterTemplate, headerTemplate, currentData, filterPostProcessor) {
+        do: function (title, filterTemplate, headerTemplate, currentData, filterPostProcessor, headerOperationProcessor) {
             contentTitle.textContent = title
             mainContainer.innerHTML = ''
             if (filterTemplate != "") {
                 var filter = doc.getElementById(filterTemplate).content.cloneNode(true).children[0]
                 filter.addEventListener('change', function (e) {
                     currentData.total = -1
+                    currentData.currentPage = 0
                     currentData.handler(1)
                 }, false)
                 mainContainer.appendChild(filter)
@@ -79,14 +90,17 @@ window.addEventListener('load', function (e) {
             if (filterPostProcessor) {
                 filterPostProcessor()
             }
-            var table = doc.getElementById('tableFramework').content.cloneNode(true)
-            var header = doc.getElementById(headerTemplate).content.cloneNode(true)
+            var table = doc.getElementById('tableFramework').content.cloneNode(true).children[0]
+            var header = doc.getElementById(headerTemplate).content.cloneNode(true).children[0]
             table.querySelector('#header').appendChild(header)
             var tableBody = table.querySelector('#body')
             currentData.pageIndexContainer = table.querySelector('#pageIndex')
             currentData.setContainer(tableBody)
             currentData.handler(1)
             mainContainer.appendChild(table)
+            if (headerOperationProcessor) {
+                headerOperationProcessor()
+            }
         },
         baseInfo: {
             isInit: false,
@@ -100,19 +114,29 @@ window.addEventListener('load', function (e) {
                 var baseInfo = data.baseInfo
                 if (!baseInfo.isInit) {
                     g.getData('/api/devices/statistics/count', genericHeaders, function (d) {
-                        baseInfo.deviceCount = d.data.value
+                        if (d.meta.code == 200) {
+                            baseInfo.deviceCount = d.data.value
+                        }
                     })
                     g.getData('/api/devices/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isOnline: true})), genericHeaders, function (d) {
-                        baseInfo.liveDeviceCount = d.data.value
+                        if (d.meta.code == 200) {
+                            baseInfo.liveDeviceCount = d.data.value
+                        }
                     })
                     g.getData('/api/books/statistics/count', genericHeaders, function (d) {
-                        baseInfo.bookCount = d.data.value
+                        if (d.meta.code == 200) {
+                            baseInfo.bookCount = d.data.value
+                        }
                     })
                     g.getData('/api/books/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isBan: false})), genericHeaders, function (d) {
-                        baseInfo.normalBookCount = d.data.value
+                        if (d.meta.code == 200) {
+                            baseInfo.normalBookCount = d.data.value
+                        }
                     })
                     g.getData('/api/users/statistics/count', genericHeaders, function (d) {
-                        baseInfo.userCount = d.data.value
+                        if (d.meta.code == 200) {
+                            baseInfo.userCount = d.data.value
+                        }
                     })
                     baseInfo.isInit = true
                 }
@@ -246,12 +270,12 @@ window.addEventListener('load', function (e) {
                     }, false)
                     body.querySelector('.ban').addEventListener('click', function (e) {
                         g.patchData('/api/books/' + e.target.dataset.id, genericHeaders, {"isBan": true}, function (r) {
-                            //
+                            books.handler(books.currentPage)
                         })
                     }, false)
                     body.querySelector('.remove').addEventListener('click', function (e) {
                         g.deleteData('/api/books/' + e.target.dataset.id, genericHeaders, function (r) {
-                            //
+                            books.handler(books.currentPage)
                         })
                     }, false)
                     books.container.appendChild(body)
@@ -267,16 +291,13 @@ window.addEventListener('load', function (e) {
                 contentTitle.textContent = '数字图书管理'
                 mainContainer.innerHTML = ''
                 var books = data.books
-                var filter = doc.getElementById('bookFilter').content.cloneNode(true)
-                mainContainer.appendChild(filter)
-                //filter.addEventListener('change', function(e) {
-                //    books.total = -1
-                //    books.handler(1)
-                //}, false)
-                mainContainer.addEventListener('change', function (e) {
+                var filter = doc.getElementById('bookFilter').content.cloneNode(true).children[0]
+                filter.addEventListener('change', function (e) {
                     books.total = -1
+                    books.currentPage = 0
                     books.handler(1)
                 }, false)
+                mainContainer.appendChild(filter)
                 if (!books.standardClassifierIsInit) {
                     books.getStandardClassifier()
                 }
@@ -677,8 +698,13 @@ window.addEventListener('load', function (e) {
                 var prop = actionStats.props[actionStats.currentProps]
                 contentTitle.textContent = prop.title
                 mainContainer.innerHTML = ''
-                var filter = doc.getElementById('statsFilter').content.cloneNode(true)
+                var filter = doc.getElementById('statsFilter').content.cloneNode(true).children[0]
                 filter.querySelector('#' + prop.readonlyFilterItem).setAttribute('readonly', 'readonly')
+                filter.addEventListener('change', function (e) {
+                    actionStats.total = -1
+                    actionStats.currentPage = 0
+                    actionStats.handler(1)
+                }, false)
                 mainContainer.appendChild(filter)
                 var hr = doc.createElement('hr')
                 mainContainer.appendChild(hr)
@@ -788,12 +814,39 @@ window.addEventListener('load', function (e) {
             do: function () {
                 var bookStats = data.bookStats
                 bookStats.currentBookType = 'download'
-                data.do('统计信息', '', 'bookStatsHeader', bookStats)
-                //contentTitle.textContent = '统计信息'
-                //mainContainer.innerHTML = ''
-                //var statsInfo = doc.getElementById('statsContent').content.cloneNode(true)
-                //g.bind(statsInfo, bookStats.downloadBooks)
-                //mainContainer.appendChild(statsInfo)
+                data.do('统计信息', '', 'bookStatsHeader', bookStats, null, function () {
+                    var orderHandler = function (button, type) {
+                        var button = e.target
+                        switch (button.dataset.order) {
+                            case 'any':
+                                button.dataset.order = 'down'
+                                break
+                            case 'down':
+                                button.dataset.order = 'up'
+                                break
+                            case 'up':
+                                button.dataset.order = 'down'
+                                break
+                            default:
+                                button.dataset.order = 'any'
+                                break
+                        }
+                        bookStats.currentBookType = type
+                        bookStats.handler(1)
+                    }
+                    var followButton = doc.getElementById('followOrder')
+                    followButton.addEventListener('click', function (e) {
+                        orderHandler(e.target, 'follow')
+                    }, false)
+                    var viewButton = doc.getElementById('viewOrder')
+                    viewButton.addEventListener('click', function (e) {
+                        orderHandler(e.target, 'view')
+                    }, false)
+                    var downloadButton = doc.getElementById('downloadOrder')
+                    downloadButton.addEventListener('click', function (e) {
+                        orderHandler(e.target, 'download')
+                    }, false)
+                })
             },
             render: function () {
                 var dataInfo = null
@@ -867,6 +920,7 @@ window.addEventListener('load', function (e) {
         device.controlNo = controlNo.value.trim()
         device.controlPassword = controlPassword.value.trim()
         device.ipAddress = ipAddress.value.trim()
+        //alert(JSON.stringify(device))
         g.postData('/api/devices/' + device.no, genericHeaders, device, function (d) {
             var title = doc.querySelector('#createDevice h4')
             title.textContent = '借阅机创建成功'

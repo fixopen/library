@@ -150,9 +150,9 @@ class books
         $result = self::commonSpecFilter($name, $value);
         if ($name === 'isBan') {
             if ($value === 'isBan' || $value === TRUE) {
-                $result = '"isBan" = 1';
+                $result = '"isBan" = TRUE';
             } else if ($value == 'normal' || $value === FALSE) {
-                $result = '"isBan" = 0';
+                $result = '"isBan" = FALSE';
             } else {
                 //still empty
             }

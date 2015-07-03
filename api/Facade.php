@@ -106,6 +106,7 @@ trait Facade
 
     private static function normalPull(array &$request)
     {
+        //print '1';
         $pathCount = count($request['paths']);
         switch ($pathCount) {
             case 0:

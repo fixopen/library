@@ -16,15 +16,17 @@ window.addEventListener('load', function (e) {
     login.addEventListener('click', function(e) {
         var name = doc.getElementById('name')
         var password = doc.getElementById('password')
-        g.postData('/api/administrators/' + name.value.trim + '/sessions', [
+        g.postData('/api/administrators/' + name.value.trim() + '/sessions', [
             {name: 'Content-Type', value: 'application/json'},
             {name: 'Accept', value: 'application/json'}
-        ], {password: password.value.trim}, function(r) {
-            if (r.state) {
-                //error
-            } else {
+        ], {password: password.value.trim()}, function(r) {
+            if (r.meta.code == 200) {
                 //ok
-                location.href = 'index.htm?name=' + r.name
+                //store sessionId
+                g.setCookie('sessionId', r.data.sessionId)
+                location.href = 'index.htm?name=' + r.data.name
+            } else {
+                //error
             }
         })
     }, false)

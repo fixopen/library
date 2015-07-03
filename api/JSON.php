@@ -40,7 +40,8 @@ trait JSON
     public static function UnifyToJson($d) {
         $result = '{}';
         //print_r($d);
-        if (isset($d->ToJson)) {
+        $c = new ReflectionClass($d);
+        if ($c->hasMethod('ToJson')) {
             //print_r($d);
             $result = $d->ToJson();
         } else {
