@@ -106,28 +106,36 @@ trait DataAccess
 
     public function FillSelf($row)
     {
+        //print '======================================<br />';
+        //print_r($this);
+        //print_r($row);
         foreach ($this as $key => $value) {
-            if (array_key_exists($key, $row)) {
-                $type = self::GetTypeByName($key);
+            $type = self::GetTypeByName($key);
+            $value = NULL;
+            if (is_array($row) && array_key_exists($key, $row)) {
                 $value = $row[$key];
-                if (!is_string($value) && ($value === NULL)) {
-                    $this->$key = NULL;
-                } else {
-                    switch ($type) {
-                        case 'int2':
-                        case 'int4':
-                            $value = intval($value);
-                            break;
-                        case 'int8':
-                            //$value = $value;
-                            break;
-                        default:
-                            break;
-                    }
-                    $this->$key = $value;
+            } else if (is_object($row)) {
+                $value = $row->$key;
+            }
+            if (/*!is_string($value) && */($value === NULL)) {
+                //$this->$key = NULL;
+            } else {
+                switch ($type) {
+                    case 'int2':
+                    case 'int4':
+                        $value = intval($value);
+                        break;
+                    case 'int8':
+                        //$value = $value;
+                        break;
+                    default:
+                        break;
                 }
+                $this->$key = $value;
             }
         }
+        //print_r($this);
+        //print '**************************************<br />';
     }
 
     private $id = 0;
@@ -161,6 +169,9 @@ trait DataAccess
                 if (is_null($value)) {
                     $where[] = self::Mark($key) . ' IS NULL';
                 } else {
+                    //if ($key == 'isBan') {
+                    //    print self::GetTypeByName('isBan');
+                    //}
                     $where[] = self::Mark($key) . ' = ' . self::DatabaseQuote($value, self::GetTypeByName($key));
                 }
             } else {
@@ -299,6 +310,7 @@ trait DataAccess
         }
         $nameValues = $this->GetNameValues();
         $command = 'INSERT INTO ' . self::Mark(self::$tableName) . ' ( ' . implode(', ', array_keys($nameValues)) . ' ) VALUES ( ' . implode(', ', array_values($nameValues)) . ' )';
+        //print $command . '<br />';
         $r = Database::GetInstance()->exec($command);
         if ($r == 1) {
             //ok

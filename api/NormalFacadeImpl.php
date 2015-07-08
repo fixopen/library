@@ -5,22 +5,27 @@ trait NormalFacadeImpl
 
     private static function NormalInsert(array &$request)
     {
-        $data = self::ConvertBodyToArray($request['body']);
-        if ($data) {
-            $ids = array();
-            foreach ($data as $item) {
-                $r = $item->Insert();
-                if ($r) {
-                    $ids[] = $r;
-                } else {
-                    $ids[] = NULL;
+        $firstLetter = $request['body'][0];
+        if ($firstLetter == '[') {
+            $data = self::ConvertBodyToObjectArray($request['body']);
+            if ($data) {
+                $ids = array();
+                foreach ($data as $item) {
+                    $r = $item->Insert();
+                    if ($r) {
+                        $ids[] = $r;
+                    } else {
+                        $ids[] = NULL;
+                    }
                 }
+                $request['response']['code'] = 201; //created
+                $request['response']['body'] = '{ "newId" : ' . json_encode($ids) . ' }';
+                //$request['response']['code'] = 500; //Internal server error
+            } else {
+                $request['response']['code'] = 400; //bad request
             }
-            $request['response']['code'] = 201; //created
-            $request['response']['body'] = '{ "newId" : ' . json_encode($ids) . ' }';
-            //$request['response']['code'] = 500; //Internal server error
-        } else {
-            $request['response']['code'] = 400; //bad request
+        } else if ($firstLetter == '{') {
+            self::SingleInsert($request, 0);
         }
     }
 
@@ -28,7 +33,11 @@ trait NormalFacadeImpl
     {
         $data = self::ConvertBodyToObject($request['body']);
         if ($data) {
-            $data->setId($id);
+            //if (isset($id)) {
+                $data->setId($id);
+            //} else {
+            //    $data->setId(0);
+            //}
             $r = $data->Insert();
             if (is_int($r) && ($r != -1)) {
                 $request['response']['code'] = 201; //created
@@ -44,7 +53,7 @@ trait NormalFacadeImpl
 
     private static function NormalUpdate(array &$request)
     {
-        $data = self::ConvertBodyToObject($request['body']);
+        $data = self::ConvertBodyToArray($request['body']);
         //@@add the filter by parent && regionExpression
         $filter = ConvertJsonToWhere($request['params']['filter']);
         $filter .= ' AND (' . $request['temp']['regionExpression'] . ')';
@@ -58,10 +67,12 @@ trait NormalFacadeImpl
 
     private static function SingleUpdate(array &$request, $s)
     {
-        $data = self::ConvertBodyToObject($request['body']);
+        $data = self::ConvertBodyToArray($request['body']);
         //$data->SetId(intval($child));
         //$r = $data->Update();
+        //print_r($data);
         $s->FillSelf($data);
+        //print_r($s);
         $r = $s->Update();
         if ($r) {
             $request['response']['code'] = 200; //ok
@@ -118,6 +129,16 @@ trait NormalFacadeImpl
     }
 
     private static function ConvertBodyToArray($json)
+    {
+        $data = json_decode($json, true);
+        $result = array();
+        foreach ($data as $key => $value) {
+            $result[$key] = $value;
+        }
+        return $result;
+    }
+
+    private static function ConvertBodyToObjectArray($json)
     {
         $result = array();
         $data = json_decode($json, true);
