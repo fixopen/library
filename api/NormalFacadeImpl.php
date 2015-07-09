@@ -141,13 +141,16 @@ trait NormalFacadeImpl
     private static function ConvertBodyToObjectArray($json)
     {
         $result = array();
+        //print $json . '<br />';
         $data = json_decode($json, true);
+        //print_r($data);
         $className = __CLASS__;
         foreach ($data as $datum) {
             $item = new $className;
             $item->FillSelf((array)$datum);
             $result[] = $item;
         }
+        //print_r($result);
         return $result;
     }
 

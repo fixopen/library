@@ -14,14 +14,69 @@ class business
         Facade {
         DataAccess::IsPrimaryKey as isPrimary;
         JSON::ToJson as privateToJson;
+        //NormalFacadeImpl::ConvertBodyToObjectArray as commonConvert;
+        DataAccess::FillSelf as commonFillSelf;
     }
 
     //id bigint NOT NULL,
-    private $userId = 0; //bigint,
-    private $deviceId = 0; //bigint,
-    private $bookId = 0; //bigint,
+    private $userId = NULL; //bigint,
+    private $deviceId = NULL; //bigint,
+    private $bookId = NULL; //bigint,
     private $time = NULL; //timestamp(4) without time zone,
     private $action = ''; //actiontype
+
+    public function FillSelf($row)
+    {
+        //print '======================================<br />';
+        //print_r($this);
+        //print_r($row);
+        foreach ($this as $key => $value) {
+            $type = self::GetTypeByName($key);
+            $value = NULL;
+            if (is_array($row) && array_key_exists($key, $row)) {
+                $value = $row[$key];
+            } else if (is_object($row)) {
+                $value = $row->$key;
+            }
+            if ($key === 'userId' && $value !== NULL) {
+                $user = users::GetOne('no', $value);
+                $now = time();
+                if ($user) {
+                    $user->setLastOperationTime($now);
+                    $user->Update(TRUE);
+                } else {
+                    $user = new users();
+                    $user->setNo($value);
+                    $user->setRegisterTime($now);
+                    $user->setLastOperationTime($now);
+                    //$user->setId($user->Insert());
+                    $user->Insert();
+                }
+                //insert user if not exist
+                //update user's lastOperationTime if exist
+                //get really userId and set to $value
+                $value = $user->getId();
+            }
+            if (/*!is_string($value) && */($value === NULL)) {
+                //$this->$key = NULL;
+            } else {
+                switch ($type) {
+                    case 'int2':
+                    case 'int4':
+                        $value = intval($value);
+                        break;
+                    case 'int8':
+                        //$value = $value;
+                        break;
+                    default:
+                        break;
+                }
+                $this->$key = $value;
+            }
+        }
+        //print_r($this);
+        //print '**************************************<br />';
+    }
 
     private static $classSpecSubresource = array('top' => 'topProc');
 
