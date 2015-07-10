@@ -3,6 +3,9 @@
  */
 
 window.addEventListener('load', function (e) {
+    if (g.getCookie('sessionId') == '') {
+        location.href = 'login.html'
+    }
     var genericHeaders = [
         {
             'name': 'Content-Type',
@@ -13,13 +16,14 @@ window.addEventListener('load', function (e) {
         }
     ]
     var doc = document
-    $('#timeNow').prepend(Date())
+    doc.getElementById('timeNow').innerHTML = Date()
     var logout = doc.getElementById('logout')
     logout.addEventListener('click', function (e) {
         g.deleteData('/api/administrators/admin/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
             if (r.meta.code < 400) {
                 alert('logout ok!')
                 //clear sessionId
+                g.setCookie('sessionId', '', -1)
                 location.href = 'login.html'
             }
         })
@@ -81,6 +85,7 @@ window.addEventListener('load', function (e) {
                 filter.addEventListener('change', function (e) {
                     currentData.total = -1
                     currentData.currentPage = 0
+                    currentData.content = []
                     currentData.handler(1)
                 }, false)
                 mainContainer.appendChild(filter)
@@ -183,7 +188,7 @@ window.addEventListener('load', function (e) {
                 var publisher = doc.getElementById('publisher')
                 var bookStandardClassifier = doc.getElementById('bookStandardClassifier')
                 var bookClassifier = doc.getElementById('bookClassifier')
-                var bookState = 0; //radio group
+                var bookState = data.getRadio('bookState') //radio group
                 var hasCondition = false
                 var filter = {}
                 var bookIdValue = bookId.value
@@ -194,6 +199,11 @@ window.addEventListener('load', function (e) {
                 var bookNameValue = bookName.value
                 if (bookNameValue != '') {
                     filter.name = bookNameValue
+                    hasCondition = true
+                }
+                var authorValue = author.value
+                if (authorValue != '') {
+                    filter.author = authorValue
                     hasCondition = true
                 }
                 var publisherValue = publisher.value
@@ -295,6 +305,7 @@ window.addEventListener('load', function (e) {
                 filter.addEventListener('change', function (e) {
                     books.total = -1
                     books.currentPage = 0
+                    books.content = []
                     books.handler(1)
                 }, false)
                 mainContainer.appendChild(filter)
@@ -703,6 +714,7 @@ window.addEventListener('load', function (e) {
                 filter.addEventListener('change', function (e) {
                     actionStats.total = -1
                     actionStats.currentPage = 0
+                    actionStats.content = []
                     actionStats.handler(1)
                 }, false)
                 mainContainer.appendChild(filter)

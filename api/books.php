@@ -151,6 +151,7 @@ class books
         if ($name === 'isBan') {
             if ($value === 'isBan' || $value === TRUE) {
                 $result = '"isBan" = TRUE';
+                //print nl2br('isBan is here' . PHP_EOL);
             } else if ($value == 'normal' || $value === FALSE) {
                 $result = '"isBan" = FALSE';
             } else {
