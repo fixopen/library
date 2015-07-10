@@ -605,7 +605,7 @@ window.addEventListener('load', function (e) {
                 }
             },
             setContainer: function (c) {
-                data.users.container = c
+                data.actionStats.container = c
             },
             reset: function () {
                 var actionStats = data.actionStats
@@ -631,27 +631,27 @@ window.addEventListener('load', function (e) {
                 var hasFilter = false
                 if (actionStats.userId != 0) {
                     filter.userId = actionStats.userId
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (actionStats.deviceId != 0) {
                     filter.deviceId = actionStats.deviceId
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (actionStats.bookId != 0) {
                     filter.bookId = actionStats.bookId
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (actionStats.startTime != null) {
                     filter.startTime = actionStats.startTime
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (actionStats.stopTime != null) {
                     filter.stopTime = actionStats.stopTime
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (actionStats.action != null) {
                     filter.action = actionStats.action
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (hasFilter) {
                     result = encodeURIComponent(JSON.stringify(filter))
@@ -665,7 +665,7 @@ window.addEventListener('load', function (e) {
                 }
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
-                        data.users.total = d.data.value
+                        data.actionStats.total = d.data.value
                     }
                 })
             },
@@ -679,7 +679,9 @@ window.addEventListener('load', function (e) {
                     actionStats.currentPage = pageNo
                     var offset = actionStats.pageSize * (actionStats.currentPage - 1)
                     var orderBy = encodeURIComponent(JSON.stringify({id: 'desc'}))
-                    g.getData('/api/users?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
+                    //var url = '/api/business?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy
+                    //alert(url)
+                    g.getData('/api/business?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             actionStats.content = d.data
                         }
@@ -720,11 +722,10 @@ window.addEventListener('load', function (e) {
                 mainContainer.appendChild(filter)
                 var hr = doc.createElement('hr')
                 mainContainer.appendChild(hr)
-                var table = doc.getElementById('tableFramework').content.cloneNode(true)
-                var header = doc.getElementById('statsItemHeader').content.cloneNode(true)
+                var table = doc.getElementById('tableFramework').content.cloneNode(true).children[0]
+                var header = doc.getElementById('statsItemHeader').content.cloneNode(true).children[0]
                 table.querySelector('#header').appendChild(header)
                 var tableBody = table.querySelector('#body')
-                var actionStats = data.actionStats
                 actionStats.pageIndexContainer = table.querySelector('#pageIndex')
                 actionStats.setContainer(tableBody)
                 actionStats.handler(1)
