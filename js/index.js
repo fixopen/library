@@ -3,6 +3,9 @@
  */
 
 window.addEventListener('load', function (e) {
+    if (g.getCookie('sessionId') == '') {
+        location.href = 'login.html'
+    }
     var genericHeaders = [
         {
             'name': 'Content-Type',
@@ -13,13 +16,14 @@ window.addEventListener('load', function (e) {
         }
     ]
     var doc = document
-    $('#timeNow').prepend(Date())
+    doc.getElementById('timeNow').innerHTML = Date()
     var logout = doc.getElementById('logout')
     logout.addEventListener('click', function (e) {
         g.deleteData('/api/administrators/admin/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
             if (r.meta.code < 400) {
                 alert('logout ok!')
                 //clear sessionId
+                g.setCookie('sessionId', '', -1)
                 location.href = 'login.html'
             }
         })
@@ -81,6 +85,7 @@ window.addEventListener('load', function (e) {
                 filter.addEventListener('change', function (e) {
                     currentData.total = -1
                     currentData.currentPage = 0
+                    currentData.content = []
                     currentData.handler(1)
                 }, false)
                 mainContainer.appendChild(filter)
@@ -183,7 +188,7 @@ window.addEventListener('load', function (e) {
                 var publisher = doc.getElementById('publisher')
                 var bookStandardClassifier = doc.getElementById('bookStandardClassifier')
                 var bookClassifier = doc.getElementById('bookClassifier')
-                var bookState = 0; //radio group
+                var bookState = data.getRadio('bookState') //radio group
                 var hasCondition = false
                 var filter = {}
                 var bookIdValue = bookId.value
@@ -194,6 +199,11 @@ window.addEventListener('load', function (e) {
                 var bookNameValue = bookName.value
                 if (bookNameValue != '') {
                     filter.name = bookNameValue
+                    hasCondition = true
+                }
+                var authorValue = author.value
+                if (authorValue != '') {
+                    filter.author = authorValue
                     hasCondition = true
                 }
                 var publisherValue = publisher.value
@@ -295,6 +305,7 @@ window.addEventListener('load', function (e) {
                 filter.addEventListener('change', function (e) {
                     books.total = -1
                     books.currentPage = 0
+                    books.content = []
                     books.handler(1)
                 }, false)
                 mainContainer.appendChild(filter)
@@ -594,7 +605,7 @@ window.addEventListener('load', function (e) {
                 }
             },
             setContainer: function (c) {
-                data.users.container = c
+                data.actionStats.container = c
             },
             reset: function () {
                 var actionStats = data.actionStats
@@ -620,27 +631,27 @@ window.addEventListener('load', function (e) {
                 var hasFilter = false
                 if (actionStats.userId != 0) {
                     filter.userId = actionStats.userId
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (actionStats.deviceId != 0) {
                     filter.deviceId = actionStats.deviceId
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (actionStats.bookId != 0) {
                     filter.bookId = actionStats.bookId
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (actionStats.startTime != null) {
                     filter.startTime = actionStats.startTime
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (actionStats.stopTime != null) {
                     filter.stopTime = actionStats.stopTime
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (actionStats.action != null) {
                     filter.action = actionStats.action
-                    hasFilter = false
+                    hasFilter = true
                 }
                 if (hasFilter) {
                     result = encodeURIComponent(JSON.stringify(filter))
@@ -654,7 +665,7 @@ window.addEventListener('load', function (e) {
                 }
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
-                        data.users.total = d.data.value
+                        data.actionStats.total = d.data.value
                     }
                 })
             },
@@ -668,7 +679,9 @@ window.addEventListener('load', function (e) {
                     actionStats.currentPage = pageNo
                     var offset = actionStats.pageSize * (actionStats.currentPage - 1)
                     var orderBy = encodeURIComponent(JSON.stringify({id: 'desc'}))
-                    g.getData('/api/users?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
+                    //var url = '/api/business?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy
+                    //alert(url)
+                    g.getData('/api/business?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             actionStats.content = d.data
                         }
@@ -703,16 +716,16 @@ window.addEventListener('load', function (e) {
                 filter.addEventListener('change', function (e) {
                     actionStats.total = -1
                     actionStats.currentPage = 0
+                    actionStats.content = []
                     actionStats.handler(1)
                 }, false)
                 mainContainer.appendChild(filter)
                 var hr = doc.createElement('hr')
                 mainContainer.appendChild(hr)
-                var table = doc.getElementById('tableFramework').content.cloneNode(true)
-                var header = doc.getElementById('statsItemHeader').content.cloneNode(true)
+                var table = doc.getElementById('tableFramework').content.cloneNode(true).children[0]
+                var header = doc.getElementById('statsItemHeader').content.cloneNode(true).children[0]
                 table.querySelector('#header').appendChild(header)
                 var tableBody = table.querySelector('#body')
-                var actionStats = data.actionStats
                 actionStats.pageIndexContainer = table.querySelector('#pageIndex')
                 actionStats.setContainer(tableBody)
                 actionStats.handler(1)
