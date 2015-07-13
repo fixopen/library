@@ -15,7 +15,7 @@ class business
         DataAccess::IsPrimaryKey as isPrimary;
         JSON::ToJson as privateToJson;
         //NormalFacadeImpl::ConvertBodyToObjectArray as commonConvert;
-        DataAccess::FillSelf as commonFillSelf;
+        NormalFacadeImpl::FillSelf as commonFillSelf;
     }
 
     //id bigint NOT NULL,

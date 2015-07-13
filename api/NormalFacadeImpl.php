@@ -119,6 +119,40 @@ trait NormalFacadeImpl
         }
     }
 
+    public function FillSelf($row)
+    {
+        //print '======================================<br />';
+        //print_r($this);
+        //print_r($row);
+        foreach ($this as $key => $value) {
+            $type = self::GetTypeByName($key);
+            $value = NULL;
+            if (is_array($row) && array_key_exists($key, $row)) {
+                $value = $row[$key];
+            } else if (is_object($row)) {
+                $value = $row->$key;
+            }
+            if (/*!is_string($value) && */($value === NULL)) {
+                //$this->$key = NULL;
+            } else {
+                switch ($type) {
+                    case 'int2':
+                    case 'int4':
+                        $value = intval($value);
+                        break;
+                    case 'int8':
+                        //$value = $value;
+                        break;
+                    default:
+                        break;
+                }
+                $this->$key = $value;
+            }
+        }
+        //print_r($this);
+        //print '**************************************<br />';
+    }
+
     private static function ConvertBodyToObject($json)
     {
         $data = json_decode($json, true);

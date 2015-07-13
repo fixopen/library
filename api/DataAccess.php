@@ -104,7 +104,7 @@ trait DataAccess
         return $result;
     }
 
-    public function FillSelf($row)
+    public function FillSelfByRow($row)
     {
         //print '======================================<br />';
         //print_r($this);
@@ -212,7 +212,7 @@ trait DataAccess
         if ($r) {
             foreach ($r as $row) {
                 $item = new $className;
-                $item->FillSelf($row);
+                $item->FillSelfByRow($row);
                 $result = $item;
                 break;
             }
@@ -226,7 +226,8 @@ trait DataAccess
         if ($r) {
             foreach ($r as $row) {
                 $item = new $className;
-                $item->FillSelf($row);
+                $item->FillSelfByRow($row);
+                //print_r($item);
                 $result[] = $item;
             }
         }
