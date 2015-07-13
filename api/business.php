@@ -172,6 +172,19 @@ class business
                                     }
                                 }
                             }
+                            $query = 'SELECT "id", name" FROM "book" WHERE "id" IN (' . implode(', ', $bookIds) . ')';
+                            $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
+                            if ($r) {
+                                foreach ($r as $row) {
+                                    $bookId = $row['id'];
+                                    foreach ($result as $stats) {
+                                        if ($stats->bookId == $bookId) {
+                                            $stats->name = $row['name'];
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                             //print_r($result);
                             $request['response']['body'] = self::ToArrayJson($result);
                             //print $request['body'];
@@ -222,6 +235,19 @@ class business
                                     }
                                 }
                             }
+                            $query = 'SELECT "id", name" FROM "book" WHERE "id" IN (' . implode(', ', $bookIds) . ')';
+                            $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
+                            if ($r) {
+                                foreach ($r as $row) {
+                                    $bookId = $row['id'];
+                                    foreach ($result as $stats) {
+                                        if ($stats->bookId == $bookId) {
+                                            $stats->name = $row['name'];
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                             $request['response']['body'] = self::ToArrayJson($result);
                             break;
                         case 'download':
@@ -265,6 +291,19 @@ class business
                                     foreach ($result as $stats) {
                                         if ($stats->bookId == $bookId) {
                                             $stats->followCount = $row['followCount'];
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            $query = 'SELECT "id", name" FROM "book" WHERE "id" IN (' . implode(', ', $bookIds) . ')';
+                            $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
+                            if ($r) {
+                                foreach ($r as $row) {
+                                    $bookId = $row['id'];
+                                    foreach ($result as $stats) {
+                                        if ($stats->bookId == $bookId) {
+                                            $stats->name = $row['name'];
                                             break;
                                         }
                                     }
