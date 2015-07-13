@@ -636,7 +636,7 @@ window.addEventListener('load', function (e) {
                 var filter = {}
                 var hasFilter = false
                 if (actionStats.currentProps != 'user') {
-                    var userId = bizBookId.value
+                    var userId = bizUserId.value
                     if (userId != '') {
                         filter.userId = userId
                         hasFilter = true
