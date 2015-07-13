@@ -627,32 +627,77 @@ window.addEventListener('load', function (e) {
             getFilter: function () {
                 var result = null
                 var actionStats = data.actionStats
+                var bizUserId = doc.getElementById('bizUserId')
+                var bizDeviceId = doc.getElementById('bizDeviceId')
+                var bizBookId = doc.getElementById('bizBookId')
+                var bizAction = doc.getElementById('bizAction')
+                var startTime = doc.getElementById('startTime')
+                var stopTime = doc.getElementById('startTime')
                 var filter = {}
                 var hasFilter = false
-                if (actionStats.userId != 0) {
-                    filter.userId = actionStats.userId
+                if (actionStats.currentProps != 'user') {
+                    var userId = bizBookId.value
+                    if (userId != '') {
+                        filter.userId = userId
+                        hasFilter = true
+                    }
+                } else {
+                    if (actionStats.userId != 0) {
+                        filter.userId = actionStats.userId
+                        hasFilter = true
+                    }
+                }
+                if (actionStats.currentProps != 'device') {
+                    var deviceId = bizDeviceId.value
+                    if (deviceId != '') {
+                        filter.deviceId = deviceId
+                        hasFilter = true
+                    }
+                } else {
+                    if (actionStats.deviceId != 0) {
+                        filter.deviceId = actionStats.deviceId
+                        hasFilter = true
+                    }
+                }
+                if (actionStats.currentProps != 'book') {
+                    var bookId = bizBookId.value
+                    if (bookId != '') {
+                        filter.bookId = bookId
+                        hasFilter = true
+                    }
+                } else {
+                    if (actionStats.bookId != 0) {
+                        filter.bookId = actionStats.bookId
+                        hasFilter = true
+                    }
+                }
+                var startTimeValue = startTime.value
+                if (startTimeValue != '') {
+                    filter.startTime = startTimeValue
                     hasFilter = true
                 }
-                if (actionStats.deviceId != 0) {
-                    filter.deviceId = actionStats.deviceId
+                //if (actionStats.startTime != null) {
+                //    filter.startTime = actionStats.startTime
+                //    hasFilter = true
+                //}
+                var stopTimeValue = stopTime.value
+                if (stopTimeValue != '') {
+                    filter.stopTime = stopTimeValue
                     hasFilter = true
                 }
-                if (actionStats.bookId != 0) {
-                    filter.bookId = actionStats.bookId
+                //if (actionStats.stopTime != null) {
+                //    filter.stopTime = actionStats.stopTime
+                //    hasFilter = true
+                //}
+                var actionValue = bizAction.value
+                if (actionValue != '') {
+                    filter.action = actionValue
                     hasFilter = true
                 }
-                if (actionStats.startTime != null) {
-                    filter.startTime = actionStats.startTime
-                    hasFilter = true
-                }
-                if (actionStats.stopTime != null) {
-                    filter.stopTime = actionStats.stopTime
-                    hasFilter = true
-                }
-                if (actionStats.action != null) {
-                    filter.action = actionStats.action
-                    hasFilter = true
-                }
+                //if (actionStats.action != null) {
+                //    filter.action = actionStats.action
+                //    hasFilter = true
+                //}
                 if (hasFilter) {
                     result = encodeURIComponent(JSON.stringify(filter))
                 }
@@ -679,8 +724,6 @@ window.addEventListener('load', function (e) {
                     actionStats.currentPage = pageNo
                     var offset = actionStats.pageSize * (actionStats.currentPage - 1)
                     var orderBy = encodeURIComponent(JSON.stringify({id: 'desc'}))
-                    //var url = '/api/business?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy
-                    //alert(url)
                     g.getData('/api/business?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             actionStats.content = d.data
