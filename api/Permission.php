@@ -9,7 +9,7 @@ trait Permission
     {
         $result = FALSE;
         $className = __CLASS__;
-        if (isset($request['cookies']['sessionId']) && in_array($className, self::$logins)) {
+        if (array_key_exists('sessionId', $request['cookies']) && in_array($className, self::$logins)) {
             //$sessionId = session_id();
             $sessionId = $request['cookies']['sessionId'];
             //$infos['header']['authrozition'];
