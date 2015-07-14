@@ -51,6 +51,7 @@ $_FILES['userfile']['error']
         //remove [scheme://host:port/path/]specPath/name.ext
         //$filename = basename($uri);
         $filename = $uri;
+        print nl2br($filename . PHP_EOL);
         $file = fopen($filename, 'wb');
         fwrite($file, $fileContent);
         fclose($file);

@@ -529,9 +529,9 @@ window.addEventListener('load', function (e) {
                     //@@filter.registerTime <= registerStopTimeValue
                     hasCondition = true
                 }
-                if (hasCondition) {
+                //if (hasCondition) {
                     result = encodeURIComponent(JSON.stringify(filter))
-                }
+                //}
                 return result
             },
             getTotal: function (filter) {

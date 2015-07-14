@@ -3,18 +3,21 @@
 trait Permission
 {
 
+    private static $logins = array('administrators', 'devices', 'users');
+
     public static function GetSubjectByQuery(array &$request)
     {
         $result = FALSE;
-        if (isset($request['cookies']['sessionId'])) {
+        $className = __CLASS__;
+        if (isset($request['cookies']['sessionId']) && in_array($className, self::$logins)) {
             //$sessionId = session_id();
             $sessionId = $request['cookies']['sessionId'];
             //$infos['header']['authrozition'];
-            $session = devices::IsPrimaryKey($sessionId);
+            $session = $className::IsPrimaryKey($sessionId);
             if ($session) {
                 $session->setLastOperationTime(time());
                 $session->Update();
-                $result = $session; //devices::SelectById($session->getUserId());
+                $result = $session; //users::SelectById($session->getUserId());
             }
         }
         return $result;

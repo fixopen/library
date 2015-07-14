@@ -63,11 +63,6 @@ class devices
         }
     }
 
-    //public static function IsPrimaryKey($no)
-    //{
-    //    return self::GetOne('no', $no);
-    //}
-
     public function getNo()
     {
         return $this->no;
