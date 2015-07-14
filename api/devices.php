@@ -28,6 +28,16 @@ class devices
     private $ipAddress = NULL;
     private $sessionId = NULL;
 
+    public static function IsPrimaryKey($v)
+    {
+        //print 'user key is ' . $v . '<br />';
+        $result = self::GetOne('sessionId', $v);
+        if ($result == FALSE) {
+            $result = self::isPrimary($v);
+        }
+        return $result;
+    }
+
     private static function specFilter($name, $value) {
         $result = self::commonSpecFilter($name, $value);
         if ($name === 'isOnline') {
@@ -44,13 +54,13 @@ class devices
         return $result;
     }
 
-    public static function IsPrimaryKey($no)
+    public static function Touch($sessionId)
     {
-        $result = self::isPrimary($no);
-        if (!$result) {
-            $result = self::GetOne('sessionId', $no);
+        $session = self::GetOne('sessionId', $sessionId);
+        if ($session) {
+            $session->setLastOperationTime(time());
+            $session->Update();
         }
-        return $result;
     }
 
     public function getNo()

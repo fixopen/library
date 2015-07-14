@@ -1,0 +1,67 @@
+/*public css*/
+body, div, dl, dt, dd, ul, ol, li,h1, h2, h3, h4, h5, h6, pre, code,form, input, button,textarea, p, th, td {
+    margin: 0;
+    padding: 0;
+	list-style:none;
+}
+
+body{font-family:微软雅黑,Arial;background:#fff;color:#333;}
+html{font-size:14px;-webkit-text-size-adjust:none;-ms-text-size-adjust:100%;}
+img{max-width:100%;height: auto;width: auto\9; /* ie8 */}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section,menu{display:block;}
+audio,canvas,video{display:inline-block;*display:inline;*zoom:1;}
+audio:not([controls]){display:none;}
+a{text-decoration:none;cursor:pointer;}
+a:focus{outline:thin dotted #333;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px;}
+a:hover,a:active{outline:0;}
+button, html input[type="button"], input[type="reset"], input[type="submit"] {cursor: pointer;}
+button, select{text-transform:none;}
+*, *:before, *:after {box-sizing:border-box;}
+input,button{border:0;outline:0;}
+.depBox .depInput:focus,.traBox .traInput:focus,.edit-acc .addlist li div.inputBox input:focus,.wire-address input:focus{border:2px solid #66b1e1}
+i,em{font-style:normal;}
+h1, h2, h3, h4, h5, h6{font-weight:400;}
+
+.fl{float:left;}
+.fr{float:right;}
+.hg{height:100%;height:auto;clear:none;overflow:hidden;}
+.box{width:1180px;margin:0 auto;}
+section{width:100%;height:auto;margin:0 auto;}
+.ico{background:url(../images/ico.png) no-repeat 0 0;}
+
+.button{width:120px;height:36px;line-height:36px;border-radius:24px;color:#fff;font-size:16px;font-family:'opensans-sb';display:inline-block;margin:60px 30px;text-align:center;}
+.bgGray{background:#e3e4e8;}
+.bgRed{background:#f2395b;}
+.bgBlue{background:#5eacdf;}
+/*font*/
+.red{color:#eb5d69}
+/*三角 ico*/
+#triangle-up {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #fff;
+}
+#triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #fff;
+}
+#triangle-left {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-right: 5px solid #f0f0f0;
+    border-bottom: 5px solid transparent;
+}
+#triangle-right {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-left: 5px solid #f0f0f0;
+    border-bottom: 5px solid transparent;
+}
+/*三角 ico end*/

@@ -267,9 +267,15 @@ window.addEventListener('load', function (e) {
                 var contents = books.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('bookItem').content.cloneNode(true).children[0]
+                    //显示上下架状态
                     contents[i].state = '正常'
                     if (contents[i].isBan) {
                         contents[i].state = '下架'
+                    }
+                    //点击上下架操作
+                    contents[i].checkState = '下架'
+                    if (contents[i].isBan) {
+                        contents[i].checkState = '上架'
                     }
                     g.bind(body, contents[i])
                     body.querySelector('.biz').addEventListener('click', function (e) {
@@ -279,9 +285,26 @@ window.addEventListener('load', function (e) {
                         actionStats.do()
                     }, false)
                     body.querySelector('.ban').addEventListener('click', function (e) {
-                        g.patchData('/api/books/' + e.target.dataset.id, genericHeaders, {"isBan": true}, function (r) {
-                            books.handler(books.currentPage)
+                        //修改上下架状态
+                        var patchData = {};
+                        books.content.forEach(function(item,index){
+                            if(item.id == e.target.dataset.id){
+                                if(item.isBan == true){
+                                    patchData = {"isBan": false}
+                                }else{
+                                    patchData = {"isBan": true}
+                                }
+                            }
                         })
+
+
+                        g.patchData('/api/books/' + e.target.dataset.id, genericHeaders, patchData, function (r) {
+                            //books.handler(books.currentPage)
+                        })
+                        books.total = -1
+                        books.currentPage = 0
+                        books.content = []
+                        books.handler(1)
                     }, false)
                     body.querySelector('.remove').addEventListener('click', function (e) {
                         g.deleteData('/api/books/' + e.target.dataset.id, genericHeaders, function (r) {
@@ -532,7 +555,13 @@ window.addEventListener('load', function (e) {
                     users.currentPage = pageNo
                     var offset = users.pageSize * (users.currentPage - 1)
                     var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
-                    g.getData('/api/users?filter=' + filter + '&offset=' + offset + '&count=' + users.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
+                    var url ;
+                    if(filter == null){
+                        url = '/api/users?'
+                    }else{
+                        url = '/api/users?filter=' + filter + '&';
+                    }
+                    g.getData(url+ 'offset=' + offset + '&count=' + users.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             users.content = d.data
                         }
