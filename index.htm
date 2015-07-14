@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="images/favicon.ico">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!--<link rel="stylesheet" type="text/css" href="css/base.css">-->
-    <!--<link rel="stylesheet" type="text/css" href="css/main.css">-->
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
     <!--
     <link href="css/non-responsive.css" rel="stylesheet"> xmlns="http://www.w3.org/1999/html"
     -->
@@ -92,7 +92,7 @@
             <span id="timeNow" style="margin-left: 25px"></span>
         </div>
     </div>
-    <div class="row" style="background-color: #fff; height: 582px;">
+    <div class="row" style="background-color: #e9e9e9; height: 582px;">
         <div class="col-lg-2"
              style="cursor: pointer; height: 100%; background-color: #373d48; color: #ffffff; line-height: 200%; font-size: x-large; padding-top: 60px; padding-bottom: 60px">
             <ul style="list-style: none; font-size: 16px;padding-left:10%;">
@@ -179,27 +179,39 @@
     </div>
 </div>
 <template id="firstPageContent">
-    <!--<div class="index hg"style="padding:0px;margin:0px;">-->
-        <!--<h2 class="ico">用户总数：${userCount}名</h2>-->
-        <!--<ul class="outTiao hg">-->
-            <!--<li>入库图书：<em>${bookCount}</em>册 </li>-->
-            <!--<i></i>-->
-            <!--<li>上架图书：<em class="red">${normalBookCount}</em>册 </li>-->
-        <!--</ul>-->
-        <!--<ul class="outTiao hg">-->
-            <!--<li>借阅机总数：<em>${deviceCount}</em>台</li>-->
-            <!--<i></i>-->
-            <!--<li>正常运行数：<em class="red">${liveDeviceCount}</em>台</li>-->
-        <!--</ul>-->
-    <!--</div>-->
-
-    <div>
-        <div style="color: darkblue">用户总数：${userCount}名</div>
-        <div style="background-color: #ffffff;">入库图书：${bookCount}册 | 上架图书：${normalBookCount}册</div>
-        <div style="background-color: #ffffff;">借阅机总数：${deviceCount}台 | 正常运行数：${liveDeviceCount}台</div>
+    <div class="index hg"style="padding:0px;margin:0px;">
+        <h2 class="ico">用户总数：${userCount}名</h2>
+        <ul class="outTiao hg">
+            <li>入库图书：<em>${bookCount}</em>册 </li>
+            <i></i>
+            <li>上架图书：<em class="red">${normalBookCount}</em>册 </li>
+        </ul>
+        <ul class="outTiao hg">
+            <li>借阅机总数：<em>${deviceCount}</em>台</li>
+            <i></i>
+            <li>正常运行数：<em class="red">${liveDeviceCount}</em>台</li>
+        </ul>
     </div>
+
+    <!--<div>-->
+        <!--<div style="color: darkblue">用户总数：${userCount}名</div>-->
+        <!--<div style="background-color: #ffffff;">入库图书：${bookCount}册 | 上架图书：${normalBookCount}册</div>-->
+        <!--<div style="background-color: #ffffff;">借阅机总数：${deviceCount}台 | 正常运行数：${liveDeviceCount}台</div>-->
+    <!--</div>-->
 </template>
 <template id="bookFilter">
+    <!--<div class="row ">-->
+        <!--<div class="col-xs-4"><label for="bookId">图书 ID</label><input id="bookId"/></div>-->
+        <!--<div class="col-xs-4"><label for="bookName">图书名称</label><input id="bookName"/></div>-->
+        <!--<div class="col-xs-4"><label for="author">作者名称</label><input id="author"/></div>-->
+    <!--<div class="col-xs-4"><label for="publisher">出 版 社</label><input id="publisher"></div>-->
+    <!--<div class="col-xs-4"><label for="bookStandardClassifier">中图分类</label><select id="bookStandardClassifier"></select></div>-->
+    <!--<div class="col-xs-4"><label for="bookClassifier">书库分类</label><select id="bookClassifier"></select></div>-->
+    <!--<div class="col-xs-4"><label>下架状态</label> <input name="bookState" type="radio" value="isBan"/>下架-->
+                <!--<input name="bookState" type="radio" value="normal"/>正常</div>-->
+    <!--<div class="col-xs-4"></div>-->
+    <!--<div class="col-xs-4"><label for="drmDuration">DRM时间设置</label><button id="setDrmDuration" class="btn btn-danger">设置</button></div>-->
+    <!--</div>-->
     <table style="width: 100%;">
         <!--
         <caption>filter</caption>
@@ -245,43 +257,43 @@
 </template>
 <template id="tableFramework">
     <div>
-        <table class="mainContent" border="1" style="width: 100%">
+        <table class="mainContent table table-striped table-bordered table-condensed" border="1" style="text-align: center;">
             <!--
             <colgroup id="cols"></colgroup>
             -->
             <thead id="header"></thead>
             <tbody id="body"></tbody>
         </table>
-        <ul id="pageIndex" class="pagination" id='pagicontainer'></ul>
+        <ul id="pageIndex" class="pagination" id='pagicontainer' style="padding-right: 0px;"></ul>
     </div>
 </template>
 <template id="bookItemColumn">
     <col id="tableBookId"/>
 </template>
 <template id="bookItemHeader">
-    <tr>
-        <th style="width: 10%">图书ID</th>
-        <th style="width: 10%">图书名称</th>
-        <th style="width: 8%">作者名称</th>
-        <th style="width: 8%">出版社</th>
-        <th style="width: 10%">书库分类</th>
-        <th style="width: 10%">中图分类</th>
-        <th style="width: 12%">ISBN</th>
-        <th style="width: 8%">下架状态</th>
-        <th style="width: 14%">图书管理</th>
+    <tr class="permission-tr">
+        <th style="min-width: 10%;text-align: center;">图书ID</th>
+        <th style="min-width: 10%;text-align: center;">图书名称</th>
+        <th style="min-width: 10%;text-align: center;">作者名称</th>
+        <th style="min-width: 10%;text-align: center;">出版社</th>
+        <th style="min-width: 10%;text-align: center;">书库分类</th>
+        <th style="min-width: 10%;text-align: center;">中图分类</th>
+        <th style="min-width: 10%;text-align: center;">ISBN</th>
+        <th style="min-width: 10%;text-align: center;">下架状态</th>
+        <th style="min-width: 10%;text-align: center;">图书管理</th>
     </tr>
 </template>
 <template id="bookItem">
-    <tr>
-        <td style="width: 10%">${id}</td>
-        <td style="width: 10%">${name}</td>
-        <td style="width: 8%">${author}</td>
-        <td style="width: 8%">${publisher}</td>
-        <td style="width: 10%">${firstLevelClassify}</td>
-        <td style="width: 10%">${standardClassify}</td>
-        <td style="width: 12%">${isbn}</td>
-        <td style="width: 8%">${state}</td>
-        <td style="width: 14%">
+    <tr class="permission-tr">
+        <td >${id}</td>
+        <td >${name}</td>
+        <td >${author}</td>
+        <td >${publisher}</td>
+        <td >${firstLevelClassify}</td>
+        <td >${standardClassify}</td>
+        <td >${isbn}</td>
+        <td >${state}</td>
+        <td >
             <button class="biz" data-id="${id}">图书借阅详情</button>
             <button class="ban" data-id="${id}">${checkState}</button>
             <button class="remove" data-id="${id}">删除</button>
