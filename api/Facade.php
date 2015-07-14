@@ -332,8 +332,8 @@ trait Facade
 
     public static function Process(array &$request, $parent)
     {
-        //$subject = self::GetSubjectByQuery($request);
-        $subject = NULL;
+        $subject = self::GetSubjectByQuery($request);
+        //$subject = NULL;
         $attributeBag = '';
 
         if ($subject) {

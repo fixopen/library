@@ -13,7 +13,7 @@ class devices
         Session,
         NormalFacadeImpl,
         Facade {
-        //DataAccess::IsPrimaryKey as isPrimary;
+        DataAccess::IsPrimaryKey as isPrimary;
         DataAccess::specFilter as commonSpecFilter;
         JSON::ToJson as privateToJson;
     }
@@ -44,10 +44,14 @@ class devices
         return $result;
     }
 
-    //public static function IsPrimaryKey($no)
-    //{
-    //    return self::GetOne('no', $no);
-    //}
+    public static function IsPrimaryKey($no)
+    {
+        $result = self::isPrimary($no);
+        if (!$result) {
+            $result = self::GetOne('sessionId', $no);
+        }
+        return $result;
+    }
 
     public function getNo()
     {
