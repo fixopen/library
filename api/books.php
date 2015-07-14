@@ -106,6 +106,7 @@ class books
             $ext = 'pdf';
         }
         $base = 'C:/httpd-2.4.12-win64-VC11/Apache24/htdocs/Library/var/';
+//        $base = 'D:/php+apache/apache/Apache24/htdocs/library/var/';
         $prefix = $base . 'books/';
         if ($type != '') {
             $prefix = $base . $type . '/';
