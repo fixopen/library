@@ -13,7 +13,7 @@ class devices
         Session,
         NormalFacadeImpl,
         Facade {
-        //DataAccess::IsPrimaryKey as isPrimary;
+        DataAccess::IsPrimaryKey as isPrimary;
         DataAccess::specFilter as commonSpecFilter;
         JSON::ToJson as privateToJson;
     }
@@ -27,6 +27,16 @@ class devices
     private $controlPassword = '';
     private $ipAddress = NULL;
     private $sessionId = NULL;
+
+    public static function IsPrimaryKey($v)
+    {
+        //print 'user key is ' . $v . '<br />';
+        $result = self::GetOne('sessionId', $v);
+        if ($result == FALSE) {
+            $result = self::isPrimary($v);
+        }
+        return $result;
+    }
 
     private static function specFilter($name, $value) {
         $result = self::commonSpecFilter($name, $value);
@@ -42,6 +52,15 @@ class devices
             }
         }
         return $result;
+    }
+
+    public static function Touch($sessionId)
+    {
+        $session = self::GetOne('sessionId', $sessionId);
+        if ($session) {
+            $session->setLastOperationTime(time());
+            $session->Update();
+        }
     }
 
     //public static function IsPrimaryKey($no)

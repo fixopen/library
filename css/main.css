@@ -1,0 +1,53 @@
+@charset "utf-8";
+.ico{background:url(../images/ico.png) no-repeat;}
+/*log*/
+.logBg{background:url(../images/log-bj.jpg) no-repeat; background-size:100%;}
+.logbox{width:262px;height:262px;position:absolute;top:50%;left:50%;margin:-131px 0 0 -131px;}
+.logbox h1{font-size:22px;color:#fff;margin-bottom:16px;}
+.logbox .inputBox{width:262px;color:#4b4642;margin-top:16px;}
+.logbox .inputBox li{width:100%;height:40px;margin-top:20px;background:#fff;border-radius:5px;box-shadow:1px 1px 2px #ccc inset;}
+.logbox .inputBox li em{width:46px;height:36px;display:inline-block;float:left;}
+.logbox .inputBox li .icoName{background-position:14px 8px;}
+.logbox .inputBox li .icoPass{background-position:18px -25px;}
+.logbox .inputBox li input{width:184px;margin-top:5px;padding:6px;color:#444;font-size:14px;border:0;float:left;}
+.logbox .inputBox li i{width:28px;height:40px;background:url(../images/close.png) no-repeat center center;display:sinline-block;float:left;}
+.logbox .check{padding:12px 0;}
+.logbox .check font{color:#aaa;padding-left:8px;}
+.logbox button{width:100%;height:40px;line-height:40px;background:#0091ff;color:#fff;font-size:16px;text－align:center;border-radius:5px;margin-top:15px;}
+.logbox button:hover{box-shadow:1px 1px 2px #007edd inset;}
+
+/*top*/
+.topbox{width:100%;height:102px;}
+.topbox .logo{background:#1378D5;width:240px;height:102px;text-align:center;color:#fff;font-size:20px;line-height:25px;padding-top:26px;float:left;}
+.topbox .top{height:102px;padding:57px 48px 0 0;background:#0091ff;color:#fff;font-size:13px;float:left;width:77.9%;text-align:right;}
+.topbox .time{float:right;margin-left:15px;}
+.topbox .user{float:right;}
+.topbox .user a{padding:0 10px;color:#fff;}
+
+/*left main*/
+.mainLeft{float:left;width:240px;height:100%;background:#373d48;}
+.mainLeft div.box{width:100%;margin:0 auto;}
+/*left nav*/
+nav{width:100%;}
+nav a{color:#fff;display:block;height:60px;line-height:60px;font-size:16px;padding-left: 54px;}
+nav a:hover,nav .cur{color:#1478d5;}
+nav a i{width:30px;height:60px;display:inline-block;float:left;}
+nav a .navico01{background-position:0px -59px;}
+nav a .navico02{background-position:0px -120px;}
+nav a .navico03{background-position:0px -180px;}
+nav a .navico04{background-position:0px -236px;}
+nav a .navico05{background-position:0px -297px;}
+nav a .navico06{background-position:0px -362px;}
+nav a.bg01{background:#313843;height:102px;padding-top:38px;}
+nav a.bg02{background:#3e4754;}
+
+/*right main*/
+#mainContent{float:left;width:77.9%;min-width:760px;height:100%;background:#fff;}
+.mainRight{width:100%;height:100%;height:auto;clear:none;overflow:hidden;background:#fff;}
+.mainRight .title{height:102px;padding:52px 0 0 48px;background:#e9e9e9;color:#0091ff;font-size:24px;}
+.index{width:100%;padding:54px 48px;}
+.index h2{background-position:0 -442px;padding-left:26px;font-size:14px;color:#1478d5;height:26px;}
+.index .outTiao{width:100%;font-size:14px;color:#444;padding:0 22px;height:60px;line-height:55px;background:#fff;border-radius:5px;border:1px solid #e3e4e4;margin-top:24px;}
+.index .outTiao li{width:40%;float:left;}
+.index .outTiao li em{display:inline-block;font-size:20px;padding:0 6px;}
+.index .outTiao i{width:1px;height:32px;margin:15px 60px;display:inline-block;float:left;background:#e3e4e4;}
