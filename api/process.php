@@ -96,13 +96,13 @@ function writeResponse($response)
         //print 'send cookie to client';
         //Set-Cookie：name=value; path=/api//; domain=.ibm.com; expires=Wednesday, 19-OCT-05 23:12:40 GMT; [secure]
         //header('Set-Cookie: sessionId=' . $response['cookies']['sessionId'] . '; path=/api');
-        $setCookiesHeaderValue = 'sessionId=' . $response['cookies']['sessionId'];
-        $r = setcookie('sessionId', $response['cookies']['sessionId']);
+        //$setCookiesHeaderValue = 'sessionId=' . $response['cookies']['sessionId'];
+        $r = setcookie('sessionId', $response['cookies']['sessionId'], 0, '/');
         if ($r == FALSE) {
             print 'sessionId cookie set fail.<br />';
         }
-        $setCookiesHeaderValue .= ', token=' . $response['cookies']['token'];
-        $r = setcookie('token', $response['cookies']['token']);
+        //$setCookiesHeaderValue .= ', token=' . $response['cookies']['token'];
+        $r = setcookie('token', $response['cookies']['token'], 0, '/');
         if ($r == FALSE) {
             print 'token cookie set fail.<br />';
         }
