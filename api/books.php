@@ -105,7 +105,9 @@ class books
         if ($this->mimeType == 'application/pdf') {
             $ext = 'pdf';
         }
-        $base = 'C:/httpd-2.4.12-win64-VC11/Apache24/htdocs/Library/var/';
+        //$base = 'C:/httpd-2.4.12-win64-VC11/Apache24/htdocs/Library/var/';
+        //$base = '/Library/WebServer/Documents/var/';
+        $base = '/Users/fixopen/Documents/work/var/';
         $prefix = $base . 'books/';
         if ($type != '') {
             $prefix = $base . $type . '/';
