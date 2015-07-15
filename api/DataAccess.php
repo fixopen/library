@@ -255,7 +255,10 @@ trait DataAccess
         $whereClause = '';
         $filter = $params['filter'];
         if (!empty($filter)) {
-            $whereClause = ' WHERE ' . self::ConvertJsonToWhere($filter) . ($regionExpression ? ' AND ( ' . $regionExpression . ' )' : '');
+            $whereItems = self::ConvertJsonToWhere($filter);
+            if ($whereItems != '') {
+                $whereClause = ' WHERE ' . $whereItems . ($regionExpression ? ' AND ( ' . $regionExpression . ' )' : '');
+            }
         }
         //print $whereClause;
         $orderByClause = '';
