@@ -359,14 +359,18 @@ window.addEventListener('load', function (e) {
                 setDrmDuration.addEventListener('click', function (e) {
                     var drmDuration = doc.getElementById('drmDuration')
                     var v = drmDuration.value.trim()
-                    if (parseInt(v) == v) {
-                        g.patchData('/api/systemParameters/drmDuration', genericHeaders, {value: v}, function (r) {
-                            if (r.meta.code < 400) {
-                                alert('设置成功')
-                            }
-                        })
-                    } else {
-                        alert('必须填写正确的天数')
+                    if(parseInt(v)>1&&parseInt(v)<366){
+                        if (parseInt(v) == v) {
+                            g.patchData('/api/systemParameters/drmDuration', genericHeaders, {value: v}, function (r) {
+                                if (r.meta.code < 400) {
+                                    alert('设置成功')
+                                }
+                            })
+                        } else {
+                            alert('必须填写正确的天数')
+                        }
+                    }else{
+                        alert('请输入1-365数字')
                     }
                 }, false)
                 var hr = doc.createElement('hr')
