@@ -749,7 +749,7 @@ window.addEventListener('load', function (e) {
                 if (actionStats.currentPage != pageNo) {
                     actionStats.currentPage = pageNo
                     var offset = actionStats.pageSize * (actionStats.currentPage - 1)
-                    var orderBy = encodeURIComponent(JSON.stringify({id: 'desc'}))
+                    var orderBy = encodeURIComponent(JSON.stringify({time: 'desc'}))
                     g.getData('/api/business?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             actionStats.content = d.data
