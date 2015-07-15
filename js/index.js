@@ -306,11 +306,13 @@ window.addEventListener('load', function (e) {
                         books.content = []
                         books.handler(1)
                     }, false)
+                    /*
                     body.querySelector('.remove').addEventListener('click', function (e) {
                         g.deleteData('/api/books/' + e.target.dataset.id, genericHeaders, function (r) {
                             books.handler(books.currentPage)
                         })
                     }, false)
+                    */
                     books.container.appendChild(body)
                 }
             },

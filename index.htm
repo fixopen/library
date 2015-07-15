@@ -285,7 +285,7 @@
         <th style="min-width: 10%;text-align: center;">书库分类</th>
         <th style="min-width: 10%;text-align: center;">中图分类</th>
         <th style="min-width: 10%;text-align: center;">ISBN</th>
-        <th style="min-width: 10%;text-align: center;">下架状态</th>
+        <th style="min-width: 10%;text-align: center;">图书状态</th>
         <th style="min-width: 10%;text-align: center;">图书管理</th>
     </tr>
 </template>
@@ -310,7 +310,9 @@
         <td>
             <button class="biz" data-id="${id}">图书借阅详情</button>
             <button class="ban" data-id="${id}">${checkState}</button>
+            <!--
             <button class="remove" data-id="${id}">删除</button>
+            -->
         </td>
     </tr>
 </template>
@@ -415,7 +417,9 @@
         <th style="text-align:center;">用户ID</th>
         <th style="text-align:center;">用户编号</th>
         <th style="text-align:center;">注册时间</th>
+        <!--
         <th style="text-align:center;">状态</th>
+        -->
         <th style="text-align:center;">图书借阅</th>
     </tr>
 </template>
@@ -424,7 +428,9 @@
         <td>${id}</td>
         <td>${no}</td>
         <td>${registerTime}</td>
+        <!--
         <td>${state}</td>
+        -->
         <td>
             <button data-id="${id}">图书借阅详情</button>
         </td>
