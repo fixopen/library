@@ -79,7 +79,7 @@
     </style>
 </head>
 <body>
-<div class="container" >
+<div class="container">
     <div class="row" style="height: 102px;">
         <div class="col-lg-2"
              style="text-align: center; color: #ffffff; background-color: #1378d5; font-size: 20px; line-height: 25px; padding-top: 26px; height: 100%;">
@@ -179,12 +179,12 @@
     </div>
 </div>
 <template id="firstPageContent">
-    <div class="index hg"style="padding:0px;margin:0px;">
+    <div class="index hg" style="padding:0px;margin:0px;">
         <h2 class="ico">用户总数：${userCount}名</h2>
         <ul class="outTiao hg">
-            <li>入库图书：<em>${bookCount}</em>册 </li>
+            <li>入库图书：<em>${bookCount}</em>册</li>
             <i></i>
-            <li>上架图书：<em class="red">${normalBookCount}</em>册 </li>
+            <li>上架图书：<em class="red">${normalBookCount}</em>册</li>
         </ul>
         <ul class="outTiao hg">
             <li>借阅机总数：<em>${deviceCount}</em>台</li>
@@ -194,72 +194,76 @@
     </div>
 
     <!--<div>-->
-        <!--<div style="color: darkblue">用户总数：${userCount}名</div>-->
-        <!--<div style="background-color: #ffffff;">入库图书：${bookCount}册 | 上架图书：${normalBookCount}册</div>-->
-        <!--<div style="background-color: #ffffff;">借阅机总数：${deviceCount}台 | 正常运行数：${liveDeviceCount}台</div>-->
+    <!--<div style="color: darkblue">用户总数：${userCount}名</div>-->
+    <!--<div style="background-color: #ffffff;">入库图书：${bookCount}册 | 上架图书：${normalBookCount}册</div>-->
+    <!--<div style="background-color: #ffffff;">借阅机总数：${deviceCount}台 | 正常运行数：${liveDeviceCount}台</div>-->
     <!--</div>-->
 </template>
 <template id="bookFilter">
-    <!--<div class="row ">-->
+    <div>
+        <!--<div class="row ">-->
         <!--<div class="col-xs-4"><label for="bookId">图书 ID</label><input id="bookId"/></div>-->
         <!--<div class="col-xs-4"><label for="bookName">图书名称</label><input id="bookName"/></div>-->
         <!--<div class="col-xs-4"><label for="author">作者名称</label><input id="author"/></div>-->
-    <!--<div class="col-xs-4"><label for="publisher">出 版 社</label><input id="publisher"></div>-->
-    <!--<div class="col-xs-4"><label for="bookStandardClassifier">中图分类</label><select id="bookStandardClassifier"></select></div>-->
-    <!--<div class="col-xs-4"><label for="bookClassifier">书库分类</label><select id="bookClassifier"></select></div>-->
-    <!--<div class="col-xs-4"><label>下架状态</label> <input name="bookState" type="radio" value="isBan"/>下架-->
-                <!--<input name="bookState" type="radio" value="normal"/>正常</div>-->
-    <!--<div class="col-xs-4"></div>-->
-    <!--<div class="col-xs-4"><label for="drmDuration">DRM时间设置</label><button id="setDrmDuration" class="btn btn-danger">设置</button></div>-->
-    <!--</div>-->
-    <table style="width: 100%;">
-        <!--
-        <caption>filter</caption>
-        <colgroup>
-            <col class="first" span="1"/>
-            <col class="first-value" span="1"/>
-            <col class="second" span="1"/>
-            <col class="second-value" span="1"/>
-        </colgroup>
-        -->
-        <tbody>
-        <tr>
-            <th class="first"><label for="bookId">图书 ID</label></th>
-            <td class="first-value"><input id="bookId" style="border-radius:5px;"/></td>
-            <th class="second"><label for="bookName" >图书名称</label></th>
-            <td class="second-value"><input id="bookName" style="border-radius:5px;"/></td>
-        </tr>
-        <tr>
-            <th class="first"><label for="author">作者名称</label></th>
-            <td class="first-value"><input id="author" style="border-radius:5px;"/></td>
-            <th class="second"><label for="publisher">出 版 社</label></th>
-            <td class="second-value"><input id="publisher" style="border-radius:5px;"></td>
-        </tr>
-        <tr>
-            <th class="first"><label for="bookStandardClassifier">中图分类</label></th>
-            <td class="first-value"><select id="bookStandardClassifier"></select></td>
-            <th class="second"><label for="bookClassifier">书库分类</label></th>
-            <td class="second-value"><select id="bookClassifier"></select></td>
-        </tr>
-        <tr>
-            <th class="first"><label>下架状态</label></th>
-            <td class="first-value">
-                <input name="bookState" type="radio" value="isBan" style="border-radius:5px;"/>下架
-                <input name="bookState" type="radio" value="normal" style="border-radius:5px;"/>正常
-            </td>
-        </tr>
-        <tr >
-            <th class="second"><label for="drmDuration">DRM时间设置</label></th>
-            <td class="second-value"><input id="drmDuration" placeholder="天数" style="border-radius:5px;"/>
-                <button id="setDrmDuration" class="btn btn-danger">设置</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+        <!--<div class="col-xs-4"><label for="publisher">出 版 社</label><input id="publisher"></div>-->
+        <!--<div class="col-xs-4"><label for="bookStandardClassifier">中图分类</label><select id="bookStandardClassifier"></select></div>-->
+        <!--<div class="col-xs-4"><label for="bookClassifier">书库分类</label><select id="bookClassifier"></select></div>-->
+        <!--<div class="col-xs-4"><label>下架状态</label> <input name="bookState" type="radio" value="isBan"/>下架-->
+        <!--<input name="bookState" type="radio" value="normal"/>正常</div>-->
+        <!--<div class="col-xs-4"></div>-->
+        <!--<div class="col-xs-4"><label for="drmDuration">DRM时间设置</label><button id="setDrmDuration" class="btn btn-danger">设置</button></div>-->
+        <!--</div>-->
+        <table style="width: 100%;">
+            <!--
+            <caption>filter</caption>
+            <colgroup>
+                <col class="first" span="1"/>
+                <col class="first-value" span="1"/>
+                <col class="second" span="1"/>
+                <col class="second-value" span="1"/>
+            </colgroup>
+            -->
+            <tbody>
+            <tr>
+                <th class="first"><label for="bookId">图书 ID</label></th>
+                <td class="first-value"><input id="bookId" style="border-radius:5px;"/></td>
+                <th class="second"><label for="bookName">图书名称</label></th>
+                <td class="second-value"><input id="bookName" style="border-radius:5px;"/></td>
+            </tr>
+            <tr>
+                <th class="first"><label for="author">作者名称</label></th>
+                <td class="first-value"><input id="author" style="border-radius:5px;"/></td>
+                <th class="second"><label for="publisher">出 版 社</label></th>
+                <td class="second-value"><input id="publisher" style="border-radius:5px;"></td>
+            </tr>
+            <tr>
+                <th class="first"><label for="bookStandardClassifier">中图分类</label></th>
+                <td class="first-value"><select id="bookStandardClassifier"></select></td>
+                <th class="second"><label for="bookClassifier">书库分类</label></th>
+                <td class="second-value"><select id="bookClassifier"></select></td>
+            </tr>
+            <tr>
+                <th class="first"><label>下架状态</label></th>
+                <td class="first-value">
+                    <input name="bookState" type="radio" value="isBan" style="border-radius:5px;"/>下架
+                    <input name="bookState" type="radio" value="normal" style="border-radius:5px;"/>正常
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <hr/>
+        <div>
+            <span class="second"><label for="drmDuration">DRM时间设置</label></span>
+        <span class="second-value"><input id="drmDuration" placeholder="天数" style="border-radius:5px;"/>
+            <button id="setDrmDuration" class="btn btn-danger">设置</button>
+        </span>
+        </div>
+    </div>
 </template>
 <template id="tableFramework">
     <div>
-        <table class="mainContent table table-striped table-bordered table-condensed" border="1" style="text-align: center;">
+        <table class="mainContent table table-striped table-bordered table-condensed" border="1"
+               style="text-align: center;">
             <!--
             <colgroup id="cols"></colgroup>
             -->
@@ -287,15 +291,23 @@
 </template>
 <template id="bookItem">
     <tr class="permission-tr">
-        <td >${id}</td>
-        <td title="${name}"><h5 style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">${name}</h5></td>
-        <td title="${author}"><h5 style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">${author}</h5></td>
-        <td title="${publisher}"><h5 style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">${publisher}</h5></td>
-        <td >${firstLevelClassify}</td>
-        <td >${standardClassify}</td>
-        <td title="${isbn}"><h5 style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">${isbn}</h5></td>
-        <td >${state}</td>
-        <td >
+        <td>${id}</td>
+        <td title="${name}"><h5
+                style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">
+            ${name}</h5></td>
+        <td title="${author}"><h5
+                style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">
+            ${author}</h5></td>
+        <td title="${publisher}"><h5
+                style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">
+            ${publisher}</h5></td>
+        <td>${firstLevelClassify}</td>
+        <td>${standardClassify}</td>
+        <td title="${isbn}"><h5
+                style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">
+            ${isbn}</h5></td>
+        <td>${state}</td>
+        <td>
             <button class="biz" data-id="${id}">图书借阅详情</button>
             <button class="ban" data-id="${id}">${checkState}</button>
             <button class="remove" data-id="${id}">删除</button>
@@ -336,7 +348,7 @@
                 <td class="first-value"><input type="date" id="setupTime" style="border-radius:5px;"/></td>
                 <th class="second"><label>状态</label></th>
                 <td class="second-value">
-                    <input type="radio" name="deviceState" value="heartbeat" >心跳
+                    <input type="radio" name="deviceState" value="heartbeat">心跳
                     <input type="radio" name="deviceState" value="offline">离线
                 </td>
             </tr>

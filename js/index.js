@@ -338,15 +338,16 @@ window.addEventListener('load', function (e) {
                 if (!books.classifierIsInit) {
                     books.getClassifier()
                 }
-                g.getData('/api/systemParameters?filter=' + encodeURIComponent(JSON.stringify({name: 'drmDuration'})), genericHeaders, function (d) {
+                g.getData('/api/systemParameters/drmDuration', genericHeaders, function (d) {
                     if (d.meta.code == 200) {
-                        if (d.data.length == 1) {
-                            var param = d.data[0]
-                            books.drmDuration = param.value
-                        } else {
-                            books.drmDuration = 90
-                            alert('DRM duration use default value : 90')
-                        }
+                        var param = d.data
+                        books.drmDuration = param.value
+                    } else {
+                        books.drmDuration = 90
+                        g.postData('/api/systemParameters', genericHeaders, {name: "drmDuration", value: 90}, function(e) {
+                            //
+                        })
+                        alert('DRM duration use default value : 90')
                     }
                 })
                 data.fillSelect('bookStandardClassifier', books.standardClassifier, true)
@@ -529,9 +530,9 @@ window.addEventListener('load', function (e) {
                     //@@filter.registerTime <= registerStopTimeValue
                     hasCondition = true
                 }
-                if (hasCondition) {
+                //if (hasCondition) {
                     result = encodeURIComponent(JSON.stringify(filter))
-                }
+                //}
                 return result
             },
             getTotal: function (filter) {

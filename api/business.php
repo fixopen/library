@@ -190,7 +190,7 @@ class business
                             //print $request['body'];
                             break;
                         case 'view':
-                            $query = 'SELECT "bookId", count(*) AS "viewCount" FROM "business" WHERE "action" = ' . "'View'" . $whereClause . ' GROUP BY "bookId" ORDER BY "viewCount" LIMIT 10';
+                            $query = 'SELECT "bookId", count(*) AS "viewCount" FROM "business" WHERE "action" = ' . "'View'" . $whereClause . ' GROUP BY "bookId" ORDER BY "viewCount" DESC LIMIT 10';
                             //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
@@ -251,7 +251,7 @@ class business
                             $request['response']['body'] = self::ToArrayJson($result);
                             break;
                         case 'download':
-                            $query = 'SELECT "bookId", COUNT(*) AS "downloadCount" FROM "business" WHERE "action" = ' . "'Download'" . $whereClause . ' GROUP BY "bookId" ORDER BY "downloadCount" LIMIT 10';
+                            $query = 'SELECT "bookId", COUNT(*) AS "downloadCount" FROM "business" WHERE "action" = ' . "'Download'" . $whereClause . ' GROUP BY "bookId" ORDER BY "downloadCount" DESC LIMIT 10';
                             //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
