@@ -535,7 +535,7 @@ window.addEventListener('load', function (e) {
                 return result
             },
             getTotal: function (filter) {
-                var uri = '/api/devices/statistics/count'
+                var uri = '/api/users/statistics/count'
                 if (filter) {
                     uri += '?filter=' + filter
                 }
@@ -555,13 +555,10 @@ window.addEventListener('load', function (e) {
                     users.currentPage = pageNo
                     var offset = users.pageSize * (users.currentPage - 1)
                     var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
-                    var url ;
-                    if(filter == null){
-                        url = '/api/users?'
-                    }else{
-                        url = '/api/users?filter=' + filter + '&';
-                    }
-                    g.getData(url+ 'offset=' + offset + '&count=' + users.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
+                    var url = '/api/users';
+                    url += '?filter=' + filter + '&offset=' + offset + '&count=' + users.pageSize + '&orderBy=' + orderBy;
+                    //alert(url)
+                    g.getData(url, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             users.content = d.data
                         }
@@ -752,7 +749,7 @@ window.addEventListener('load', function (e) {
                 if (actionStats.currentPage != pageNo) {
                     actionStats.currentPage = pageNo
                     var offset = actionStats.pageSize * (actionStats.currentPage - 1)
-                    var orderBy = encodeURIComponent(JSON.stringify({id: 'desc'}))
+                    var orderBy = encodeURIComponent(JSON.stringify({time: 'desc'}))
                     g.getData('/api/business?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             actionStats.content = d.data
