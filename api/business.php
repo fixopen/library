@@ -124,7 +124,7 @@ class business
                     $dir = array_shift($request['paths']);
                     switch ($dir) {
                         case 'follow':
-                            $query = 'SELECT "bookId", count(*) AS "followCount" FROM "business" WHERE "action" = ' . "'Follow'" . $whereClause . ' GROUP BY "bookId" ORDER BY "followCount" LIMIT 10';
+                            $query = 'SELECT "bookId", count(*) AS "followCount" FROM "business" WHERE "action" = ' . "'Follow'" . $whereClause . ' GROUP BY "bookId" ORDER BY "followCount" DESC LIMIT 10';
                             //print $query . '<br />';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
@@ -172,7 +172,7 @@ class business
                                     }
                                 }
                             }
-                            $query = 'SELECT "id", name" FROM "book" WHERE "id" IN (' . implode(', ', $bookIds) . ')';
+                            $query = 'SELECT "id", "name" FROM "book" WHERE "id" IN (' . implode(', ', $bookIds) . ')';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
@@ -235,7 +235,7 @@ class business
                                     }
                                 }
                             }
-                            $query = 'SELECT "id", name" FROM "book" WHERE "id" IN (' . implode(', ', $bookIds) . ')';
+                            $query = 'SELECT "id", "name" FROM "book" WHERE "id" IN (' . implode(', ', $bookIds) . ')';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
@@ -296,7 +296,7 @@ class business
                                     }
                                 }
                             }
-                            $query = 'SELECT "id", name" FROM "book" WHERE "id" IN (' . implode(', ', $bookIds) . ')';
+                            $query = 'SELECT "id", "name" FROM "book" WHERE "id" IN (' . implode(', ', $bookIds) . ')';
                             $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
                             if ($r) {
                                 foreach ($r as $row) {
