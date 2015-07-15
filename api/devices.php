@@ -13,6 +13,7 @@ class devices
         Session,
         NormalFacadeImpl,
         Facade {
+        NormalFacadeImpl::FillSelf as commonFillSelf;
         DataAccess::IsPrimaryKey as isPrimary;
         DataAccess::specFilter as commonSpecFilter;
         JSON::ToJson as privateToJson;
@@ -22,7 +23,7 @@ class devices
     private $address = '';
     private $location = NULL; //(x, y);
     private $lastOperationTime = NULL;
-    private $lastUpdateTime = NULL;
+    private $setupTime = NULL;
     private $controlNo = '';
     private $controlPassword = '';
     private $ipAddress = NULL;
@@ -52,6 +53,13 @@ class devices
             }
         }
         return $result;
+    }
+
+    public function FillSelf($row)
+    {
+        $this->commonFillSelf($row);
+        $this->lastOperationTime = 0;
+        //$this->lastUpdateTime = time();
     }
 
     public static function Touch($sessionId)
@@ -103,14 +111,14 @@ class devices
         $this->lastOperationTime = $lastOperationTime;
     }
 
-    public function getLastUpdateTime()
+    public function getSetupTime()
     {
-        return $this->lastUpdateTime;
+        return $this->setupTime;
     }
 
-    public function setLastUpdateTime($lastUpdateTime)
+    public function setSetupTime($lastUpdateTime)
     {
-        $this->lastUpdateTime = $lastUpdateTime;
+        $this->setupTime = $lastUpdateTime;
     }
 
     public function getControlNo()

@@ -14,6 +14,7 @@ class users
         NormalFacadeImpl,
         Facade {
         DataAccess::IsPrimaryKey as isPrimary;
+        DataAccess::specFilter as commonSpecFilter;
         JSON::ToJson as privateToJson;
     }
 
@@ -21,6 +22,17 @@ class users
     private $registerTime = NULL; // timestamp(4) without time zone,
     private $lastOperationTime = NULL; //timestamp(4) without time zone,
     private $sessionId = NULL;
+
+    private static function specFilter($name, $value) {
+        $result = self::commonSpecFilter($name, $value);
+        if ($name === 'fromTime') {
+            $result = '"registerTime" > ' . $value;
+        }
+        if ($name === 'toTime') {
+            $result = '"registerTime" < ' . $value;
+        }
+        return $result;
+    }
 
     public static function IsPrimaryKey($no)
     {
