@@ -522,12 +522,12 @@ window.addEventListener('load', function (e) {
                 }
                 var registerStartTimeValue = registerStartTime.value
                 if (registerStartTimeValue != '') {
-                    //@@filter.registerTime >= registerStartTimeValue
+                    filter.fromTime = registerStartTimeValue
                     hasCondition = true
                 }
                 var registerStopTimeValue = registerStopTime.value
                 if (registerStopTimeValue != '') {
-                    //@@filter.registerTime <= registerStopTimeValue
+                    filter.toTime = registerStopTimeValue
                     hasCondition = true
                 }
                 //if (hasCondition) {
