@@ -164,12 +164,12 @@
                 <h4 class="modal-title">新建借阅机</h4>
             </div>
             <div class="modal-body">
-                <input id="newDeviceNo" type="text" placeholder="编号"><br/>
-                <input id="newDeviceAddress" type="text" placeholder="借阅机位置">
-                <input id="newDeviceSetupTime" type="text" placeholder="安装时间"><br/>
-                <input id="newDeviceControlNo" type="text" placeholder="远端控制帐号">
-                <input id="newDeviceControlPassword" type="text" placeholder="远端控制密码"><br/>
-                <input id="newDeviceIPAddress" type="text" placeholder="IP地址">
+                <input id="newDeviceNo" type="text" placeholder="编号" style="border-radius:5px;"><br/>
+                <input id="newDeviceAddress" type="text" placeholder="借阅机位置" style="border-radius:5px;">
+                <input id="newDeviceSetupTime" type="text" placeholder="安装时间" style="border-radius:5px;"><br/>
+                <input id="newDeviceControlNo" type="text" placeholder="远端控制帐号" style="border-radius:5px;">
+                <input id="newDeviceControlPassword" type="text" placeholder="远端控制密码" style="border-radius:5px;"><br/>
+                <input id="newDeviceIPAddress" type="text" placeholder="IP地址" style="border-radius:5px;">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -225,15 +225,15 @@
         <tbody>
         <tr>
             <th class="first"><label for="bookId">图书 ID</label></th>
-            <td class="first-value"><input id="bookId"/></td>
-            <th class="second"><label for="bookName">图书名称</label></th>
-            <td class="second-value"><input id="bookName"/></td>
+            <td class="first-value"><input id="bookId" style="border-radius:5px;"/></td>
+            <th class="second"><label for="bookName" >图书名称</label></th>
+            <td class="second-value"><input id="bookName" style="border-radius:5px;"/></td>
         </tr>
         <tr>
             <th class="first"><label for="author">作者名称</label></th>
-            <td class="first-value"><input id="author"/></td>
+            <td class="first-value"><input id="author" style="border-radius:5px;"/></td>
             <th class="second"><label for="publisher">出 版 社</label></th>
-            <td class="second-value"><input id="publisher"></td>
+            <td class="second-value"><input id="publisher" style="border-radius:5px;"></td>
         </tr>
         <tr>
             <th class="first"><label for="bookStandardClassifier">中图分类</label></th>
@@ -244,11 +244,13 @@
         <tr>
             <th class="first"><label>下架状态</label></th>
             <td class="first-value">
-                <input name="bookState" type="radio" value="isBan"/>下架
-                <input name="bookState" type="radio" value="normal"/>正常
+                <input name="bookState" type="radio" value="isBan" style="border-radius:5px;"/>下架
+                <input name="bookState" type="radio" value="normal" style="border-radius:5px;"/>正常
             </td>
+        </tr>
+        <tr >
             <th class="second"><label for="drmDuration">DRM时间设置</label></th>
-            <td class="second-value"><input id="drmDuration" placeholder="天数">
+            <td class="second-value"><input id="drmDuration" placeholder="天数" style="border-radius:5px;"/>
                 <button id="setDrmDuration" class="btn btn-danger">设置</button>
             </td>
         </tr>
@@ -264,7 +266,7 @@
             <thead id="header"></thead>
             <tbody id="body"></tbody>
         </table>
-        <ul id="pageIndex" class="pagination" id='pagicontainer' style="padding-right: 0px;"></ul>
+        <ul id="pageIndex" class="pagination" id='pagicontainer' style="float:right;margin-top:0px;"></ul>
     </div>
 </template>
 <template id="bookItemColumn">
@@ -286,12 +288,12 @@
 <template id="bookItem">
     <tr class="permission-tr">
         <td >${id}</td>
-        <td >${name}</td>
-        <td >${author}</td>
-        <td >${publisher}</td>
+        <td title="${name}"><h5 style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">${name}</h5></td>
+        <td title="${author}"><h5 style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">${author}</h5></td>
+        <td title="${publisher}"><h5 style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">${publisher}</h5></td>
         <td >${firstLevelClassify}</td>
         <td >${standardClassify}</td>
-        <td >${isbn}</td>
+        <td title="${isbn}"><h5 style="width: 70px;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;margin-top: 5px;">${isbn}</h5></td>
         <td >${state}</td>
         <td >
             <button class="biz" data-id="${id}">图书借阅详情</button>
@@ -319,22 +321,22 @@
             <tbody>
             <tr>
                 <th class="first"><label for="deviceNo">编号</label></th>
-                <td class="first-value"><input id="deviceNo"/></td>
+                <td class="first-value"><input id="deviceNo" style="border-radius:5px;"/></td>
                 <th class="second"><label for="deviceAddress">借阅机位置</label></th>
-                <td class="second-value"><input id="deviceAddress"/></td>
+                <td class="second-value"><input id="deviceAddress" style="border-radius:5px;"/></td>
             </tr>
             <tr>
                 <th class="first"><label for="deviceId">借阅机ID</label></th>
-                <td class="first-value"><input id="deviceId"/></td>
+                <td class="first-value"><input id="deviceId" style="border-radius:5px;"/></td>
                 <th class="second"><label for="deviceIp">借阅机IP</label></th>
-                <td class="second-value"><input id="deviceIp"></td>
+                <td class="second-value"><input id="deviceIp" style="border-radius:5px;"/></td>
             </tr>
             <tr>
                 <th class="first"><label for="setupTime">安装时间</label></th>
-                <td class="first-value"><input type="date" id="setupTime"></td>
+                <td class="first-value"><input type="date" id="setupTime" style="border-radius:5px;"/></td>
                 <th class="second"><label>状态</label></th>
                 <td class="second-value">
-                    <input type="radio" name="deviceState" value="heartbeat">心跳
+                    <input type="radio" name="deviceState" value="heartbeat" >心跳
                     <input type="radio" name="deviceState" value="offline">离线
                 </td>
             </tr>
@@ -344,14 +346,14 @@
 </template>
 <template id="deviceItemHeader">
     <tr>
-        <th>借阅机ID</th>
-        <th>编号</th>
-        <th>借阅机位置</th>
-        <th>安装时间</th>
-        <th>远端控制帐号</th>
-        <th>远端控制密码</th>
-        <th>状态</th>
-        <th>管理</th>
+        <th style="text-align:center;">借阅机ID</th>
+        <th style="text-align:center;">编号</th>
+        <th style="text-align:center;">借阅机位置</th>
+        <th style="text-align:center;">安装时间</th>
+        <th style="text-align:center;">远端控制帐号</th>
+        <th style="text-align:center;">远端控制密码</th>
+        <th style="text-align:center;">状态</th>
+        <th style="text-align:center;">管理</th>
     </tr>
 </template>
 <template id="deviceItem">
@@ -382,15 +384,15 @@
         <tbody>
         <tr>
             <th class="filter-title"><label for="userNo">用户编号</label></th>
-            <td class="filter-title-value"><input id="userNo"/></td>
+            <td class="filter-title-value"><input id="userNo" style="border-radius:5px;"/></td>
         </tr>
         <tr>
-            <th class="filter-title"><label for="deviceId">注册时间</label></th>
+            <th class="filter-title"><label for="deviceId">注册时间</label><label for="registerStartTime">从</label></th>
             <td class="filter-title-value">
-                <label for="registerStartTime">从</label>
-                <input type="datetime-local" id="registerStartTime"/>
+                <lable></lable>
+                <input type="datetime-local" id="registerStartTime" style="border-radius:5px;"/>
                 <label for="registerStopTime">到</label>
-                <input type="datetime" id="registerStopTime"/>
+                <input type="datetime" id="registerStopTime" style="border-radius:5px;"/>
             </td>
         </tr>
         </tbody>
@@ -398,11 +400,11 @@
 </template>
 <template id="userItemHeader">
     <tr>
-        <th>用户ID</th>
-        <th>用户编号</th>
-        <th>注册时间</th>
-        <th>状态</th>
-        <th>图书借阅</th>
+        <th style="text-align:center;">用户ID</th>
+        <th style="text-align:center;">用户编号</th>
+        <th style="text-align:center;">注册时间</th>
+        <th style="text-align:center;">状态</th>
+        <th style="text-align:center;">图书借阅</th>
     </tr>
 </template>
 <template id="userItem">
@@ -421,35 +423,35 @@
         <tbody>
         <tr>
             <th class="first"><label for="bizUserId">用户ID</label></th>
-            <td class="first-value"><input id="bizUserId"/></td>
+            <td class="first-value"><input id="bizUserId" style="border-radius:5px;"/></td>
             <th class="second"><label for="bizDeviceId">借阅机ID</label></th>
-            <td class="second-value"><input id="bizDeviceId"/></td>
+            <td class="second-value"><input id="bizDeviceId" style="border-radius:5px;"/></td>
         </tr>
         <tr>
             <th class="first"><label for="bizBookId">书籍ID</label></th>
-            <td class="first-value"><input id="bizBookId" /></td>
+            <td class="first-value"><input id="bizBookId" style="border-radius:5px;"/></td>
             <th class="second"><label for="bizAction">类型</label></th>
-            <td class="second-value"><input id="bizAction"/></td>
+            <td class="second-value"><input id="bizAction" style="border-radius:5px;"/></td>
         </tr>
         <tr>
-            <th class="first"><label>时间</label></th>
-            <td class="first-value" colspan="3">
-                <label for="startTime">从</label>
-                <input type="date" id="startTime"/>
+            <th class="first"><label>时间</label><label for="startTime">从</label></th>
+
+            <td class="first-value">
+                <input type="date" id="startTime" style="border-radius:5px;"/>
                 <label for="stopTime">到</label>
-                <input type="date" id="stopTime"/>
+                <input type="date" id="stopTime" style="border-radius:5px;"/>
             </td>
         </tr>
         </tbody>
     </table>
 </template>
 <template id="statsItemHeader">
-    <tr>
-        <th>用户ID</th>
-        <th>图书ID</th>
-        <th>借阅机ID</th>
-        <th>时间</th>
-        <th>类型</th>
+    <tr style="text-align: center;">
+        <th style="text-align:center;">用户ID</th>
+        <th style="text-align:center;">图书ID</th>
+        <th style="text-align:center;">借阅机ID</th>
+        <th style="text-align:center;">时间</th>
+        <th style="text-align:center;">类型</th>
     </tr>
 </template>
 <template id="statsItem">
@@ -469,26 +471,26 @@
     </ul>
 </template>
 <template id="bookStatsHeader">
-    <tr>
-        <th>图书编号</th>
-        <th>图书名称</th>
-        <th>关注数量
+    <tr style="text-align: center;">
+        <th style="text-align:center;">图书编号</th>
+        <th style="text-align:center;">图书名称</th>
+        <th style="text-align:center;">关注数量
             <button id="followOrder" data-order="any">Up\Down</button>
         </th>
-        <th>阅读数量
+        <th style="text-align:center;">阅读数量
             <button id="viewOrder" data-order="any">Up\Down</button>
         </th>
-        <th>下载数量
+        <th style="text-align:center;">下载数量
             <button id="downloadOrder" data-order="down">Up\Down</button>
         </th>
     </tr>
 </template>
 <template id="bookStatsItem">
     <tr>
-        <td>${id}</td>
+        <td>${bookId}</td>
         <td>${name}</td>
         <td>${followCount}</td>
-        <td>${readCount}</td>
+        <td>${viewCount}</td>
         <td>${downloadCount}</td>
     </tr>
 </template>
@@ -496,15 +498,15 @@
     <table border="1">
         <thead>
         <tr>
-            <th>图书编号</th>
-            <th>图书名称</th>
-            <th>关注数量
+            <th style="text-align:center;">图书编号</th>
+            <th style="text-align:center;">图书名称</th>
+            <th style="text-align:center;">关注数量
                 <button>Up\Down</button>
             </th>
-            <th>阅读数量
+            <th style="text-align:center;">阅读数量
                 <button>Up\Down</button>
             </th>
-            <th>下载数量
+            <th style="text-align:center;">下载数量
                 <button>Up\Down</button>
             </th>
         </tr>
@@ -529,15 +531,15 @@
         </tr>
         <tr>
             <th>旧密码</th>
-            <td><input id="oldPassword"></td>
+            <td><input id="oldPassword" style="border-radius:5px;"/></td>
         </tr>
         <tr>
             <th>新密码</th>
-            <td><input id="newPassword"></td>
+            <td><input id="newPassword" style="border-radius:5px;"/></td>
         </tr>
         <tr>
             <th>确认新密码</th>
-            <td><input id="retryNewPassword"></td>
+            <td><input id="retryNewPassword" style="border-radius:5px;"/></td>
         </tr>
         <tr>
             <td colspan="2">

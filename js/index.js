@@ -381,7 +381,7 @@ window.addEventListener('load', function (e) {
             }
         },
         devices: {
-            pageSize: 10,
+            pageSize: 4,
             total: -1,
             currentPage: 0,
             content: [],
