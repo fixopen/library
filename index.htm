@@ -76,6 +76,12 @@
         .filter-title-value {
             width: 70%;
         }
+        .button-click {
+            color: red;
+        }
+        .button-remove-click {
+            color: #ffffff;
+        }
 
     </style>
 </head>
@@ -164,13 +170,13 @@
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">新建借阅机</h4>
             </div>
-            <div class="modal-body">
-                <input id="newDeviceNo" type="text" placeholder="编号" style="border-radius:5px;"><br/>
-                <input id="newDeviceAddress" type="text" placeholder="借阅机位置" style="border-radius:5px;">
-                <input id="newDeviceSetupTime" type="text" placeholder="安装时间" style="border-radius:5px;"><br/>
-                <input id="newDeviceControlNo" type="text" placeholder="远端控制帐号" style="border-radius:5px;">
-                <input id="newDeviceControlPassword" type="text" placeholder="远端控制密码" style="border-radius:5px;"><br/>
-                <input id="newDeviceIPAddress" type="text" placeholder="IP地址" style="border-radius:5px;">
+            <div class="modal-body" style="background-color: grey;">
+                <input id="newDeviceNo" type="text" placeholder="编号" style="border-radius:5px;margin: 5px;"><br/>
+                <input id="newDeviceAddress" type="text" placeholder="借阅机位置" style="border-radius:5px;margin: 5px;">
+                <input id="newDeviceSetupTime" type="text" placeholder="安装时间" style="border-radius:5px;margin: 5px;"><br/>
+                <input id="newDeviceControlNo" type="text" placeholder="远端控制帐号" style="border-radius:5px;margin: 5px;">
+                <input id="newDeviceControlPassword" type="text" placeholder="远端控制密码" style="border-radius:5px;margin: 5px;"><br/>
+                <input id="newDeviceIPAddress" type="text" placeholder="IP地址" style="border-radius:5px;margin: 5px;">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -494,24 +500,24 @@
     </ul>
 </template>
 <template id="bookStatsHeader">
-    <tr style="text-align: center;">
+    <tr >
         <th style="text-align:center;">图书编号</th>
         <th style="text-align:center;">图书名称</th>
-        <th style="text-align:center;">关注数量
-            <button id="followOrder" data-order="any">Up\Down</button>
+        <th style="text-align:center;">
+            <button id="followOrder" data-order="any" >关注数量</button>
         </th>
-        <th style="text-align:center;">阅读数量
-            <button id="viewOrder" data-order="any">Up\Down</button>
+        <th style="text-align:center;">
+            <button id="viewOrder" data-order="any">阅读数量</button>
         </th>
-        <th style="text-align:center;">下载数量
-            <button id="downloadOrder" data-order="down">Up\Down</button>
+        <th style="text-align:center;">
+            <button id="downloadOrder" data-order="down">下载数量</button>
         </th>
     </tr>
 </template>
 <template id="bookStatsItem">
-    <tr>
+    <tr >
         <td>${bookId}</td>
-        <td>${name}</td>
+        <td title="${name}">${shortName}</td>
         <td>${followCount}</td>
         <td>${viewCount}</td>
         <td>${downloadCount}</td>

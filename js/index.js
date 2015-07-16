@@ -936,15 +936,28 @@ window.addEventListener('load', function (e) {
                         bookStats.handler(1)
                     }
                     var followButton = doc.getElementById('followOrder')
+                    var viewButton = doc.getElementById('viewOrder')
+                    var downloadButton = doc.getElementById('downloadOrder')
+                    downloadButton.addClass('button-click ')
+
                     followButton.addEventListener('click', function (e) {
+                        viewButton.removeClass('button-click ')
+                        downloadButton.removeClass('button-click ')
+                        followButton.addClass('button-click ')
                         orderHandler(e.target, 'follow')
                     }, false)
-                    var viewButton = doc.getElementById('viewOrder')
+
                     viewButton.addEventListener('click', function (e) {
+                        viewButton.addClass('button-click ')
+                        downloadButton.removeClass('button-click ')
+                        followButton.removeClass('button-click ')
                         orderHandler(e.target, 'view')
                     }, false)
-                    var downloadButton = doc.getElementById('downloadOrder')
+
                     downloadButton.addEventListener('click', function (e) {
+                        viewButton.removeClass('button-click ')
+                        downloadButton.addClass('button-click ')
+                        followButton.removeClass('button-click ')
                         orderHandler(e.target, 'download')
                     }, false)
                 })
@@ -968,6 +981,9 @@ window.addEventListener('load', function (e) {
                     data.bookStats.container.deleteRow(-1);
                 }
                 for (var i = 0, c = dataInfo.length; i < c; ++i) {
+                    if(dataInfo[i].name.length > 20){
+                        dataInfo[i].shortName = dataInfo[i].name.substr(0 , 15)+"..."
+                    }
                     var body = doc.getElementById('bookStatsItem').content.cloneNode(true).children[0]
                     g.bind(body, dataInfo[i])
                     data.bookStats.container.appendChild(body)
@@ -1022,16 +1038,21 @@ window.addEventListener('load', function (e) {
         device.controlPassword = controlPassword.value.trim()
         device.ipAddress = ipAddress.value.trim()
         //alert(JSON.stringify(device))
-        g.postData('/api/devices/' + device.no, genericHeaders, device, function (d) {
-            var title = doc.querySelector('#createDevice h4')
-            title.textContent = '借阅机创建成功'
-            title.style.color = 0x0000FF
-            setTimeout(function () {
-                $('#createDevice').modal('hide')
-                //add device to data.devices.content
-            }, 2000)
-            //alert('借阅机创建成功')
-        })
+        if(device.setupTime.match(/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)){
+            g.postData('/api/devices/' + device.no, genericHeaders, device, function (d) {
+                var title = doc.querySelector('#createDevice h4')
+                title.textContent = '借阅机创建成功'
+                title.style.color = 0x0000FF
+                setTimeout(function () {
+                    $('#createDevice').modal('hide')
+                    //add device to data.devices.content
+                }, 2000)
+                //alert('借阅机创建成功')
+            })
+        }else{
+            alert("请输入正确的时间格式（2015-01-01）")
+        }
+
     }, false)
     var e = doc.createEvent('Event')
     e.initEvent('click', false, false)
