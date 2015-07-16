@@ -19,7 +19,15 @@ class administrators
 
     public static function IsPrimaryKey($name)
     {
-        return self::GetOne('name', $name);
+        //print 'user key is ' . $v . '<br />';
+        $result = self::GetOne('sessionId', $name);
+        if ($result == FALSE) {
+            $result = self::GetOne('name', $name);
+            if ($result == FALSE) {
+                $result = self::isPrimary($name);
+            }
+        }
+        return $result;
     }
 
     private $name = ''; //character varying(32),

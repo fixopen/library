@@ -8,16 +8,18 @@ trait Permission
     public static function GetSubjectByQuery(array &$request)
     {
         $result = FALSE;
-        $className = __CLASS__;
-        if (array_key_exists('sessionId', $request['cookies']) && in_array($className, self::$logins)) {
+        if (array_key_exists('sessionId', $request['cookies'])) {
             //$sessionId = session_id();
             $sessionId = $request['cookies']['sessionId'];
+            // && in_array($className, self::$logins)
             //$infos['header']['authrozition'];
-            $session = $className::IsPrimaryKey($sessionId);
-            if ($session) {
-                $session->setLastOperationTime(time());
-                $session->Update();
-                $result = $session; //users::SelectById($session->getUserId());
+            foreach (self::$logins as $className) {
+                $session = $className::IsPrimaryKey($sessionId);
+                if ($session) {
+                    $session->setLastOperationTime(time());
+                    $session->Update();
+                    $result = $session; //users::SelectById($session->getUserId());
+                }
             }
         }
         return $result;
