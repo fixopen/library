@@ -15,6 +15,7 @@ window.addEventListener('load', function (e) {
             'value': 'application/json'
         }
     ]
+    var clickState = {}
     var doc = document
     doc.getElementById('timeNow').innerHTML = Date()
     var logout = doc.getElementById('logout')
@@ -150,9 +151,10 @@ window.addEventListener('load', function (e) {
             }
         },
         books: {
-            pageSize: 4,
+            pageSize: 10,
             total: -1,
             currentPage: 0,
+            oldPage:1,
             standardClassifierIsInit: false,
             standardClassifier: [],
             classifierIsInit: false,
@@ -268,7 +270,7 @@ window.addEventListener('load', function (e) {
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('bookItem').content.cloneNode(true).children[0]
                     //显示上下架状态
-                    contents[i].state = '正常'
+                    contents[i].state = '上架'
                     if (contents[i].isBan) {
                         contents[i].state = '下架'
                     }
@@ -279,6 +281,10 @@ window.addEventListener('load', function (e) {
                     }
                     g.bind(body, contents[i])
                     body.querySelector('.biz').addEventListener('click', function (e) {
+                        //图书详情点击状态
+                        clickState.name = "book";
+                        clickState.value =  e.target.dataset.id
+                        //
                         var actionStats = data.actionStats
                         actionStats.reset()
                         actionStats.setProp('book', e.target.dataset.id)
@@ -304,18 +310,19 @@ window.addEventListener('load', function (e) {
                         books.total = -1
                         books.currentPage = 0
                         books.content = []
-                        books.handler(1)
+                        books.handler(books.oldPage)
                     }, false)
-                    body.querySelector('.remove').addEventListener('click', function (e) {
-                        g.deleteData('/api/books/' + e.target.dataset.id, genericHeaders, function (r) {
-                            books.handler(books.currentPage)
-                        })
-                    }, false)
+                    //body.querySelector('.remove').addEventListener('click', function (e) {
+                    //    g.deleteData('/api/books/' + e.target.dataset.id, genericHeaders, function (r) {
+                    //        books.handler(books.currentPage)
+                    //    })
+                    //}, false)
                     books.container.appendChild(body)
                 }
             },
             handler: function (pageNo) {
                 var books = data.books
+                books.oldPage = pageNo
                 books.loadData(pageNo)
                 books.render()
                 g.renderPageNavigator(books.pageIndexContainer, books.pageSize, books.currentPage, books.total, books.handler)
@@ -386,7 +393,7 @@ window.addEventListener('load', function (e) {
             }
         },
         devices: {
-            pageSize: 4,
+            pageSize: 10,
             total: -1,
             currentPage: 0,
             content: [],
@@ -503,7 +510,7 @@ window.addEventListener('load', function (e) {
             }
         },
         users: {
-            pageSize: 10,
+            pageSize: 15,
             total: -1,
             currentPage: 0,
             content: [],
@@ -514,6 +521,7 @@ window.addEventListener('load', function (e) {
             },
             getFilter: function () {
                 var result = null
+                var obbbb = new Date(2015,01,01)
                 var userNo = doc.getElementById('userNo')
                 var registerStartTime = doc.getElementById('registerStartTime')
                 var registerStopTime = doc.getElementById('registerStopTime')
@@ -534,9 +542,9 @@ window.addEventListener('load', function (e) {
                     filter.toTime = registerStopTimeValue
                     hasCondition = true
                 }
-                //if (hasCondition) {
+                if (hasCondition) {
                     result = encodeURIComponent(JSON.stringify(filter))
-                //}
+                }
                 return result
             },
             getTotal: function (filter) {
@@ -786,7 +794,9 @@ window.addEventListener('load', function (e) {
                 contentTitle.textContent = prop.title
                 mainContainer.innerHTML = ''
                 var filter = doc.getElementById('statsFilter').content.cloneNode(true).children[0]
-                filter.querySelector('#' + prop.readonlyFilterItem).setAttribute('readonly', 'readonly')
+                var readOnlyItem = filter.querySelector('#' + prop.readonlyFilterItem)
+                readOnlyItem.setAttribute('readonly', 'readonly')
+                readOnlyItem.setAttribute('value', actionStats[actionStats.currentProps + 'Id'])
                 filter.addEventListener('change', function (e) {
                     actionStats.total = -1
                     actionStats.currentPage = 0
@@ -824,20 +834,23 @@ window.addEventListener('load', function (e) {
                                     u.password = newPassword.value
                                     g.patchData('/api/administrators/' + u.name, genericHeaders, u, function (d) {
                                         if (d.meta.code < 400) {
-                                            alert('Your password changed!')
+                                            //alert('Your password changed!')
+                                            alert('修改成功')
                                             oldPassword.value = ''
                                             newPassword.value = ''
                                             retryNewPassword.value = ''
                                         }
                                     })
                                 } else {
-                                    alert('new password not same')
+                                    //alert('new password not same')
+                                    alert('新密码输入不相同')
                                 }
                             } else {
                                 alert('server internal error')
                             }
                         } else {
-                            alert('old password incorrect')
+                            //alert('old password incorrect')
+                            alert('旧密码错误，请重新输入')
                         }
                     })
                 }, false)
