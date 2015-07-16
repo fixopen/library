@@ -25,7 +25,7 @@ trait Permission
         return $result;
     }
 
-    public static function CheckPermission(users $subject, $operation, $dataTypeId, array $attributeBag)
+    public static function CheckPermission($subject, $operation, $dataTypeId, array $attributeBag)
     {
         $result = '1 = 1';
 //        $permission = permissions::GetByUserAndOperationDataTypeIdAttributeBag($subject, $operation, $dataTypeId, $attributeBag);
