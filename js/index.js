@@ -293,6 +293,15 @@ window.addEventListener('load', function (e) {
                     }, false)
                     body.querySelector('.ban').addEventListener('click', function (e) {
                         //修改上下架状态
+                        //var r=confirm("Press a button")
+                        //if (r==true)
+                        //{
+                        //    document.write("You pressed OK!")
+                        //}
+                        //else
+                        //{
+                        //    document.write("You pressed Cancel!")
+                        //}
                         var patchData = {};
                         books.content.forEach(function(item,index){
                             if(item.id == e.target.dataset.id){
@@ -522,7 +531,6 @@ window.addEventListener('load', function (e) {
             },
             getFilter: function () {
                 var result = null
-                var obbbb = new Date(2015,01,01)
                 var userNo = doc.getElementById('userNo')
                 var registerStartTime = doc.getElementById('registerStartTime')
                 var registerStopTime = doc.getElementById('registerStopTime')
