@@ -994,6 +994,7 @@ window.addEventListener('load', function (e) {
     }
     var firstPage = doc.getElementById('firstPage')
     firstPage.addEventListener('click', function (event) {
+        data.baseInfo.isInit = false;
         data.switchTo(firstPage)
         data.baseInfo.do()
     }, false)
@@ -1004,6 +1005,7 @@ window.addEventListener('load', function (e) {
     }, false)
     var deviceList = doc.getElementById('deviceList')
     deviceList.addEventListener('click', function (event) {
+        data.devices.content = []
         data.switchTo(deviceList)
         data.devices.do()
     }, false)
