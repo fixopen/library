@@ -1,5 +1,6 @@
 /**
  * Created by fixopen on 7/4/15.
+ * getTime() / 1000.0
  */
 
 window.addEventListener('load', function (e) {

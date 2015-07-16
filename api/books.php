@@ -127,6 +127,7 @@ class books
         PathProcess,
         NormalFacadeImpl,
         Facade {
+        NormalFacadeImpl::FillSelf as commonFillSelf;
         DataAccess::IsPrimaryKey as isPrimary;
         DataAccess::specFilter as commonSpecFilter;
     }
@@ -162,6 +163,12 @@ class books
             }
         }
         return $result;
+    }
+
+    public function FillSelf($row)
+    {
+        $this->commonFillSelf($row);
+        $this->lastUpdateTime = 'now';
     }
 
     public function getName()

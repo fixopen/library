@@ -36,7 +36,15 @@ class users
 
     public static function IsPrimaryKey($no)
     {
-        return self::GetOne('no', $no);
+        //print 'user key is ' . $v . '<br />';
+        $result = self::GetOne('sessionId', $no);
+        if ($result == FALSE) {
+            $result = self::GetOne('no', $no);
+            if ($result == FALSE) {
+                $result = self::isPrimary($no);
+            }
+        }
+        return $result;
     }
 
     public function getNo()
