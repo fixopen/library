@@ -334,7 +334,7 @@ trait Facade
     {
         $subject = self::GetSubjectByQuery($request);
         //$subject = NULL;
-        $attributeBag = '';
+        $attributeBag = [];
 
         if ($subject) {
             $regionExpression = self::CheckPermission($subject, $request['method'], dataTypes::GetIdByName(self::$tableName), $attributeBag);
