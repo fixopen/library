@@ -983,6 +983,8 @@ window.addEventListener('load', function (e) {
                 for (var i = 0, c = dataInfo.length; i < c; ++i) {
                     if(dataInfo[i].name.length > 20){
                         dataInfo[i].shortName = dataInfo[i].name.substr(0 , 15)+"..."
+                    }else{
+                        dataInfo[i].shortName = dataInfo[i].name
                     }
                     var body = doc.getElementById('bookStatsItem').content.cloneNode(true).children[0]
                     g.bind(body, dataInfo[i])
