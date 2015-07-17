@@ -174,8 +174,8 @@
             <div class="modal-body" style="background-color: grey;">
                 <input id="newDeviceNo" type="text" placeholder="编号" style="border-radius:5px;margin: 5px;"><br/>
                 <input id="newDeviceAddress" type="text" placeholder="借阅机位置" style="border-radius:5px;margin: 5px;">
-                <!--<input  type="text" placeholder="安装时间（2015-01-01）" style="border-radius:5px;margin: 5px;">-->
-                <input id="newDeviceSetupTime"  placeholder="安装时间" class="Wdate" type="text" id="d16" onfocus="WdatePicker({position:{left:0,top:0}})"/><br/>
+                <input id="newDeviceSetupTime" type="date" placeholder="安装时间" style="border-radius:5px;margin: 5px;"><br/>
+                <!--<input id="newDeviceSetupTime"  placeholder="安装时间" class="Wdate" type="datatime" id="d16" onfocus="WdatePicker({position:{left:0,top:0}})"/><br/>-->
                 <input id="newDeviceControlNo" type="text" placeholder="远端控制帐号" style="border-radius:5px;margin: 5px;">
                 <input id="newDeviceControlPassword" type="text" placeholder="远端控制密码" style="border-radius:5px;margin: 5px;"><br/>
                 <input id="newDeviceIPAddress" type="text" placeholder="IP地址" style="border-radius:5px;margin: 5px;">
@@ -424,9 +424,9 @@
                 <!--<input type="text" class="Wdate" id="registerStartTime" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'registerStartTime\',{d:-3});}'})"/>-->
                 <!--<label >到</label>-->
                 <!--<input type="text" class="Wdate" id="registerStopTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'registerStopTime\',{d:3});}'})"/>-->
-                <input type="datetime-local" id="registerStartTime" style="border-radius:5px;"/>
+                <input type="date" id="registerStartTime" style="border-radius:5px;"/>
                 <label for="registerStopTime">到</label>
-                <input type="datetime" id="registerStopTime" style="border-radius:5px;"/>
+                <input type="date" id="registerStopTime" style="border-radius:5px;"/>
             </td>
         </tr>
         </tbody>

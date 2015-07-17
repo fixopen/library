@@ -605,7 +605,7 @@ window.addEventListener('load', function (e) {
                     var body = doc.getElementById('userItem').content.cloneNode(true).children[0]
                     contents[i].state = '心跳'
                     if(contents[i].registerTime != null){
-                        contents[i].normalTime =  new Date(contents[i].registerTime)
+                        contents[i].registerTime =  new Date(contents[i].registerTime *1000).getFullYear()+"-"+new Date(contents[i].registerTime *1000).getMonth()+"-"+new Date(contents[i].registerTime *1000).getDay()
                     }
                     var currentTime = new Date()
                     currentTime = currentTime.getTime() / 1000
@@ -1072,7 +1072,7 @@ window.addEventListener('load', function (e) {
         //alert(JSON.stringify(device))
         var sameOrNot = encodeURIComponent(JSON.stringify({'no':device.no}));
         //验证时间格式   与  编码是否唯一
-        if(device.setupTime.match(/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)){
+        //if(device.setupTime.match(/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)){
             g.getData('/api/devices?filter=' +sameOrNot , genericHeaders, function (d) {
                 if (d.meta.code == 200&& d.data.length>0) {
                     alert(device.no+"已存在")
@@ -1095,9 +1095,9 @@ window.addEventListener('load', function (e) {
                 }
             })
 
-        }else{
-            alert("请输入正确的时间格式（2015-01-01）")
-        }
+        //}else{
+        //    alert("请输入正确的时间格式（2015-01-01）")
+        //}
 
     }, false)
     var e = doc.createEvent('Event')
