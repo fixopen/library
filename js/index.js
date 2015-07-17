@@ -293,34 +293,31 @@ window.addEventListener('load', function (e) {
                     }, false)
                     body.querySelector('.ban').addEventListener('click', function (e) {
                         //修改上下架状态
-                        //var r=confirm("Press a button")
-                        //if (r==true)
-                        //{
-                        //    document.write("You pressed OK!")
-                        //}
-                        //else
-                        //{
-                        //    document.write("You pressed Cancel!")
-                        //}
                         var patchData = {};
+                        var info = ""
                         books.content.forEach(function(item,index){
                             if(item.id == e.target.dataset.id){
                                 if(item.isBan == true){
                                     patchData = {"isBan": false}
+                                    info = "是否上架图书ID为（"+e.target.dataset.id+")的书籍"
                                 }else{
                                     patchData = {"isBan": true}
+                                    info = "是否下架图书ID为（"+e.target.dataset.id+")的书籍"
                                 }
                             }
                         })
+                        var r=confirm(info)
+                        if (r==true)
+                        {
+                            g.patchData('/api/books/' + e.target.dataset.id, genericHeaders, patchData, function (r) {
+                                //books.handler(books.currentPage)
+                            })
+                            books.total = -1
+                            books.currentPage = 0
+                            books.content = []
+                            books.handler(books.oldPage)
+                        }
 
-
-                        g.patchData('/api/books/' + e.target.dataset.id, genericHeaders, patchData, function (r) {
-                            //books.handler(books.currentPage)
-                        })
-                        books.total = -1
-                        books.currentPage = 0
-                        books.content = []
-                        books.handler(books.oldPage)
                     }, false)
                     //body.querySelector('.remove').addEventListener('click', function (e) {
                     //    g.deleteData('/api/books/' + e.target.dataset.id, genericHeaders, function (r) {
