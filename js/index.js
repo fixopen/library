@@ -1057,12 +1057,14 @@ window.addEventListener('load', function (e) {
     var createDevice = doc.querySelector('#createDevice .btn-primary')
     createDevice.addEventListener('click', function (e) {
         var device = {}
+        var id = doc.getElementById('newDeviceId')
         var no = doc.getElementById('newDeviceNo')
         var address = doc.getElementById('newDeviceAddress')
         var setupTime = doc.getElementById('newDeviceSetupTime')
         var controlNo = doc.getElementById('newDeviceControlNo')
         var controlPassword = doc.getElementById('newDeviceControlPassword')
         var ipAddress = doc.getElementById('newDeviceIPAddress')
+        device.id = id.value.trim()
         device.no = no.value.trim()
         device.address = address.value.trim()
         device.setupTime = setupTime.value.trim()
@@ -1070,34 +1072,39 @@ window.addEventListener('load', function (e) {
         device.controlPassword = controlPassword.value.trim()
         device.ipAddress = ipAddress.value.trim()
         //alert(JSON.stringify(device))
-        var sameOrNot = encodeURIComponent(JSON.stringify({'no':device.no}));
-        //验证时间格式   与  编码是否唯一
-        //if(device.setupTime.match(/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)){
-            g.getData('/api/devices?filter=' +sameOrNot , genericHeaders, function (d) {
-                if (d.meta.code == 200&& d.data.length>0) {
-                    alert(device.no+"已存在")
-                }else{
-                    g.postData('/api/devices/' + device.no, genericHeaders, device, function (d) {
-                        var title = doc.querySelector('#createDevice h4')
-                        title.textContent = '借阅机创建成功'
-                        title.style.color = 0x0000FF
-                        setTimeout(function () {
-                            $('#createDevice').modal('hide')
-                            //add device to data.devices.content
-                        }, 2000)
-                        data.devices.currentPage = 0;
-                        data.devices.total = -1
-                        data.devices.content=[]
-                        data.switchTo(deviceList)
-                        data.devices.do()
-                        //alert('借阅机创建成功')
-                    })
-                }
-            })
+        var sameOrNot = encodeURIComponent(JSON.stringify({'id':device.id}));
+        //验证时间格式   与  id是否唯一
+        if(device.setupTime!=""){
+            if(device.id.match(/^[0-9]*[1-9][0-9]*$/)){
+                g.getData('/api/devices?filter=' +sameOrNot , genericHeaders, function (d) {
+                    if (d.meta.code == 200&& d.data.length>0) {
+                        alert(device.id+"已存在")
+                    }else{
+                        g.postData('/api/devices/' + device.id, genericHeaders, device, function (d) {
+                            var title = doc.querySelector('#createDevice h4')
+                            title.textContent = '借阅机创建成功'
+                            title.style.color = 0x0000FF
+                            setTimeout(function () {
+                                $('#createDevice').modal('hide')
+                                //add device to data.devices.content
+                            }, 2000)
+                            data.devices.currentPage = 0;
+                            data.devices.total = -1
+                            data.devices.content=[]
+                            data.switchTo(deviceList)
+                            data.devices.do()
+                            //alert('借阅机创建成功')
+                        })
+                    }
+                })
 
-        //}else{
-        //    alert("请输入正确的时间格式（2015-01-01）")
-        //}
+            }else{
+                alert("请输入正确ID(数字)")
+            }
+        }else{
+            alert("时间不能为空")
+        }
+
 
     }, false)
     var e = doc.createEvent('Event')
