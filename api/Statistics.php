@@ -18,7 +18,10 @@ trait Statistics
         //print 'filter is ' . $filter . '<br />';
         if (!empty($filter)) {
             //print 'filter is ' . $filter . '<br />';
-            $whereClause = ' WHERE ' . self::ConvertJsonToWhere($filter);
+            $whereItems = self::ConvertJsonToWhere($filter);
+            if ($whereItems != '') {
+                $whereClause = ' WHERE ' . $whereItems;
+            }
         }
         //$whereClause = ' WHERE ' . $filter;
         //if (empty($filter)) {
