@@ -18,6 +18,8 @@ window.addEventListener('load', function (e) {
     ]
     var clickState = {}
     var doc = document
+    //new Date().getTime() / 1000.0
+    //var d = Date(s * 1000.0)
     doc.getElementById('timeNow').innerHTML = Date()
     var logout = doc.getElementById('logout')
     logout.addEventListener('click', function (e) {
