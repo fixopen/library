@@ -1007,17 +1007,22 @@ window.addEventListener('load', function (e) {
     }, false)
     var bookList = doc.getElementById('bookList')
     bookList.addEventListener('click', function (event) {
+        data.books.currentPage = 0
+        data.books.total = -1
         data.switchTo(bookList)
         data.books.do()
     }, false)
     var deviceList = doc.getElementById('deviceList')
     deviceList.addEventListener('click', function (event) {
-        data.devices.content = []
+        data.devices.currentPage = 0;
+        data.devices.total = -1
         data.switchTo(deviceList)
         data.devices.do()
     }, false)
     var userManagement = doc.getElementById('userManagement')
     userManagement.addEventListener('click', function (event) {
+        data.users.currentPage = 0;
+        data.users.total = -1
         data.switchTo(userManagement)
         data.users.do()
     }, false)
