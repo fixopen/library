@@ -160,7 +160,7 @@ trait DataAccess
         $where = array();
         //print $filter . '<br />';
         $filterJson = json_decode($filter);
-        //print_r($filterJson);
+        //var_dump($filterJson);
         //print 'hello';
         //print_r($filterJson);
         foreach ($filterJson as $key => $value) {

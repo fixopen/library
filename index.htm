@@ -9,6 +9,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/base.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="js/My97DatePicker/skin/WdatePicker.css">
     <!--
     <link href="css/non-responsive.css" rel="stylesheet"> xmlns="http://www.w3.org/1999/html"
     -->
@@ -173,7 +174,8 @@
             <div class="modal-body" style="background-color: grey;">
                 <input id="newDeviceNo" type="text" placeholder="编号" style="border-radius:5px;margin: 5px;"><br/>
                 <input id="newDeviceAddress" type="text" placeholder="借阅机位置" style="border-radius:5px;margin: 5px;">
-                <input id="newDeviceSetupTime" type="text" placeholder="安装时间" style="border-radius:5px;margin: 5px;"><br/>
+                <!--<input  type="text" placeholder="安装时间（2015-01-01）" style="border-radius:5px;margin: 5px;">-->
+                <input id="newDeviceSetupTime"  placeholder="安装时间" class="Wdate" type="text" id="d16" onfocus="WdatePicker({position:{left:0,top:0}})"/><br/>
                 <input id="newDeviceControlNo" type="text" placeholder="远端控制帐号" style="border-radius:5px;margin: 5px;">
                 <input id="newDeviceControlPassword" type="text" placeholder="远端控制密码" style="border-radius:5px;margin: 5px;"><br/>
                 <input id="newDeviceIPAddress" type="text" placeholder="IP地址" style="border-radius:5px;margin: 5px;">
@@ -351,13 +353,22 @@
                 <td class="second-value"><input id="deviceIp" style="border-radius:5px;"/></td>
             </tr>
             <tr>
-                <th class="first"><label for="setupTime">安装时间</label></th>
-                <td class="first-value"><input type="date" id="setupTime" style="border-radius:5px;"/></td>
                 <th class="second"><label>状态</label></th>
                 <td class="second-value">
                     <input type="radio" name="deviceState" value="heartbeat">心跳
                     <input type="radio" name="deviceState" value="offline">离线
                 </td>
+                <th class="first"><label for="setupTime">安装时间从</label></th>
+                <td class="first-value">
+                    <!--<input id="setupTime" class="Wdate" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'setupTime\')||\'9990-10-01\'}'})"/><label >到</label>-->
+                    <!--<input id="setupStopTime" class="Wdate" type="text" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'setupStopTime\')}',maxDate:'9990-10-01'})"/>-->
+                    <!--<input type="text" class="Wdate" id="setupTime" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'setupTime\',{d:-3});}'})"/>-->
+                    <!--<label >到</label>-->
+                    <!--<input type="text" class="Wdate" id="setupStopTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'setupStopTime\',{d:3});}'})"/>-->
+                    <input type="date" id="setupTime" style="border-radius:5px;"/>
+                    <label for="setupStopTime">到</label></th><input type="date" id="setupStopTime" style="border-radius:5px;"/>
+                </td>
+
             </tr>
             </tbody>
         </table>
@@ -406,9 +417,13 @@
             <td class="filter-title-value"><input id="userNo" style="border-radius:5px;"/></td>
         </tr>
         <tr>
-            <th class="filter-title"><label for="deviceId">注册时间</label><label for="registerStartTime">从</label></th>
+            <th class="filter-title"><label for="deviceId">注册时间</label><label >从</label></th>
             <td class="filter-title-value">
-                <lable></lable>
+                <!--<input id="registerStartTime"  class="Wdate" type="text" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'registerStartTime\')||\'9990-10-01\'}'})"/><label >到</label>-->
+                <!--<input id="registerStopTime" class="Wdate" type="text" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'registerStopTime\')}',maxDate:'9990-10-01'})"/>-->
+                <!--<input type="text" class="Wdate" id="registerStartTime" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'registerStartTime\',{d:-3});}'})"/>-->
+                <!--<label >到</label>-->
+                <!--<input type="text" class="Wdate" id="registerStopTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'registerStopTime\',{d:3});}'})"/>-->
                 <input type="datetime-local" id="registerStartTime" style="border-radius:5px;"/>
                 <label for="registerStopTime">到</label>
                 <input type="datetime" id="registerStopTime" style="border-radius:5px;"/>
@@ -457,9 +472,9 @@
             <!--<input id="bizAction" style="border-radius:5px;"/>-->
             <td class="second-value"><select  id="bizAction">
                 <option value="">全部</option>
-                <option value="View">View</option>
-                <option value="Download">Download</option>
-                <option value="Follow">Follow</option>
+                <option value="View">阅读</option>
+                <option value="Download">下载</option>
+                <option value="Follow">关注</option>
             </select></td>
         </tr>
         <tr>
@@ -582,6 +597,7 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.easyui.min.js"></script>
 <script src="js/util.js"></script>
+<script src="js/My97DatePicker/WdatePicker.js"></script>
 <!--
 <script src="js/baseService.js"></script>
 <script src="js/tree.js"></script>

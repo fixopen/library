@@ -416,6 +416,7 @@ window.addEventListener('load', function (e) {
                 var deviceId = doc.getElementById('deviceId')
                 var deviceIp = doc.getElementById('deviceIp')
                 var setupTime = doc.getElementById('setupTime')
+                var stopTime = doc.getElementById('setupStopTime')
                 var deviceState = data.getRadio('deviceState')
                 var hasCondition = false
                 var filter = {}
@@ -441,7 +442,12 @@ window.addEventListener('load', function (e) {
                 }
                 var setupTimeValue = setupTime.value
                 if (setupTimeValue != '') {
-                    filter.setupTime = setupTimeValue
+                    filter.fromTime = setupTimeValue
+                    hasCondition = true
+                }
+                var toTimeValue = stopTime.value
+                if (toTimeValue != '') {
+                    filter.toTime = toTimeValue
                     hasCondition = true
                 }
                 var stateValue = deviceState
@@ -488,6 +494,9 @@ window.addEventListener('load', function (e) {
                 var contents = devices.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('deviceItem').content.cloneNode(true).children[0]
+                    if(contents[i].setupTime != null){
+                        contents[i].setupTime = contents[i].setupTime.substr(0,10)
+                    }
                     contents[i].state = '心跳'
                     var currentTime = new Date()
                     currentTime = currentTime.getTime() / 1000
@@ -593,6 +602,12 @@ window.addEventListener('load', function (e) {
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('userItem').content.cloneNode(true).children[0]
                     contents[i].state = '心跳'
+                    if(contents[i].registerTime != null){
+                        contents[i].normalTime =  new Date(contents[i].registerTime)
+                        var a= contents[i].normalTime.getDate()
+                        var b= contents[i].normalTime.getDay()
+                        var c=contents[i].normalTime.getYear()
+                    }
                     var currentTime = new Date()
                     currentTime = currentTime.getTime() / 1000
                     if ((currentTime - contents[i].lastOperationTime) > 30 * 60) {
@@ -784,6 +799,9 @@ window.addEventListener('load', function (e) {
                 var contents = actionStats.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('statsItem').content.cloneNode(true).children[0]
+                    if(contents[i].time != null){
+                        contents[i].time = contents[i].time.substr(0,10)
+                    }
                     g.bind(body, contents[i])
                     actionStats.container.appendChild(body)
                 }
@@ -1015,6 +1033,7 @@ window.addEventListener('load', function (e) {
     var deviceList = doc.getElementById('deviceList')
     deviceList.addEventListener('click', function (event) {
         data.devices.currentPage = 0;
+        data.devices.content=[]
         data.devices.total = -1
         data.switchTo(deviceList)
         data.devices.do()
@@ -1052,17 +1071,31 @@ window.addEventListener('load', function (e) {
         device.controlPassword = controlPassword.value.trim()
         device.ipAddress = ipAddress.value.trim()
         //alert(JSON.stringify(device))
+        var sameOrNot = encodeURIComponent(JSON.stringify({'no':device.no}));
+        //验证时间格式   与  编码是否唯一
         if(device.setupTime.match(/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)){
-            g.postData('/api/devices/' + device.no, genericHeaders, device, function (d) {
-                var title = doc.querySelector('#createDevice h4')
-                title.textContent = '借阅机创建成功'
-                title.style.color = 0x0000FF
-                setTimeout(function () {
-                    $('#createDevice').modal('hide')
-                    //add device to data.devices.content
-                }, 2000)
-                //alert('借阅机创建成功')
+            g.getData('/api/devices?filter=' +sameOrNot , genericHeaders, function (d) {
+                if (d.meta.code == 200&& d.data.length>0) {
+                    alert(device.no+"已存在")
+                }else{
+                    g.postData('/api/devices/' + device.no, genericHeaders, device, function (d) {
+                        var title = doc.querySelector('#createDevice h4')
+                        title.textContent = '借阅机创建成功'
+                        title.style.color = 0x0000FF
+                        setTimeout(function () {
+                            $('#createDevice').modal('hide')
+                            //add device to data.devices.content
+                        }, 2000)
+                        data.devices.currentPage = 0;
+                        data.devices.total = -1
+                        data.devices.content=[]
+                        data.switchTo(deviceList)
+                        data.devices.do()
+                        //alert('借阅机创建成功')
+                    })
+                }
             })
+
         }else{
             alert("请输入正确的时间格式（2015-01-01）")
         }

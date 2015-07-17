@@ -40,6 +40,7 @@ class devices
     }
 
     private static function specFilter($name, $value) {
+        //print 'user key is ' . $name . '<br />';
         $result = self::commonSpecFilter($name, $value);
         if ($name === 'isOnline') {
             $now = time();
@@ -51,6 +52,12 @@ class devices
             } else {
                 //still empty
             }
+        }
+        if ($name === 'fromTime') {
+            $result = '"setupTime" > TIMESTAMP ' . "'" . $value . "'";
+        }
+        if ($name === 'toTime') {
+            $result = '"setupTime" < TIMESTAMP ' . "'" . $value . "'";
         }
         return $result;
     }

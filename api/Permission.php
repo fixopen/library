@@ -7,9 +7,11 @@ trait Permission
 
     public static function GetSubjectByQuery(array &$request)
     {
+//        print_r($request['cookies']);
         $result = FALSE;
         if (array_key_exists('sessionId', $request['cookies'])) {
             //$sessionId = session_id();
+//            print  "1<br/>";
             $sessionId = $request['cookies']['sessionId'];
             // && in_array($className, self::$logins)
             //$infos['header']['authrozition'];
