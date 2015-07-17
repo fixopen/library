@@ -604,9 +604,6 @@ window.addEventListener('load', function (e) {
                     contents[i].state = '心跳'
                     if(contents[i].registerTime != null){
                         contents[i].normalTime =  new Date(contents[i].registerTime)
-                        var a= contents[i].normalTime.getDate()
-                        var b= contents[i].normalTime.getDay()
-                        var c=contents[i].normalTime.getYear()
                     }
                     var currentTime = new Date()
                     currentTime = currentTime.getTime() / 1000
