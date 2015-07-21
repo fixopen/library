@@ -163,13 +163,13 @@ class books
             }
         }
         if($name === 'name'){
-            $result = '"name" like ' . "'{$value}%'";
+            $result = '"name" like ' . "'%{$value}%'";
         }
         if($name === 'author'){
-            $result = '"author" like ' . "'{$value}%'";
+            $result = '"author" like ' . "'%{$value}%'";
         }
         if($name === 'publisher'){
-            $result = '"publisher" like ' . "'{$value}%'";
+            $result = '"publisher" like ' . "'%{$value}%'";
         }
         return $result;
     }
