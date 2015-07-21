@@ -248,9 +248,9 @@
             </tr>
             <tr>
                 <th class="first"><label for="bookStandardClassifier">中图分类</label></th>
-                <td class="first-value"><select id="bookStandardClassifier"></select></td>
+                <td class="first-value"><select id="bookStandardClassifier" style="width:150px;"></select></td>
                 <th class="second"><label for="bookClassifier">书库分类</label></th>
-                <td class="second-value"><select id="bookClassifier"></select></td>
+                <td class="second-value"><select id="bookClassifier" style="width:150px;"></select></td>
             </tr>
             <tr>
                 <th class="first"><label>上下架状态</label></th>
@@ -397,7 +397,8 @@
         <td>${controlPassword}</td>
         <td>${state}</td>
         <td>
-            <button data-id="${id}">图书借阅详情</button>
+            <button class="detail" data-id="${id}">图书借阅详情</button>
+            <button class="remove" data-id="${id}">删除</button>
         </td>
     </tr>
 </template>
@@ -471,7 +472,7 @@
             <td class="first-value"><input id="bizBookId" style="border-radius:5px;"/></td>
             <th class="second"><label for="bizAction">类型</label></th>
             <!--<input id="bizAction" style="border-radius:5px;"/>-->
-            <td class="second-value"><select  id="bizAction">
+            <td class="second-value"><select  id="bizAction" style="width:150px;">
                 <option value="">全部</option>
                 <option value="View">阅读</option>
                 <option value="Download">下载</option>

@@ -23,6 +23,7 @@ class IdGenerator
         $result |= ($now << 16) & 0xFFFFFFFF0000;
         $result |= self::$seqNo & 0xFFFF;
         ++self::$seqNo;
+        $result &= 0x7FFFFFFF;
         return $result;
     }
 

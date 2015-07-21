@@ -504,6 +504,20 @@ window.addEventListener('load', function (e) {
                         contents[i].state = '下线'
                     }
                     g.bind(body, contents[i])
+                    body.querySelector('.remove').addEventListener('click', function (e) {
+                        g.deleteData('/api/devices/' + e.target.dataset.id, genericHeaders, function (r) {
+                            if(r.meta.code == 200){
+                                data.devices.currentPage = 0;
+                                data.devices.content=[]
+                                data.devices.total = -1
+                                data.switchTo(deviceList)
+                                data.devices.do()
+                            }else{
+                                alert("删除借阅机ID（"+ e.target.dataset.id+"）失败，请查看是否存在借阅信息")
+                            }
+                            //books.handler(books.currentPage)
+                        })
+                    }, false)
                     body.querySelector('button').addEventListener('click', function (e) {
                         var actionStats = data.actionStats
                         actionStats.reset()
@@ -798,6 +812,13 @@ window.addEventListener('load', function (e) {
                     var body = doc.getElementById('statsItem').content.cloneNode(true).children[0]
                     if(contents[i].time != null){
                         contents[i].time = contents[i].time.substr(0,10)
+                    }
+                    if(contents[i].action == "Download"){
+                        contents[i].action = "下载"
+                    }else if(contents[i].action == "View"){
+                        contents[i].action = "阅读"
+                    }else if(contents[i].action == "Follow"){
+                        contents[i].action = "关注"
                     }
                     g.bind(body, contents[i])
                     actionStats.container.appendChild(body)
