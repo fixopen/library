@@ -26,12 +26,18 @@ class users
     private static function specFilter($name, $value) {
         $result = self::commonSpecFilter($name, $value);
         if ($name === 'fromTime') {
-            $result = '"registerTime" > ' . $value;
+            $result = '"registerTime" > ' . strtotime($value . 'T00:00:00');
         }
         if ($name === 'toTime') {
-            $result = '"registerTime" < ' . $value;
+            $result = '"registerTime" < ' . strtotime($value . 'T00:00:00');
         }
         return $result;
+    }
+
+    public function ToJson()
+    {
+        $this->registerDate = date('Y-n-j', $this->registerTime);
+        return $this->privateToJson();
     }
 
     public static function IsPrimaryKey($no)

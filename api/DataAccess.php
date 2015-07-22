@@ -274,6 +274,7 @@ trait DataAccess
         }
         $query = 'SELECT ' . implode(', ', self::GetMarkedColumnNames()) . ' FROM ' . self::Mark(self::$tableName) . $whereClause . $orderByClause . $pagedClause;
         //print $query . '<br />';
+        //print date('Y-n-j', 1436925102) . '<br />';
         return self::GetData($query, __CLASS__);
     }
 

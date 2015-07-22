@@ -618,14 +618,15 @@ window.addEventListener('load', function (e) {
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('userItem').content.cloneNode(true).children[0]
                     contents[i].state = '心跳'
-                    if(contents[i].registerTime != null){
-                        contents[i].registerTime =  new Date(contents[i].registerTime *1000).getFullYear()+"-"+new Date(contents[i].registerTime *1000).getMonth()+"-"+new Date(contents[i].registerTime *1000).getDay()
-                    }
-                    var currentTime = new Date()
-                    currentTime = currentTime.getTime() / 1000
-                    if ((currentTime - contents[i].lastOperationTime) > 30 * 60) {
-                        contents[i].state = '下线'
-                    }
+                    //if (contents[i].registerTime != null) {
+                    //    var registerDate = new Date(contents[i].registerTime * 1000.0)
+                    //    contents[i].registerDate = registerDate.getFullYear() + '-' + (registerDate.getMonth() + 1) + '-' + registerDate.getDay()
+                    //}
+                    //var currentTime = new Date()
+                    //currentTime = currentTime.getTime() / 1000
+                    //if ((currentTime - contents[i].lastOperationTime) > 30 * 60) {
+                    //    contents[i].state = '下线'
+                    //}
                     g.bind(body, contents[i])
                     body.querySelector('button').addEventListener('click', function (e) {
                         var actionStats = data.actionStats
