@@ -142,6 +142,11 @@
                     style="background-position: 0 -300px;">
                     统计信息
                 </li>
+                <li id="administrator"
+                    class="menu-item"
+                    style="background-position: 0 -360px;">
+                    权限管理
+                </li>
                 <li id="administratorManagement"
                     class="menu-item"
                     style="background-position: 0 -360px;">
@@ -568,7 +573,7 @@
         </tbody>
     </table>
 </template>
-<template id="administratorInfo">
+<template id="administratorInfoP">
     <table>
         <tbody>
         <tr>
@@ -594,6 +599,32 @@
         </tr>
         </tbody>
     </table>
+</template>
+<template id="administratorInfoFilter">
+    <table style="width: 100%;">
+        <tbody>
+        <tr>
+            <th class="filter-title"><button id="createUser" >创建用户</button></th>
+        </tr>
+
+        </tbody>
+    </table>
+</template>
+<template id="administratorInfoHeader">
+    <tr>
+        <th style="text-align:center;">登录名</th>
+        <th style="text-align:center;">创建时间</th>
+        <th style="text-align:center;">操作</th>
+    </tr>
+</template>
+<template id="administratorInfo">
+    <tr>
+        <td>${id}</td>
+        <td>${no}</td>
+        <td>
+            <button data-id="${id}">图书借阅详情</button>
+        </td>
+    </tr>
 </template>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>

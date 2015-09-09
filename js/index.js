@@ -565,12 +565,13 @@ window.addEventListener('load', function (e) {
                 }
                 var registerStartTimeValue = registerStartTime.value
                 if (registerStartTimeValue != '') {
-                    filter.fromTime = registerStartTimeValue
+                    filter.fromTime =(new Date(registerStartTime.value)).getTime()/1000
                     hasCondition = true
                 }
                 var registerStopTimeValue = registerStopTime.value
                 if (registerStopTimeValue != '') {
-                    filter.toTime = registerStopTimeValue
+                    //filter.toTime = registerStopTimeValue
+                    filter.toTime = (new Date(registerStopTime.value)).getTime()/1000
                     hasCondition = true
                 }
                 //if (hasCondition) {
@@ -865,7 +866,7 @@ window.addEventListener('load', function (e) {
             do: function () {
                 contentTitle.textContent = '管理员信息'
                 mainContainer.innerHTML = ''
-                var changePasswordPanel = doc.getElementById('administratorInfo').content.cloneNode(true)
+                var changePasswordPanel = doc.getElementById('administratorInfoP').content.cloneNode(true)
                 var setPassword = changePasswordPanel.querySelector('#setPassword')
                 setPassword.addEventListener('click', function (e) {
                     var oldPassword = document.querySelector('#oldPassword')
@@ -1036,6 +1037,218 @@ window.addEventListener('load', function (e) {
                 }
 
             }
+        },
+        administrator:{
+            pageSize: 15,
+            total: -1,
+            currentPage: 0,
+            content: [],
+            container: null,
+            pageIndexContainer: null,
+            setContainer: function (c) {
+                data.administrator.container = c
+            },
+            getFilter: function () {
+                var result = null
+                var userNo = doc.getElementById('userNo')
+                var registerStartTime = doc.getElementById('registerStartTime')
+                var registerStopTime = doc.getElementById('registerStopTime')
+                var hasCondition = false
+                var filter = {}
+                var userNoValue = userNo.value
+                if (userNoValue != '') {
+                    filter.no = userNoValue
+                    hasCondition = true
+                }
+                var registerStartTimeValue = registerStartTime.value
+                if (registerStartTimeValue != '') {
+                    filter.fromTime =(new Date(registerStartTime.value)).getTime()/1000
+                    hasCondition = true
+                }
+                var registerStopTimeValue = registerStopTime.value
+                if (registerStopTimeValue != '') {
+                    //filter.toTime = registerStopTimeValue
+                    filter.toTime = (new Date(registerStopTime.value)).getTime()/1000
+                    hasCondition = true
+                }
+                //if (hasCondition) {
+                result = encodeURIComponent(JSON.stringify(filter))
+                //}
+                return result
+            },
+            getTotal: function (filter) {
+                var uri = '/api/administrators/statistics/count'
+                if (filter) {
+                    uri += '?filter=' + filter
+                }
+                g.getData(uri, genericHeaders, function (d) {
+                    if (d.meta.code == 200) {
+                        data.administrator.total = d.data.value
+                    }
+                })
+            },
+            loadData: function (pageNo) {
+                var administrator = data.administrator
+                //var filter = privilege.getFilter()
+                if (administrator.total == -1) {
+                    administrator.getTotal()
+                }
+                if (administrator.currentPage != pageNo) {
+                    administrator.currentPage = pageNo
+                    var offset = administrator.pageSize * (administrator.currentPage - 1)
+                    var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
+                    var url = '/api/administrators';
+                    url += '?offset=' + offset + '&count=' + administrator.pageSize + '&orderBy=' + orderBy;
+                    //alert(url)
+                    g.getData(url, genericHeaders, function (d) {
+                        if (d.meta.code == 200) {
+                            administrator.content = d.data
+                        }
+                    })
+                }
+            },
+            render: function () {
+                var administrator = data.administrator
+                while (administrator.container.rows.length > 0) {
+                    administrator.container.deleteRow(-1);
+                }
+                var contents = administrator.content
+                for (var i = 0, c = contents.length; i < c; ++i) {
+                    var body = doc.getElementById('userItem').content.cloneNode(true).children[0]
+                    contents[i].state = '心跳'
+                    if(contents[i].registerTime != null){
+                        contents[i].registerTime =  new Date(contents[i].registerTime *1000).getFullYear()+"-"+new Date(contents[i].registerTime *1000).getMonth()+"-"+new Date(contents[i].registerTime *1000).getDay()
+                    }
+                    var currentTime = new Date()
+                    currentTime = currentTime.getTime() / 1000
+                    if ((currentTime - contents[i].lastOperationTime) > 30 * 60) {
+                        contents[i].state = '下线'
+                    }
+                    g.bind(body, contents[i])
+                    body.querySelector('button').addEventListener('click', function (e) {
+                        var actionStats = data.actionStats
+                        actionStats.reset()
+                        actionStats.setProp('user', e.target.dataset.id)
+                        actionStats.do()
+                    }, false)
+                    administrator.container.appendChild(body)
+                }
+            },
+            handler: function (pageNo) {
+                var administrator = data.administrator
+                administrator.loadData(pageNo)
+                administrator.render()
+                g.renderPageNavigator(administrator.pageIndexContainer, administrator.pageSize, administrator.currentPage, administrator.total, administrator.handler)
+            },
+            do: function () {
+                data.do('权限管理', 'administratorInfoFilter', 'administratorInfoHeader', data.administrator)
+            }
+        },
+        createUser:{
+            pageSize: 15,
+            total: -1,
+            currentPage: 0,
+            content: [],
+            container: null,
+            pageIndexContainer: null,
+            setContainer: function (c) {
+                data.privilege.container = c
+            },
+            getFilter: function () {
+                var result = null
+                var userNo = doc.getElementById('userNo')
+                var registerStartTime = doc.getElementById('registerStartTime')
+                var registerStopTime = doc.getElementById('registerStopTime')
+                var hasCondition = false
+                var filter = {}
+                var userNoValue = userNo.value
+                if (userNoValue != '') {
+                    filter.no = userNoValue
+                    hasCondition = true
+                }
+                var registerStartTimeValue = registerStartTime.value
+                if (registerStartTimeValue != '') {
+                    filter.fromTime =(new Date(registerStartTime.value)).getTime()/1000
+                    hasCondition = true
+                }
+                var registerStopTimeValue = registerStopTime.value
+                if (registerStopTimeValue != '') {
+                    //filter.toTime = registerStopTimeValue
+                    filter.toTime = (new Date(registerStopTime.value)).getTime()/1000
+                    hasCondition = true
+                }
+                //if (hasCondition) {
+                result = encodeURIComponent(JSON.stringify(filter))
+                //}
+                return result
+            },
+            getTotal: function (filter) {
+                var uri = '/api/privileges/statistics/count'
+                if (filter) {
+                    uri += '?filter=' + filter
+                }
+                g.getData(uri, genericHeaders, function (d) {
+                    if (d.meta.code == 200) {
+                        data.privilege.total = d.data.value
+                    }
+                })
+            },
+            loadData: function (pageNo) {
+                var privilege = data.privilege
+                //var filter = privilege.getFilter()
+                if (privilege.total == -1) {
+                    privilege.getTotal()
+                }
+                if (privilege.currentPage != pageNo) {
+                    privilege.currentPage = pageNo
+                    var offset = privilege.pageSize * (privilege.currentPage - 1)
+                    var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
+                    var url = '/api/privileges';
+                    url += '?filter=' + filter + '&offset=' + offset + '&count=' + privilege.pageSize + '&orderBy=' + orderBy;
+                    //alert(url)
+                    g.getData(url, genericHeaders, function (d) {
+                        if (d.meta.code == 200) {
+                            privilege.content = d.data
+                        }
+                    })
+                }
+            },
+            render: function () {
+                var privilege = data.privilege
+                while (privilege.container.rows.length > 0) {
+                    privilege.container.deleteRow(-1);
+                }
+                var contents = privilege.content
+                for (var i = 0, c = contents.length; i < c; ++i) {
+                    var body = doc.getElementById('userItem').content.cloneNode(true).children[0]
+                    contents[i].state = '心跳'
+                    if(contents[i].registerTime != null){
+                        contents[i].registerTime =  new Date(contents[i].registerTime *1000).getFullYear()+"-"+new Date(contents[i].registerTime *1000).getMonth()+"-"+new Date(contents[i].registerTime *1000).getDay()
+                    }
+                    var currentTime = new Date()
+                    currentTime = currentTime.getTime() / 1000
+                    if ((currentTime - contents[i].lastOperationTime) > 30 * 60) {
+                        contents[i].state = '下线'
+                    }
+                    g.bind(body, contents[i])
+                    body.querySelector('button').addEventListener('click', function (e) {
+                        var actionStats = data.actionStats
+                        actionStats.reset()
+                        actionStats.setProp('user', e.target.dataset.id)
+                        actionStats.do()
+                    }, false)
+                    users.container.appendChild(body)
+                }
+            },
+            handler: function (pageNo) {
+                var privilege = data.privilege
+                privilege.loadData(pageNo)
+                privilege.render()
+                g.renderPageNavigator(privilege.pageIndexContainer, privilege.pageSize, privilege.currentPage, privilege.total, privilege.handler)
+            },
+            do: function () {
+                data.do('权限管理', 'privilegeInfoFilter', 'privilegeInfoHeader', data.privilege)
+            }
         }
     }
     var firstPage = doc.getElementById('firstPage')
@@ -1070,6 +1283,18 @@ window.addEventListener('load', function (e) {
     administratorManagement.addEventListener('click', function (event) {
         data.switchTo(administratorManagement)
         data.admin.do()
+    }, false)
+    //用户权限
+    var administrator = doc.getElementById('administrator')
+    administrator.addEventListener('click', function (event) {
+        data.switchTo(administrator)
+        data.administrator.do()
+        //创建用户
+        var createUser = doc.getElementById('createUser')
+        createUser.addEventListener('click', function (event) {
+            data.switchTo(createUser)
+            data.createUser.do()
+        }, false)
     }, false)
     var stats = doc.getElementById('stats')
     stats.addEventListener('click', function (event) {

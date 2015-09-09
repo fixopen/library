@@ -146,6 +146,19 @@ CREATE TABLE "user" (
     "lastOperationTime" bigint
 );
 
+CREATE TABLE "privilege"(
+    id bigint NOT NULL PRIMARY KEY ,
+    name CHARACTER varying (32),
+    kind CHARACTER varying (32),
+    "tablen" CHARACTER varying (32),
+    "readWrite" CHARACTER varying (32)
+);
+CREATE TABLE "administratorPrivilegeMap"(
+    id bigint NOT NULL PRIMARY KEY ,
+   "administratorId" bigint NOT NULL ,
+   "privilegeId" bigint NOT NULL
+);
+
 
 ALTER TABLE public."user" OWNER TO postgres;
 

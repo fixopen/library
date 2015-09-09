@@ -31,6 +31,7 @@ class users
         if ($name === 'toTime') {
             $result = '"registerTime" < ' . strtotime($value . 'T00:00:00');
         }
+//        print 'user key is ' . $result . '<br />';
         return $result;
     }
 
