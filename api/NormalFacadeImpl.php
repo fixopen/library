@@ -34,11 +34,12 @@ trait NormalFacadeImpl
         $data = self::ConvertBodyToObject($request['body']);
         if ($data) {
             //if (isset($id)) {
-                $data->setId($id);
+                $data->setId((int)$id);
             //} else {
             //    $data->setId(0);
             //}
             $r = $data->Insert();
+            //var_dump($r);
             if (is_int($r) && ($r != -1)) {
                 $request['response']['code'] = 201; //created
                 $request['response']['body'] = '{ "newId" : ' . $r . ' }';
