@@ -604,7 +604,7 @@
     <table style="width: 100%;">
         <tbody>
         <tr>
-            <th class="filter-title"><button id="createUser" >创建用户</button></th>
+            <th class="filter-title"><button id="createAdmin" >创建用户</button></th>
         </tr>
 
         </tbody>
@@ -613,19 +613,73 @@
 <template id="administratorInfoHeader">
     <tr>
         <th style="text-align:center;">登录名</th>
-        <th style="text-align:center;">创建时间</th>
+        <th style="text-align:center;">最后操作时间</th>
         <th style="text-align:center;">操作</th>
     </tr>
 </template>
 <template id="administratorInfo">
     <tr>
-        <td>${id}</td>
-        <td>${no}</td>
+        <td>${name}</td>
+        <td>${lastOperationTime}</td>
         <td>
-            <button data-id="${id}">图书借阅详情</button>
+            <button  class="changeOut" data-id="${id}">注销</button>
+            <button  class="changePrivilege" data-id="${id}">修改权限</button>
         </td>
     </tr>
 </template>
+<template id="createAdminInfo">
+    <div class="index hg" style="padding:0px;margin:0px;">
+        <ul class="outTiao hg">
+            <li>设置登录名：<input type="text" id="userName" ></li>
+        </ul>
+        <ul class="outTiao hg">
+            <li>设置密码：<input type="text" id="userPassword" ></li>
+        </ul>
+
+        <h2 class="ico" style="padding-top: 20px;">授权</h2>
+
+        <ul class="outTiao hg">
+            <li>用户管理：<input type="checkbox" name="select" value="10000" id="10000" ><em style="font-size: 15px;" >查看用户（含查询）</em></li>
+        </ul>
+        <ul class="outTiao hg">
+            <li>设备管理：<input type="checkbox"  name="select" value="11000" id="11000"><em style="font-size: 15px;">查看设备（含查询）</em></li>
+            <i></i>
+            <li><input type="checkbox"  name="select" value="11001" id="11001"><em style="font-size: 15px;">管理设备 （新增、删除、修改设备信息）</em></li>
+        </ul>
+        <ul class="outTiao hg">
+            <li>图书管理：<input type="checkbox" name="select" value="12000" id="12000"><em style="font-size: 15px;">查看图书（含查询）</em></li>
+            <i></i>
+            <li><input type="checkbox" name="select" value="12001" id="12001"><em style="font-size: 15px;">管理图书（上下架）</em></li>
+        </ul>
+        <ul class="outTiao hg">
+            <li>统计信息管理：<input type="checkbox" name="select" value="13000" id="13000"><em style="font-size: 15px;">查看并导出统计信息</em></li>
+        </ul>
+        <ul >
+            <button id="createUser" style="height: 40px;width: 80px;float: right;background-color: #357ebd;color: #ffffff;margin-right: 50px;margin-top: 20px;"> 保存</button>
+        </ul>
+    </div>
+</template>
+<!--<template id="createAdminHeader">-->
+    <!--<tr>-->
+        <!--<th style="text-align:center;">登录名</th>-->
+        <!--<th style="text-align:center;">最后操作时间</th>-->
+        <!--<th style="text-align:center;">操作</th>-->
+    <!--</tr>-->
+<!--</template>-->
+<!--<template id="createAdminFilter">-->
+    <!--<table>-->
+        <!--<tbody>-->
+        <!--<tr>-->
+            <!--<th>设置用户名</th>-->
+            <!--<td><input id="createName" style="border-radius:5px;margin: 5px;"/></td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+            <!--<th> 设置密码</th>-->
+            <!--<td><input id="createPassword" style="border-radius:5px;margin: 5px;"/></td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+    <!--</table>-->
+<!--</template>-->
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.easyui.min.js"></script>

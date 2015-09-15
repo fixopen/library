@@ -84,9 +84,11 @@ trait NormalFacadeImpl
     private static function NormalDelete(array &$request)
     {
         //@@add the filter by parent && regionExpression
-        $filter = ConvertJsonToWhere($request['params']['filter']);
+//        print_r($request['params']['filter']);
+        $filter = self::ConvertJsonToWhere($request['params']['filter']);
+//        print_r($filter);
         $filter .= ' AND (' . $request['temp']['regionExpression'] . ')';
-        $r = self::BatchDelete(' WHERE ' . $filter);
+        $r = self::BatchDelete($filter);
         if ($r) {
             $request['response']['code'] = 200; //ok
         } else {

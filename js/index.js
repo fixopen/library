@@ -1114,25 +1114,25 @@ window.addEventListener('load', function (e) {
                 }
                 var contents = administrator.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
-                    var body = doc.getElementById('userItem').content.cloneNode(true).children[0]
-                    contents[i].state = '心跳'
-                    if(contents[i].registerTime != null){
-                        contents[i].registerTime =  new Date(contents[i].registerTime *1000).getFullYear()+"-"+new Date(contents[i].registerTime *1000).getMonth()+"-"+new Date(contents[i].registerTime *1000).getDay()
-                    }
-                    var currentTime = new Date()
-                    currentTime = currentTime.getTime() / 1000
-                    if ((currentTime - contents[i].lastOperationTime) > 30 * 60) {
-                        contents[i].state = '下线'
-                    }
+                    var body = doc.getElementById('administratorInfo').content.cloneNode(true).children[0]
                     g.bind(body, contents[i])
-                    body.querySelector('button').addEventListener('click', function (e) {
-                        var actionStats = data.actionStats
-                        actionStats.reset()
-                        actionStats.setProp('user', e.target.dataset.id)
-                        actionStats.do()
+                    //修改用户权限
+                    body.querySelector('.changePrivilege').addEventListener('click', function (e) {
+                        data.createAdmin.userId =  e.target.dataset.id
+                        data.switchTo(doc.getElementById('createAdmin'))
+                        data.createAdmin.do()
+                    }, false)
+
+                    //注销用户
+                    body.querySelector('.changeOut').addEventListener('click', function (e) {
+                        var value =  e.target.dataset.id
+                        data.administrator.changeOut(value)
                     }, false)
                     administrator.container.appendChild(body)
                 }
+            },
+            changeOut:function(value){
+                g.deleteData()
             },
             handler: function (pageNo) {
                 var administrator = data.administrator
@@ -1144,110 +1144,99 @@ window.addEventListener('load', function (e) {
                 data.do('权限管理', 'administratorInfoFilter', 'administratorInfoHeader', data.administrator)
             }
         },
-        createUser:{
-            pageSize: 15,
-            total: -1,
-            currentPage: 0,
-            content: [],
-            container: null,
-            pageIndexContainer: null,
-            setContainer: function (c) {
-                data.privilege.container = c
-            },
-            getFilter: function () {
-                var result = null
-                var userNo = doc.getElementById('userNo')
-                var registerStartTime = doc.getElementById('registerStartTime')
-                var registerStopTime = doc.getElementById('registerStopTime')
-                var hasCondition = false
-                var filter = {}
-                var userNoValue = userNo.value
-                if (userNoValue != '') {
-                    filter.no = userNoValue
-                    hasCondition = true
+        createAdmin:{
+            isInit: false,
+            userCount: 0,
+            bookCount: 0, normalBookCount: 0,
+            deviceCount: 0, liveDeviceCount: 0,
+            userInfo:{},
+            userId:0,
+            getInfo:function(){
+                //var userName = doc.getElementById('userName')
+                var result=false;
+                var userName = doc.getElementById('userName').value.trim()
+                var userPassword = doc.getElementById('userPassword').value.trim()
+                if(userName!=""&&userPassword!=""){
+                    data.createAdmin.userInfo.userName=userName
+                    data.createAdmin.userInfo.userPassword=userPassword
+                    data.createAdmin.userInfo.stage = [];
+                    var stageChks=$("[name='select']:checked").each(function(c){
+                        data.createAdmin.userInfo.stage.push($(this).val())
+                    });
+                    return result = data.createAdmin.userInfo;
+                }else{
+                    alert("请输入用户名，密码")
                 }
-                var registerStartTimeValue = registerStartTime.value
-                if (registerStartTimeValue != '') {
-                    filter.fromTime =(new Date(registerStartTime.value)).getTime()/1000
-                    hasCondition = true
-                }
-                var registerStopTimeValue = registerStopTime.value
-                if (registerStopTimeValue != '') {
-                    //filter.toTime = registerStopTimeValue
-                    filter.toTime = (new Date(registerStopTime.value)).getTime()/1000
-                    hasCondition = true
-                }
-                //if (hasCondition) {
-                result = encodeURIComponent(JSON.stringify(filter))
-                //}
                 return result
             },
-            getTotal: function (filter) {
-                var uri = '/api/privileges/statistics/count'
-                if (filter) {
-                    uri += '?filter=' + filter
-                }
-                g.getData(uri, genericHeaders, function (d) {
-                    if (d.meta.code == 200) {
-                        data.privilege.total = d.data.value
-                    }
-                })
-            },
-            loadData: function (pageNo) {
-                var privilege = data.privilege
-                //var filter = privilege.getFilter()
-                if (privilege.total == -1) {
-                    privilege.getTotal()
-                }
-                if (privilege.currentPage != pageNo) {
-                    privilege.currentPage = pageNo
-                    var offset = privilege.pageSize * (privilege.currentPage - 1)
-                    var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
-                    var url = '/api/privileges';
-                    url += '?filter=' + filter + '&offset=' + offset + '&count=' + privilege.pageSize + '&orderBy=' + orderBy;
-                    //alert(url)
-                    g.getData(url, genericHeaders, function (d) {
+            do: function () {
+                contentTitle.textContent = '用户信息'
+                mainContainer.innerHTML = ''
+                var firstPageContent = doc.getElementById('createAdminInfo').content.cloneNode(true).children[0]
+                mainContainer.appendChild(firstPageContent)
+                if(data.createAdmin.userId==0){
+                    //保存用户，privilege关联
+                    doc.getElementById('createUser').addEventListener('click',function(){
+                        var dataInfo = data.createAdmin.getInfo();
+                        if(dataInfo != false){
+                            g.getData('/api/administrators?filter='+encodeURIComponent(JSON.stringify({name:dataInfo.userName})),genericHeaders,function(user){
+                                if(user.meta.code==404){
+                                    g.postData('/api/administrators/full', genericHeaders, dataInfo, function (d) {
+                                        if(d.meta.code == 200){
+                                            alert("创建成功")
+                                            data.createAdmin.userId = 0
+                                            data.switchTo(doc.getElementById('administrator'))
+                                            data.administrator.do()
+                                        }
+                                    })
+                                }else{
+                                    alert("用户名已存在")
+                                }
+                            })
+
+                        }
+                    },false)
+                }else{
+                    //输出姓名   编辑用户信息
+                    g.getData('/api/administrators/'+data.createAdmin.userId, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
-                            privilege.content = d.data
+                            doc.getElementById('userName').value= d.data.name
+                            doc.getElementById('userName').readOnly=true
+                            doc.getElementById('userPassword').value= d.data.password
+                            doc.getElementById('userPassword').readOnly=true
+                            //添加勾选信息
+                            g.getData('/api/privileges/byMap/privilegeId/administratorPrivilegeMap/administratorId/'+ d.data.id,genericHeaders,function(e){
+                                if (e.meta.code == 200) {
+                                    e.data.forEach(function(a){
+                                        doc.getElementById(a.id).checked = true
+                                    })
+                                }
+                            })
                         }
                     })
+                    //修改用户，privilege关联
+                    doc.getElementById('createUser').addEventListener('click',function(){
+                        var dataInfo=[];
+                        var result = data.createAdmin.getInfo()
+                        result.stage.forEach(function(s){
+                            dataInfo.push({"administratorId":data.createAdmin.userId,"privilegeId":s})
+                        })
+                        g.deleteData('/api/administratorPrivilegeMaps?filter='+encodeURIComponent(JSON.stringify({administratorId: data.createAdmin.userId})), genericHeaders, function (d) {
+                            if(d.meta.code == 200|| d.meta.code ==404){
+                                g.postData('/api/administratorPrivilegeMaps', genericHeaders, dataInfo, function (d) {
+                                    if(d.meta.code == 201){
+                                        alert("创建成功")
+                                        data.createAdmin.userId = 0
+                                        data.switchTo(doc.getElementById('administrator'))
+                                        data.administrator.do()
+                                    }
+                                })
+                            }
+                        })
+                    },false)
                 }
-            },
-            render: function () {
-                var privilege = data.privilege
-                while (privilege.container.rows.length > 0) {
-                    privilege.container.deleteRow(-1);
-                }
-                var contents = privilege.content
-                for (var i = 0, c = contents.length; i < c; ++i) {
-                    var body = doc.getElementById('userItem').content.cloneNode(true).children[0]
-                    contents[i].state = '心跳'
-                    if(contents[i].registerTime != null){
-                        contents[i].registerTime =  new Date(contents[i].registerTime *1000).getFullYear()+"-"+new Date(contents[i].registerTime *1000).getMonth()+"-"+new Date(contents[i].registerTime *1000).getDay()
-                    }
-                    var currentTime = new Date()
-                    currentTime = currentTime.getTime() / 1000
-                    if ((currentTime - contents[i].lastOperationTime) > 30 * 60) {
-                        contents[i].state = '下线'
-                    }
-                    g.bind(body, contents[i])
-                    body.querySelector('button').addEventListener('click', function (e) {
-                        var actionStats = data.actionStats
-                        actionStats.reset()
-                        actionStats.setProp('user', e.target.dataset.id)
-                        actionStats.do()
-                    }, false)
-                    users.container.appendChild(body)
-                }
-            },
-            handler: function (pageNo) {
-                var privilege = data.privilege
-                privilege.loadData(pageNo)
-                privilege.render()
-                g.renderPageNavigator(privilege.pageIndexContainer, privilege.pageSize, privilege.currentPage, privilege.total, privilege.handler)
-            },
-            do: function () {
-                data.do('权限管理', 'privilegeInfoFilter', 'privilegeInfoHeader', data.privilege)
+
+
             }
         }
     }
@@ -1290,10 +1279,11 @@ window.addEventListener('load', function (e) {
         data.switchTo(administrator)
         data.administrator.do()
         //创建用户
-        var createUser = doc.getElementById('createUser')
+        var createUser = doc.getElementById('createAdmin')
         createUser.addEventListener('click', function (event) {
+            data.createAdmin.userId = 0
             data.switchTo(createUser)
-            data.createUser.do()
+            data.createAdmin.do()
         }, false)
     }, false)
     var stats = doc.getElementById('stats')

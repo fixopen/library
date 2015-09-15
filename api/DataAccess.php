@@ -157,8 +157,9 @@ trait DataAccess
 
     public static function ConvertJsonToWhere($filter)
     {
+//        print $filter . '--------------------<br />';
         $where = array();
-        //print $filter . '<br />';
+//        print $filter . '<br />';
         $filterJson = json_decode($filter);
         //var_dump($filterJson);
         //print 'hello';
@@ -192,7 +193,8 @@ trait DataAccess
 
     public static function ConstructMapFilter($foreignName, $mapTable, $pairName, $pairValue)
     {
-        return 'id IN ( SELECT ' . $foreignName . ' FROM ' . $mapTable . ' WHERE ' . $pairName . ' = ' . $pairValue . ' )';
+        return '"id" IN ( SELECT ' . self::Mark($foreignName) . ' FROM ' . self::Mark($mapTable) . ' WHERE ' . self::Mark($pairName) . ' = ' . $pairValue . ' )';
+        //SELECT * FROM privilege WHERE id IN ( SELECT privilegeId FROM administratorPrivilegeMap WHERE administratorId = ? )
     }
 
     private static function ConvertJsonToOrderBy($orderBy)
@@ -344,6 +346,7 @@ trait DataAccess
             $whereClause = ' WHERE ' . $filter;
         }
         $command = 'DELETE FROM ' . self::Mark(self::$tableName) . $whereClause;
+//        print_r($command);
         return Database::GetInstance()->exec($command);
     }
 
