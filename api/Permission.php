@@ -34,6 +34,7 @@ trait Permission
         //$privileges = privileges::CustomSelect('id in (select )')
         $req = array('method' => 'GET', 'paths' => array('privilegeId', 'administratorPrivilegeMap', 'administratorId', $subject->getId()));
         $privileges = privileges::commonByMapProc($req);
+
         if($privileges['response']['code'] == 200){
             $repArray = json_decode($privileges['response']['body'], true);
             foreach($repArray as $oneInfo){
