@@ -17,6 +17,62 @@ class administrators
         JSON::ToJson as privateToJson;
     }
 
+    //'/api/administrators/full'
+
+    private static $classSpecSubresource = array(
+        'full' => 'fullProc'
+    );
+
+    public static function fullProc(array &$request)
+    {
+        $count = count($request['paths']);
+        switch ($request['method']) {
+            case 'POST':
+                $body = json_decode($request['body'], true);
+                //print_r($body) ;
+                $administrator = new administrators();
+                $administrator->setId(0);
+                $administrator->setName($body['userName']);
+                //print_r("-------------------------------") ;
+                //print_r($body['userName']) ;
+//                $administrator->setLastOperationTime(now());
+                $administrator->setPassword($body['userPassword']);
+                $id = $administrator->Insert();
+                if(is_integer($id)){
+                    //print_r($id) ;
+                    //print_r($body['stage']) ;
+                    foreach ($body['stage'] as &$value) {
+                        //print_r($value) ;
+                        $administratorPrivilegeMap = new administratorPrivilegeMaps();
+                        $administratorPrivilegeMap->setId(0);
+                        $administratorPrivilegeMap->setAdministratorId($id);
+                        $administratorPrivilegeMap->setPrivilegeId($value);
+                        $administratorPrivilegeMap->Insert();
+                    }
+                }
+                break;
+            case 'PUT':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'PATCH':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'GET':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'DELETE':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            default:
+                break;
+        }
+        return $request;
+    }
+
     public static function IsPrimaryKey($name)
     {
         //print 'user key is ' . $v . '<br />';

@@ -41,7 +41,9 @@ trait Facade
             //print 'class method is ' . $classChildrenProcess . '<br />';
             if ($classChildrenProcess) {
                 //print 'class method is ' . $classChildrenProcess . '<br />';
-                //print_r($request);
+//                print '#################################<br />';
+//                print_r($request);
+//                print '#################################<br />';
                 $request = call_user_func(__CLASS__ . '::' . $classChildrenProcess, $request);
                 //print_r($request);
             } else {
@@ -69,6 +71,9 @@ trait Facade
                 break;
             case 1:
                 $childObject = self::childProcess($request, NULL);
+                if ($request['temp']['child'] == 'full') {
+                    break;
+                }
                 if ($childObject) {
                     switch ($request['method']) {
                         case 'POST':
@@ -85,7 +90,11 @@ trait Facade
                 } else {
                     switch ($request['method']) {
                         case 'POST':
+                            print '***************************<br />';
+                            print_r($request);
+                            print '***************************<br />';
                             self::SingleInsert($request, $request['temp']['child']);
+                            print '***************************<br />';
                             break;
                         case 'PUT':
                             $request['response']['code'] = 400; //bad request, resource exist
@@ -337,7 +346,7 @@ trait Facade
         $attributeBag = [];
 
         if ($subject) {
-            $regionExpression = self::CheckPermission($subject, $request['method'], dataTypes::GetIdByName(self::$tableName), $attributeBag);
+            $regionExpression = self::CheckPermission($subject, $request['method'], self::$tableName, $attributeBag);
             if (!$regionExpression) {
                 $request['response']['code'] = 401; //Unauthorized
                 return;
