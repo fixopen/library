@@ -125,6 +125,8 @@ window.addEventListener('load', function (e) {
                     g.getData('/api/devices/statistics/count', genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             baseInfo.deviceCount = d.data.value
+                        }else if(d.meta.code == 401){
+                            alert('该用户没有访问权限');
                         }
                     })
                     g.getData('/api/devices/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isOnline: true})), genericHeaders, function (d) {
@@ -182,6 +184,8 @@ window.addEventListener('load', function (e) {
                     if (d.meta.code == 200) {
                         data.books.classifier = d.data
                         data.books.classifierIsInit = true
+                    }else if(d.meta.code == 401){
+                        alert('该用户没有访问权限');
                     }
                 })
             },
@@ -244,6 +248,8 @@ window.addEventListener('load', function (e) {
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
                         data.books.total = d.data.value
+                    }else if(d.meta.code == 401){
+                        alert('该用户没有访问权限');
                     }
                 })
             },
@@ -260,6 +266,8 @@ window.addEventListener('load', function (e) {
                     g.getData('/api/books?filter=' + filter + '&offset=' + offset + '&count=' + books.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             books.content = d.data
+                        }else if(d.meta.code == 401){
+                            alert('该用户没有访问权限');
                         }
                     })
                 }
@@ -358,10 +366,15 @@ window.addEventListener('load', function (e) {
                     if (d.meta.code == 200) {
                         var param = d.data
                         books.drmDuration = param.value
+                    }else if(d.meta.code == 401){
+                        alert('该用户没有访问权限');
                     } else {
                         books.drmDuration = 90
                         g.postData('/api/systemParameters', genericHeaders, {name: "drmDuration", value: 90}, function(e) {
                             //
+                            if(e.meta.data==401){
+                                alert('用户没有修改权限')
+                            }
                         })
                         alert('DRM duration use default value : 90')
                     }
@@ -380,6 +393,8 @@ window.addEventListener('load', function (e) {
                             g.patchData('/api/systemParameters/drmDuration', genericHeaders, {value: v}, function (r) {
                                 if (r.meta.code < 400) {
                                     alert('设置成功')
+                                }else if(r.meta.data==401){
+                                    alert('用户没有修改权限')
                                 }
                             })
                         } else {
@@ -468,6 +483,8 @@ window.addEventListener('load', function (e) {
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
                         data.devices.total = d.data.value
+                    }else if(d.meta.code == 401){
+                        alert('该用户没有访问权限');
                     }
                 })
             },
@@ -484,6 +501,8 @@ window.addEventListener('load', function (e) {
                     g.getData('/api/devices?filter=' + filter + '&offset=' + offset + '&count=' + devices.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             devices.content = d.data
+                        }else if(d.meta.code == 401){
+                            alert('该用户没有访问权限');
                         }
                     })
                 }
@@ -514,6 +533,8 @@ window.addEventListener('load', function (e) {
                                 data.devices.total = -1
                                 data.switchTo(deviceList)
                                 data.devices.do()
+                            }else if(r.meta.data==401){
+                                alert('用户没有修改权限')
                             }else{
                                 alert("删除借阅机ID（"+ e.target.dataset.id+"）失败，请查看是否存在借阅信息")
                             }
@@ -587,6 +608,8 @@ window.addEventListener('load', function (e) {
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
                         data.users.total = d.data.value
+                    }else if(d.meta.code == 401){
+                        alert('该用户没有访问权限');
                     }
                 })
             },
@@ -606,6 +629,8 @@ window.addEventListener('load', function (e) {
                     g.getData(url, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             users.content = d.data
+                        }else if(d.meta.code == 401){
+                            alert('该用户没有访问权限');
                         }
                     })
                 }
@@ -786,6 +811,8 @@ window.addEventListener('load', function (e) {
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
                         data.actionStats.total = d.data.value
+                    }else if(d.meta.code == 401){
+                        alert('该用户没有访问权限');
                     }
                 })
             },
@@ -802,6 +829,8 @@ window.addEventListener('load', function (e) {
                     g.getData('/api/business?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             actionStats.content = d.data
+                        }else if(d.meta.code == 401){
+                            alert('该用户没有访问权限');
                         }
                     })
                 }
@@ -885,6 +914,8 @@ window.addEventListener('load', function (e) {
                                             oldPassword.value = ''
                                             newPassword.value = ''
                                             retryNewPassword.value = ''
+                                        }else if(d.meta.data==401){
+                                            alert('用户没有修改权限')
                                         }
                                     })
                                 } else {
@@ -894,6 +925,8 @@ window.addEventListener('load', function (e) {
                             } else {
                                 alert('server internal error')
                             }
+                        }else if(d.meta.code == 401){
+                            alert('该用户没有访问权限');
                         } else {
                             //alert('old password incorrect')
                             alert('旧密码错误，请重新输入')
@@ -928,6 +961,8 @@ window.addEventListener('load', function (e) {
                                 if (d.meta.code == 200) {
                                     bookStats.followBooks = d.data
                                     bookStats.isFollowBooksGet = true
+                                }else if(d.meta.code == 401){
+                                    alert('该用户没有访问权限');
                                 }
                             })
                         }
@@ -938,6 +973,8 @@ window.addEventListener('load', function (e) {
                                 if (d.meta.code == 200) {
                                     bookStats.viewBooks = d.data
                                     bookStats.isViewBooksGet = true
+                                }else if(d.meta.code == 401){
+                                    alert('该用户没有访问权限');
                                 }
                             })
                         }
@@ -948,6 +985,8 @@ window.addEventListener('load', function (e) {
                                 if (d.meta.code == 200) {
                                     bookStats.downloadBooks = d.data
                                     bookStats.isDownloadBooksGet = true
+                                }else if(d.meta.code == 401){
+                                    alert('该用户没有访问权限');
                                 }
                             })
                         }
@@ -1084,6 +1123,8 @@ window.addEventListener('load', function (e) {
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
                         data.administrator.total = d.data.value
+                    }else if(d.meta.code == 401){
+                        alert('该用户没有访问权限');
                     }
                 })
             },
@@ -1103,6 +1144,8 @@ window.addEventListener('load', function (e) {
                     g.getData(url, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             administrator.content = d.data
+                        }else if(d.meta.code == 401){
+                            alert('该用户没有访问权限');
                         }
                     })
                 }
@@ -1187,8 +1230,12 @@ window.addEventListener('load', function (e) {
                                             data.createAdmin.userId = 0
                                             data.switchTo(doc.getElementById('administrator'))
                                             data.administrator.do()
+                                        }else if(d.meta.data==401){
+                                            alert('用户没有修改权限')
                                         }
                                     })
+                                }else if(d.meta.code == 401){
+                                    alert('该用户没有访问权限');
                                 }else{
                                     alert("用户名已存在")
                                 }
@@ -1210,8 +1257,12 @@ window.addEventListener('load', function (e) {
                                     e.data.forEach(function(a){
                                         doc.getElementById(a.id).checked = true
                                     })
+                                }else if(d.meta.code == 401){
+                                    alert('该用户没有访问权限');
                                 }
                             })
+                        }else if(d.meta.code == 401){
+                            alert('该用户没有访问权限');
                         }
                     })
                     //修改用户，privilege关联
@@ -1231,6 +1282,8 @@ window.addEventListener('load', function (e) {
                                         data.administrator.do()
                                     }
                                 })
+                            }else if(d.meta.data==401){
+                                alert('用户没有修改权限')
                             }
                         })
                     },false)
@@ -1316,6 +1369,8 @@ window.addEventListener('load', function (e) {
                 g.getData('/api/devices?filter=' +sameOrNot , genericHeaders, function (d) {
                     if (d.meta.code == 200&& d.data.length>0) {
                         alert(device.id+"已存在")
+                    }else if(d.meta.code == 401){
+                        alert('该用户没有访问权限');
                     }else{
                         g.postData('/api/devices/' + device.id, genericHeaders, device, function (d) {
                             var title = doc.querySelector('#createDevice h4')

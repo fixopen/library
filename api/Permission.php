@@ -30,23 +30,28 @@ trait Permission
     public static function CheckPermission($subject, $operation, $dataTypeId, array $attributeBag)
     {
         // 用户 请求方式， 表，
-        $result = '1 = 2';
+        $result = false;
+//                            print_r('1111111111');
         //$privileges = privileges::CustomSelect('id in (select )')
         $req = array('method' => 'GET', 'paths' => array('privilegeId', 'administratorPrivilegeMap', 'administratorId', $subject->getId()));
         $privileges = privileges::commonByMapProc($req);
-
+//        print_r($privileges);
         if($privileges['response']['code'] == 200){
             $repArray = json_decode($privileges['response']['body'], true);
+//            print_r($repArray);
             foreach($repArray as $oneInfo){
                 //表明
                 if($oneInfo['tablen']==$dataTypeId){
                     //操作方式
+//                    print_r('1111111111');
                     if(($operation=="GET"&&$oneInfo['readWrite']=="read")||($operation!="GET"&&$oneInfo['readWrite']=='write')){
-                        $result = '1 = 1';
+//                        print_r('22222222222222');
+                        $result = true;
                     }
                 }
             }
         }
+//        print_r($result);
 //        foreach($privileges as $privilegeInfo){
 //            if($privilegeInfo['code']==200){
 //                print_r(json_decode($privilegeInfo['body'], true));
