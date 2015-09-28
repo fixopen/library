@@ -111,7 +111,7 @@ trait NormalFacadeImpl
     {
         //@@add the filter by parent && regionExpression
         $lists = self::Select($request['params'], $request['temp']['regionExpression']);
-        //print_r($lists);
+//        print_r($lists);
         if (count($lists) == 0) {
             //print 'hello, not found<br />';
             $request['response']['code'] = 404; //Not Found
