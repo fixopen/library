@@ -11,6 +11,7 @@ trait Facade
         $classChildrenProcess = self::GetClassChildrenProcess($child);
         if ($classChildrenProcess) {
             $request = call_user_func(__CLASS__ . '::' . $classChildrenProcess, $request);
+            $childObject = TRUE;
         } else {
             if ($child == 'me') {
                 $childObject = $subject;
@@ -25,20 +26,21 @@ trait Facade
     private static function childrenProcess(array &$request, $subject)
     {
         $child = array_shift($request['paths']);
-        //print 'child is ' . $child;
+//        print 'child is ' . $child;
         $childObject = self::IsPrimaryKey($child);
         if ($child == 'me') {
             $childObject = $subject;
         }
-        //print_r($childObject);
+//        print_r($childObject);
         if ($childObject) {
             $grandson = array_shift($request['paths']);
             $childObject->ObjectChildrenProcess($grandson, $request);
-            //print_r($request);
+//            print_r($request);
         } else {
-            //print 'error<br />';
+//            print_r($child);
+//            print 'error<br />';
             $classChildrenProcess = self::GetClassChildrenProcess($child);
-            //print 'class method is ' . $classChildrenProcess . '<br />';
+//            print 'class method is ' . $classChildrenProcess . '<br />';
             if ($classChildrenProcess) {
                 //print 'class method is ' . $classChildrenProcess . '<br />';
 //                print '#################################<br />';
@@ -115,16 +117,20 @@ trait Facade
 
     private static function normalPull(array &$request)
     {
-        //print '1';
+//        print '1';
         $pathCount = count($request['paths']);
         switch ($pathCount) {
             case 0:
+//                print_r($request);
                 self::NormalSelect($request);
                 break;
             case 1:
                 $childObject = self::childProcess($request, NULL);
+//                print_r($childObject);
                 if ($childObject) {
-                    $request['response']['body'] = $childObject->ToJson();
+                    if ($childObject !== TRUE) {
+                        $request['response']['body'] = $childObject->ToJson();
+                    }
                 } else {
                     $request['response']['code'] = 404; //resource not found
                 }
@@ -356,7 +362,7 @@ trait Facade
             //only for login
             $request['temp']['regionExpression'] = '1 = 1';
         }
-
+//        print_r($request);
         $request['temp']['parent'] = $parent;
 
         switch ($request['method']) {
@@ -375,7 +381,8 @@ trait Facade
             case 'GET':
                 $acceptContentType = $request['headers']['Accept'];
                 if (strpos($acceptContentType, 'application/json') === 0) {
-                    //print 'normal pull';
+//                    print 'normal pull';
+//                    print_r($request);
                     self::normalPull($request);
                 } else {
                     //binary downloader

@@ -20,9 +20,12 @@ window.addEventListener('load', function (e) {
     var doc = document
     //new Date().getTime() / 1000.0
     //var d = Date(s * 1000.0)
+    var userName =location.href.split('=')[1];
+    doc.getElementById('loginName').innerHTML=userName
     doc.getElementById('timeNow').innerHTML = Date()
     var logout = doc.getElementById('logout')
     logout.addEventListener('click', function (e) {
+        //g.deleteData('/api/administrators/'+userName+'/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
         g.deleteData('/api/administrators/admin/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
             if (r.meta.code < 400) {
                 alert('logout ok!')
@@ -125,9 +128,10 @@ window.addEventListener('load', function (e) {
                     g.getData('/api/devices/statistics/count', genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             baseInfo.deviceCount = d.data.value
-                        }else if(d.meta.code == 401){
-                            alert('该用户没有访问权限');
                         }
+                        //else if(d.meta.code == 401){
+                        //    alert('该用户没有访问权限');
+                        //}
                     })
                     g.getData('/api/devices/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isOnline: true})), genericHeaders, function (d) {
                         if (d.meta.code == 200) {
@@ -184,9 +188,10 @@ window.addEventListener('load', function (e) {
                     if (d.meta.code == 200) {
                         data.books.classifier = d.data
                         data.books.classifierIsInit = true
-                    }else if(d.meta.code == 401){
-                        alert('该用户没有访问权限');
                     }
+                    //else if(d.meta.code == 401){
+                    //    alert('该用户没有访问权限');
+                    //}
                 })
             },
             getFilter: function () {
@@ -248,9 +253,10 @@ window.addEventListener('load', function (e) {
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
                         data.books.total = d.data.value
-                    }else if(d.meta.code == 401){
-                        alert('该用户没有访问权限');
                     }
+                    //else if(d.meta.code == 401){
+                    //    alert('该用户没有访问权限');
+                    //}
                 })
             },
             loadData: function (pageNo) {
@@ -266,9 +272,10 @@ window.addEventListener('load', function (e) {
                     g.getData('/api/books?filter=' + filter + '&offset=' + offset + '&count=' + books.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             books.content = d.data
-                        }else if(d.meta.code == 401){
-                            alert('该用户没有访问权限');
                         }
+                        //else if(d.meta.code == 401){
+                        //    alert('该用户没有访问权限');
+                        //}
                     })
                 }
             },
@@ -366,15 +373,13 @@ window.addEventListener('load', function (e) {
                     if (d.meta.code == 200) {
                         var param = d.data
                         books.drmDuration = param.value
-                    }else if(d.meta.code == 401){
-                        alert('该用户没有访问权限');
                     } else {
                         books.drmDuration = 90
                         g.postData('/api/systemParameters', genericHeaders, {name: "drmDuration", value: 90}, function(e) {
                             //
-                            if(e.meta.data==401){
-                                alert('用户没有修改权限')
-                            }
+                            //if(e.meta.data==401){
+                            //    alert('用户没有修改权限')
+                            //}
                         })
                         alert('DRM duration use default value : 90')
                     }
@@ -393,9 +398,10 @@ window.addEventListener('load', function (e) {
                             g.patchData('/api/systemParameters/drmDuration', genericHeaders, {value: v}, function (r) {
                                 if (r.meta.code < 400) {
                                     alert('设置成功')
-                                }else if(r.meta.data==401){
-                                    alert('用户没有修改权限')
                                 }
+                                //else if(r.meta.data==401){
+                                //    alert('用户没有修改权限')
+                                //}
                             })
                         } else {
                             alert('必须填写正确的天数')
@@ -483,9 +489,10 @@ window.addEventListener('load', function (e) {
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
                         data.devices.total = d.data.value
-                    }else if(d.meta.code == 401){
-                        alert('该用户没有访问权限');
                     }
+                    //else if(d.meta.code == 401){
+                    //    alert('该用户没有访问权限');
+                    //}
                 })
             },
             loadData: function (pageNo) {
@@ -501,9 +508,10 @@ window.addEventListener('load', function (e) {
                     g.getData('/api/devices?filter=' + filter + '&offset=' + offset + '&count=' + devices.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             devices.content = d.data
-                        }else if(d.meta.code == 401){
-                            alert('该用户没有访问权限');
                         }
+                        //else if(d.meta.code == 401){
+                        //    alert('该用户没有访问权限');
+                        //}
                     })
                 }
             },
@@ -533,8 +541,6 @@ window.addEventListener('load', function (e) {
                                 data.devices.total = -1
                                 data.switchTo(deviceList)
                                 data.devices.do()
-                            }else if(r.meta.data==401){
-                                alert('用户没有修改权限')
                             }else{
                                 alert("删除借阅机ID（"+ e.target.dataset.id+"）失败，请查看是否存在借阅信息")
                             }
@@ -608,9 +614,10 @@ window.addEventListener('load', function (e) {
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
                         data.users.total = d.data.value
-                    }else if(d.meta.code == 401){
-                        alert('该用户没有访问权限');
                     }
+                    //else if(d.meta.code == 401){
+                    //    alert('该用户没有访问权限');
+                    //}
                 })
             },
             loadData: function (pageNo) {
@@ -629,9 +636,10 @@ window.addEventListener('load', function (e) {
                     g.getData(url, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             users.content = d.data
-                        }else if(d.meta.code == 401){
-                            alert('该用户没有访问权限');
                         }
+                        //else if(d.meta.code == 401){
+                        //    alert('该用户没有访问权限');
+                        //}
                     })
                 }
             },
@@ -811,9 +819,10 @@ window.addEventListener('load', function (e) {
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
                         data.actionStats.total = d.data.value
-                    }else if(d.meta.code == 401){
-                        alert('该用户没有访问权限');
                     }
+                    //else if(d.meta.code == 401){
+                    //    alert('该用户没有访问权限');
+                    //}
                 })
             },
             loadData: function (pageNo) {
@@ -829,9 +838,10 @@ window.addEventListener('load', function (e) {
                     g.getData('/api/business?filter=' + filter + '&offset=' + offset + '&count=' + actionStats.pageSize + '&orderBy=' + orderBy, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             actionStats.content = d.data
-                        }else if(d.meta.code == 401){
-                            alert('该用户没有访问权限');
                         }
+                        //else if(d.meta.code == 401){
+                        //    alert('该用户没有访问权限');
+                        //}
                     })
                 }
             },
@@ -899,6 +909,7 @@ window.addEventListener('load', function (e) {
                 var setPassword = changePasswordPanel.querySelector('#setPassword')
                 setPassword.addEventListener('click', function (e) {
                     var oldPassword = document.querySelector('#oldPassword')
+                    //var u = {name: userName, password: oldPassword.value.trim()}
                     var u = {name: "admin", password: oldPassword.value.trim()}
                     g.getData('/api/administrators?filter=' + encodeURIComponent(JSON.stringify(u)), genericHeaders, function (d) {
                         if (d.meta.code == 200) {
@@ -914,9 +925,10 @@ window.addEventListener('load', function (e) {
                                             oldPassword.value = ''
                                             newPassword.value = ''
                                             retryNewPassword.value = ''
-                                        }else if(d.meta.data==401){
-                                            alert('用户没有修改权限')
                                         }
+                                        // else if(d.meta.data==401){
+                                        //    alert('用户没有修改权限')
+                                        //}
                                     })
                                 } else {
                                     //alert('new password not same')
@@ -925,8 +937,6 @@ window.addEventListener('load', function (e) {
                             } else {
                                 alert('server internal error')
                             }
-                        }else if(d.meta.code == 401){
-                            alert('该用户没有访问权限');
                         } else {
                             //alert('old password incorrect')
                             alert('旧密码错误，请重新输入')
@@ -961,9 +971,10 @@ window.addEventListener('load', function (e) {
                                 if (d.meta.code == 200) {
                                     bookStats.followBooks = d.data
                                     bookStats.isFollowBooksGet = true
-                                }else if(d.meta.code == 401){
-                                    alert('该用户没有访问权限');
                                 }
+                                //else if(d.meta.code == 401){
+                                //    alert('该用户没有访问权限');
+                                //}
                             })
                         }
                         break
@@ -973,9 +984,10 @@ window.addEventListener('load', function (e) {
                                 if (d.meta.code == 200) {
                                     bookStats.viewBooks = d.data
                                     bookStats.isViewBooksGet = true
-                                }else if(d.meta.code == 401){
-                                    alert('该用户没有访问权限');
                                 }
+                                //else if(d.meta.code == 401){
+                                //    alert('该用户没有访问权限');
+                                //}
                             })
                         }
                         break
@@ -985,9 +997,10 @@ window.addEventListener('load', function (e) {
                                 if (d.meta.code == 200) {
                                     bookStats.downloadBooks = d.data
                                     bookStats.isDownloadBooksGet = true
-                                }else if(d.meta.code == 401){
-                                    alert('该用户没有访问权限');
                                 }
+                                //else if(d.meta.code == 401){
+                                //    alert('该用户没有访问权限');
+                                //}
                             })
                         }
                         break
@@ -999,7 +1012,7 @@ window.addEventListener('load', function (e) {
             do: function () {
                 var bookStats = data.bookStats
                 bookStats.currentBookType = 'download'
-                data.do('统计信息', '', 'bookStatsHeader', bookStats, null, function () {
+                data.do('排行榜', '', 'bookStatsHeader', bookStats, null, function () {
                     var orderHandler = function (button, type) {
                         var button = e.target
                         switch (button.dataset.order) {
@@ -1077,6 +1090,292 @@ window.addEventListener('load', function (e) {
 
             }
         },
+        bookStatsInfo:{
+            selectDevice:[],
+            classifierIsInit: false,
+            classifier: [],
+            followBooks: [],
+            isFollowBooksGet: false,
+            viewBooks: [],
+            isViewBooksGet: false,
+            downloadBooks: [],
+            isDownloadBooksGet: false,
+            currentBookType: 'download', //follow, view
+            total: -1,
+            pageSize:10,
+            container: null,
+            content:[],
+            currentPage: 0,
+            pageIndexContainer: null,
+            tableName:'users',
+            setContainer: function (c) {
+                data.bookStatsInfo.container = c
+            },
+            handler: function (pageNo) {
+                var bookStatsInfo = data.bookStatsInfo
+                bookStatsInfo.loadData(pageNo)
+                //bookStatsInfo.render()
+                g.renderPageNavigator(bookStatsInfo.pageIndexContainer, bookStatsInfo.pageSize, bookStatsInfo.currentPage, bookStatsInfo.total, bookStatsInfo.handler)
+            },
+            getTotal: function (filter) {
+                var bookStatsInfo = data.bookStatsInfo
+                if(bookStatsInfo.tableName == 'users'){
+                    var uri = '/api/'+bookStatsInfo.tableName+'/top/count'
+                    if (!filter) {
+                        //uri += '?filter=' + filter
+                        g.getData(uri, genericHeaders, function (d) {
+                            if (d.meta.code == 200) {
+                                bookStatsInfo.total = d.data[0].count
+                            }
+                            //else if(d.meta.code == 401){
+                            //    alert('该用户没有访问权限');
+                            //}
+                        })
+                    }else{
+                        bookStatsInfo.total = 1
+                    }
+
+                }else if(bookStatsInfo.tableName=="books"){
+                    var uri = '/api/books/groups/firstLevelClassify'
+                    if (!filter) {
+                        uri += '?filter=' + filter
+                        g.getData(uri, genericHeaders, function (d) {
+                            if (d.meta.code == 200) {
+                                bookStatsInfo.classifier = d.data
+                                bookStatsInfo.total = d.data.length
+                            }
+                            //else if(d.meta.code == 401){
+                            //    alert('该用户没有访问权限');
+                            //}
+                        })
+                    }else{
+                        bookStatsInfo.total = 1
+                    }
+
+                }else if(data.bookStatsInfo.tableName=="devices"){
+                    var uri = '/api/devices'
+                    if (!filter) {
+                        uri += '?filter=' + filter
+                        g.getData(uri, genericHeaders, function (d) {
+                            if (d.meta.code == 200) {
+                                bookStatsInfo.selectDevice = d.data
+                                bookStatsInfo.total = d.data.length
+                            }
+                            //else if(d.meta.code == 401){
+                            //    alert('该用户没有访问权限');
+                            //}
+                        })
+                    }else{
+                        bookStatsInfo.total = 1
+                    }
+
+                }
+
+            },
+            getFilter: function () {
+                var result = null
+                var userFrom=doc.getElementById('fromTimeUser')
+                var userTo = doc.getElementById('toTimeUser')
+                var bookSelect =doc.getElementById('selectBook')
+                var bookFrom = doc.getElementById('fromTimeBook')
+                var bookTo = doc.getElementById('toTimeBook')
+                var deviceSelect =doc.getElementById('selectDevice')
+                var deviceFrom = doc.getElementById('fromTimeDevice')
+                var deviceTo = doc.getElementById('toTimeDevice')
+                var hasCondition = false
+                var filter = {}
+                if(data.bookStatsInfo.tableName=="users"){
+                    var userFromValue = userFrom.value
+                    var userToValue = userTo.value
+                    if(userFromValue!=''){
+                        filter.userFrom = userFromValue
+                        hasCondition = true
+                    }
+                    if(userToValue!=''){
+                        filter.userTo = userToValue
+                        hasCondition = true
+                    }
+                }else if(data.bookStatsInfo.tableName=="books"){
+                    var bookSelectValue = bookSelect.value
+                    var bookFromValue = bookFrom.value
+                    var bookToValue = bookTo.value
+                    if(bookSelectValue!=''&&bookSelectValue!='全部'){
+                        filter.bookSelect = bookSelectValue
+                        hasCondition = true
+                    }
+                    if(bookFromValue!=''){
+                        filter.bookFrom = bookFromValue
+                        hasCondition = true
+                    }
+                    if(bookToValue!=''){
+                        filter.bookTo = bookToValue
+                        hasCondition = true
+                    }
+                }else if(data.bookStatsInfo.tableName=="devices"){
+                    var deviceSelectValue = deviceSelect.value
+                    var deviceFromValue = deviceFrom.value
+                    var deviceToValue = deviceTo.value
+                    if(deviceSelectValue!=''&&deviceSelectValue!='全部'){
+                        filter.deviceSelect = deviceSelectValue
+                        hasCondition = true
+                    }
+                    if(deviceFromValue!=''){
+                        filter.deviceFrom = deviceFromValue
+                        hasCondition = true
+                    }
+                    if(deviceToValue!=''){
+                        filter.deviceTo = deviceToValue
+                        hasCondition = true
+                    }
+                }
+                if (hasCondition) {
+                    result = encodeURIComponent(JSON.stringify(filter))
+                }
+                return result
+            },
+            loadData:function (pageNo){
+                var bookStatsInfo = data.bookStatsInfo
+                var filter = bookStatsInfo.getFilter()
+                //if(filter){
+                    bookStatsInfo.getTotal(filter)
+                //}
+                var filterChange = doc.getElementById('filterChange')
+                filterChange.addEventListener('change', function (e) {
+                    bookStatsInfo.total = -1
+                    bookStatsInfo.currentPage = 0
+                    bookStatsInfo.content = []
+                    bookStatsInfo.handler(1)
+                }, false)
+                    bookStatsInfo.currentPage = pageNo
+                    if(data.bookStatsInfo.tableName=="users"){
+                        var uri = '/api/'+bookStatsInfo.tableName+'/top/page'
+                        if (filter) {
+                            uri += '?filter=' + filter + '&offset=' + bookStatsInfo.pageSize*(pageNo-1) + '&count=' + bookStatsInfo.pageSize
+                        }else{
+                            uri += '?offset=' + bookStatsInfo.pageSize*(pageNo-1)  + '&count=' + bookStatsInfo.pageSize
+                        }
+                        g.getData(uri, genericHeaders, function (d) {
+                            if (d.meta.code == 200) {
+                                bookStatsInfo.content = d.data
+                                bookStatsInfo.render("userStateInfo")
+                            }
+                            //else if(d.meta.code == 401){
+                            //    alert('该用户没有访问权限');
+                            //}
+                        })
+                    }else if(data.bookStatsInfo.tableName=="books"){
+                        var uri = '/api/'+bookStatsInfo.tableName+'/counted'
+                        if (filter) {
+                            uri += '?filter=' + filter + '&offset=' + bookStatsInfo.pageSize*(pageNo-1) + '&count=' + bookStatsInfo.pageSize
+                        }else{
+                            uri += '?offset=' + bookStatsInfo.pageSize*(pageNo-1)  + '&count=' + bookStatsInfo.pageSize
+                        }
+                        g.getData(uri, genericHeaders, function (d) {
+                            if (d.meta.code == 200) {
+                                bookStatsInfo.content = d.data
+                                bookStatsInfo.render("bookStateInfo")
+                            }
+                            //else if(d.meta.code == 401){
+                            //    alert('该用户没有访问权限');
+                            //}
+                        })
+                    }else if(data.bookStatsInfo.tableName=="devices"){
+                        var uri = '/api/'+bookStatsInfo.tableName+'/counted'
+                        if (filter) {
+                            uri += '?filter=' + filter + '&offset=' + bookStatsInfo.pageSize*(pageNo-1) + '&count=' + bookStatsInfo.pageSize
+                        }else{
+                            uri += '?offset=' + bookStatsInfo.pageSize*(pageNo-1)  + '&count=' + bookStatsInfo.pageSize
+                        }
+                        g.getData(uri, genericHeaders, function (d) {
+                            if (d.meta.code == 200) {
+                                bookStatsInfo.content = d.data
+                                bookStatsInfo.render("deviceStateInfo")
+                            }
+                            //else if(d.meta.code == 401){
+                            //    alert('该用户没有访问权限');
+                            //}
+                        })
+                    }
+            },
+            render: function (elementId) {
+                var dataInfo = data.bookStatsInfo.content
+                while (data.bookStatsInfo.container.rows.length > 0) {
+                    data.bookStatsInfo.container.deleteRow(-1);
+                }
+                for (var i = 0, c = dataInfo.length; i < c; ++i) {
+                    var body = doc.getElementById(elementId).content.cloneNode(true).children[0]
+                    if(data.bookStatsInfo.tableName=="users"){
+                        if(!dataInfo[i].date){
+                            if(dataInfo[i].from){
+                                dataInfo[i].date = dataInfo[i].from+"--"
+                            }else{
+                                dataInfo[i].date = "...."+"--"
+                            }
+                            if(dataInfo[i].to){
+                                dataInfo[i].date += dataInfo[i].to
+                            }else{
+                                dataInfo[i].date += "...."
+                            }
+                        }
+
+                    }
+                    g.bind(body, dataInfo[i])
+                    data.bookStatsInfo.container.appendChild(body)
+                }
+
+            },
+            do:function(name,filter,header,info){
+                data.do(name,filter,header,info)
+                if(data.bookStatsInfo.tableName == "books"){
+                    data.fillSelect('selectBook', data.bookStatsInfo.classifier, true)
+                }else if(data.bookStatsInfo.tableName == "devices"){
+                    var deviceNo = []
+                    data.bookStatsInfo.selectDevice.forEach(function(e){
+                        deviceNo.push(e.no);
+                    })
+                    data.fillSelect('selectDevice', deviceNo, true)
+                }
+                var userInfo = doc.getElementById('userInfo')
+                userInfo.addEventListener('click', function (event) {
+                    data.bookStatsInfo.total=-1
+                    data.bookStatsInfo.tableName='users'
+                    data.switchTo(userInfo)
+                    data.bookStatsInfo.do('统计信息','bookStatsInfoFilter','userInfoHeader', data.bookStatsInfo)
+                    $('.change').removeClass("active")
+                    doc.getElementById('userLi').addClass('active')
+                    //$('#userInfo').parentNode.class="active"
+                    //var aaa = userInfo.parentNode
+                    //userInfo.parentNode.class="active"
+
+                }, false)
+                var bookInfo = doc.getElementById('bookInfo')
+                bookInfo.addEventListener('click', function (event) {
+                    data.bookStatsInfo.total=-1
+                    data.bookStatsInfo.tableName='books'
+                    data.switchTo(bookInfo)
+                    data.bookStatsInfo.do('统计信息','bookStatsInfoFilter','bookInfoHeader', data.bookStatsInfo)
+                    $('.change').removeClass("active")
+                    doc.getElementById('bookLi').addClass('active')
+                    //$('#bookInfo').parentNode.class="active"
+                    //var aaa = bookInfo.parentNode
+                    //bookInfo.parentNode.class="active
+
+                }, false)
+                var deviceInfo = doc.getElementById('deviceInfo')
+                deviceInfo.addEventListener('click', function (event) {
+                    data.bookStatsInfo.total=-1
+                    data.bookStatsInfo.tableName='devices'
+                    data.switchTo(deviceInfo)
+                    data.bookStatsInfo.do('统计信息','bookStatsInfoFilter','deviceInfoHeader', data.bookStatsInfo)
+                    $('.change').removeClass("active")
+                    doc.getElementById('deviceLi').addClass('active')
+                    //$('#deviceInfo').parentNode.class="active"
+                    //var aaa = deviceInfo.parentNode
+                    //deviceInfo.parentNode.class="active"
+
+                }, false)
+            }
+        },
         administrator:{
             pageSize: 15,
             total: -1,
@@ -1123,9 +1422,10 @@ window.addEventListener('load', function (e) {
                 g.getData(uri, genericHeaders, function (d) {
                     if (d.meta.code == 200) {
                         data.administrator.total = d.data.value
-                    }else if(d.meta.code == 401){
-                        alert('该用户没有访问权限');
                     }
+                    //else if(d.meta.code == 401){
+                    //    alert('该用户没有访问权限');
+                    //}
                 })
             },
             loadData: function (pageNo) {
@@ -1144,9 +1444,10 @@ window.addEventListener('load', function (e) {
                     g.getData(url, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             administrator.content = d.data
-                        }else if(d.meta.code == 401){
-                            alert('该用户没有访问权限');
                         }
+                        //else if(d.meta.code == 401){
+                        //    alert('该用户没有访问权限');
+                        //}
                     })
                 }
             },
@@ -1158,6 +1459,8 @@ window.addEventListener('load', function (e) {
                 var contents = administrator.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('administratorInfo').content.cloneNode(true).children[0]
+                    var date = new Date(contents[i].lastOperationTime*1000)
+                    contents[i].lastOperationTime = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
                     g.bind(body, contents[i])
                     //修改用户权限
                     body.querySelector('.changePrivilege').addEventListener('click', function (e) {
@@ -1202,7 +1505,7 @@ window.addEventListener('load', function (e) {
                 if(userName!=""&&userPassword!=""){
                     data.createAdmin.userInfo.userName=userName
                     data.createAdmin.userInfo.userPassword=userPassword
-                    data.createAdmin.userInfo.stage = [];
+                    data.createAdmin.userInfo.stage = [15001];
                     var stageChks=$("[name='select']:checked").each(function(c){
                         data.createAdmin.userInfo.stage.push($(this).val())
                     });
@@ -1230,12 +1533,11 @@ window.addEventListener('load', function (e) {
                                             data.createAdmin.userId = 0
                                             data.switchTo(doc.getElementById('administrator'))
                                             data.administrator.do()
-                                        }else if(d.meta.data==401){
-                                            alert('用户没有修改权限')
                                         }
+                                        //else if(d.meta.data==401){
+                                        //    alert('用户没有修改权限')
+                                        //}
                                     })
-                                }else if(d.meta.code == 401){
-                                    alert('该用户没有访问权限');
                                 }else{
                                     alert("用户名已存在")
                                 }
@@ -1255,15 +1557,17 @@ window.addEventListener('load', function (e) {
                             g.getData('/api/privileges/byMap/privilegeId/administratorPrivilegeMap/administratorId/'+ d.data.id,genericHeaders,function(e){
                                 if (e.meta.code == 200) {
                                     e.data.forEach(function(a){
-                                        doc.getElementById(a.id).checked = true
+                                        if(doc.getElementById(a.id)){
+                                            doc.getElementById(a.id).checked = true
+                                        }
+
                                     })
-                                }else if(d.meta.code == 401){
-                                    alert('该用户没有访问权限');
                                 }
                             })
-                        }else if(d.meta.code == 401){
-                            alert('该用户没有访问权限');
                         }
+                        //else if(d.meta.code == 401){
+                        //    alert('该用户没有访问权限');
+                        //}
                     })
                     //修改用户，privilege关联
                     doc.getElementById('createUser').addEventListener('click',function(){
@@ -1282,9 +1586,10 @@ window.addEventListener('load', function (e) {
                                         data.administrator.do()
                                     }
                                 })
-                            }else if(d.meta.data==401){
-                                alert('用户没有修改权限')
                             }
+                            //else if(d.meta.data==401){
+                            //    alert('用户没有修改权限')
+                            //}
                         })
                     },false)
                 }
@@ -1325,6 +1630,7 @@ window.addEventListener('load', function (e) {
     administratorManagement.addEventListener('click', function (event) {
         data.switchTo(administratorManagement)
         data.admin.do()
+        doc.getElementById('changeName').innerHTML=userName
     }, false)
     //用户权限
     var administrator = doc.getElementById('administrator')
@@ -1343,6 +1649,13 @@ window.addEventListener('load', function (e) {
     stats.addEventListener('click', function (event) {
         data.switchTo(stats)
         data.bookStats.do()
+    }, false)
+    var statsInfo = doc.getElementById('statsInfo')
+    statsInfo.addEventListener('click', function (event) {
+        data.switchTo(statsInfo)
+        data.bookStatsInfo.do('统计信息','bookStatsInfoFilter','userInfoHeader', data.bookStatsInfo)
+        doc.getElementById('userLi').addClass('active')
+        //doc.getElementById('userLi').style.color='white';
     }, false)
     var createDevice = doc.querySelector('#createDevice .btn-primary')
     createDevice.addEventListener('click', function (e) {
@@ -1369,8 +1682,6 @@ window.addEventListener('load', function (e) {
                 g.getData('/api/devices?filter=' +sameOrNot , genericHeaders, function (d) {
                     if (d.meta.code == 200&& d.data.length>0) {
                         alert(device.id+"已存在")
-                    }else if(d.meta.code == 401){
-                        alert('该用户没有访问权限');
                     }else{
                         g.postData('/api/devices/' + device.id, genericHeaders, device, function (d) {
                             var title = doc.querySelector('#createDevice h4')

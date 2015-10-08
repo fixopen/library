@@ -7,8 +7,118 @@ class books
 
     private static $classSpecSubresource = array(
         'updateSince' => 'updateSinceProc',
-        'groups' => 'groupsProc'
+        'groups' => 'groupsProc',
+        'counted' => 'countedProc',
     );
+    public static function countedProc(array &$request){
+        $count = count($request['paths']);
+        switch ($request['method']) {
+            case 'POST':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'PUT':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'PATCH':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            case 'GET':
+                if ($count == 0) {
+                    $result = array();
+                    $whereClause = '';
+                    $filter = $request['params']['filter'];
+                    if ($filter != '') {
+                        $filterJson = json_decode($filter);
+                        $where = array();
+                        foreach ($filterJson as $key => $value) {
+                            $condition = self::specFilter($key, $value);
+                            if ($condition == '') {
+                                if (is_null($value)) {
+                                    $where[] = self::Mark($key) . ' IS NULL';
+                                } else {
+                                    $where[] = self::Mark($key) . ' = ' . self::DatabaseQuote($value, self::GetTypeByName($key));
+                                }
+                            } else {
+                                $where[] = $condition;
+                            }
+                        }
+                        //print_r($where);
+                        $whereClause = ' AND ' . implode(' AND ', $where);
+                    }
+//                    $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='小说' and b.id = bu."bookId" and bu.action='Download';'
+                    $bookKind= [];
+                    if($whereClause){
+                        $sql = 'select "firstLevelClassify" from book where 1=1 '.$whereClause.' group by "firstLevelClassify"';
+                    }else{
+                        $sql = 'select "firstLevelClassify" from book group by "firstLevelClassify"';
+                    }
+                    $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+                    if ($r) {
+                        foreach ($r as $row) {
+                            $item = new stdClass();
+                            $item->name =$row['firstLevelClassify'];
+                            $bookKind[] = $item;
+                        }
+                    }
+                    foreach($bookKind as $one){
+                        $item = new stdClass();
+                        $item->name = $one->name;
+//                        print_r($one);
+                        if($whereClause){
+                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" .$whereClause.' and b.id = bu."bookId" and bu.action='."'".Download."'";
+                        }else{
+                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" . ' and b.id = bu."bookId" and bu.action='."'".Download."'";
+                        }
+                        $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+                        if ($r) {
+                            foreach ($r as $row) {
+                                $item->Download =$row['count'];
+                            }
+                        }
+                        if($whereClause){
+                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" .$whereClause.' and b.id = bu."bookId" and bu.action='."'".View."'";
+                        }else{
+                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" . ' and b.id = bu."bookId" and bu.action='."'".View."'";
+                        }
+                        $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+                        if ($r) {
+                            foreach ($r as $row) {
+                                $item->View =$row['count'];
+                            }
+                        }
+                        if($whereClause){
+                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" .$whereClause.' and b.id = bu."bookId" and bu.action='."'".Follow."'";
+                        }else{
+                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" . ' and b.id = bu."bookId" and bu.action='."'".Follow."'";
+                        }
+                        $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+                        if ($r) {
+                            foreach ($r as $row) {
+                                $item->Follow =$row['count'];
+                            }
+                        }
+                        $result[] = $item;
+                    }
+//                    $request['response']['code'] = 200; //bad request
+                    $request['response']['body'] = self::ToArrayJson($result);
+//                    print_r($request);
+                } else {
+                    $request['response']['code'] = 400; //bad request
+                    $request['response']['body'] = '{"state": "must include [time] path segment"}';
+                }
+                break;
+            case 'DELETE':
+                $request['response']['code'] = 405; //Method Not Allowed
+                //$result['code'] = 406; //not acceptable
+                break;
+            default:
+                break;
+        }
+        return $request;
+    }
 
     public static function updateSinceProc(array &$request)
     {
@@ -170,6 +280,15 @@ class books
         }
         if($name === 'publisher'){
             $result = '"publisher" like ' . "'%{$value}%'";
+        }
+        if($name === 'bookSelect'){
+            $result = '"firstLevelClassify" = ' . "'{$value}'";
+        }
+        if ($name === 'bookFrom') {
+            $result = '"lastUpdateTime" > ' ."'{$value}'"  ;
+        }
+        if ($name === 'bookTo') {
+            $result = '"lastUpdateTime" < ' ."'{$value}'";
         }
         return $result;
     }

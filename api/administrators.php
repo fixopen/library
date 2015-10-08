@@ -35,7 +35,7 @@ class administrators
                 $administrator->setName($body['userName']);
                 //print_r("-------------------------------") ;
                 //print_r($body['userName']) ;
-//                $administrator->setLastOperationTime(now());
+                $administrator->setLastOperationTime(time());
                 $administrator->setPassword($body['userPassword']);
                 $id = $administrator->Insert();
                 if(is_integer($id)){

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="images/favicon.ico">
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="css/bootstrap.css" rel="stylesheet">-->
     <link rel="stylesheet" type="text/css" href="css/base.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="js/My97DatePicker/skin/WdatePicker.css">
@@ -28,7 +29,15 @@
         td > select {
             width: 90%;
         }
-
+        .ax_paragraph {
+            font-family: "Arial Normal","Arial";
+            font-weight: 400;
+            font-style: normal;
+            font-size: 13px;
+            color: #333;
+            text-align: left;
+            line-height: normal;
+        }
         .menu-item {
             color: #ffffff;
             background-repeat: no-repeat;
@@ -96,7 +105,7 @@
         </div>
         <div class="col-lg-10"
              style="text-align: right; color: #ffffff; padding-top: 48px; background-color: #0091ff; font-size: 13px; height: 100%;">
-            admin 管理员 | <span id="logout" style="cursor: pointer">退出</span>
+            <span id="loginName"></span> 管理员 | <span id="logout" style="cursor: pointer">退出</span>
             <span id="timeNow" style="margin-left: 25px"></span>
         </div>
     </div>
@@ -137,10 +146,15 @@
                     </ul>
                     -->
                 </li>
-                <li id="stats"
+                <li id="statsInfo"
                     class="menu-item"
                     style="background-position: 0 -300px;">
                     统计信息
+                </li>
+                <li id="stats"
+                    class="menu-item"
+                    style="background-position: 0 -300px;">
+                    排行榜
                 </li>
                 <li id="administrator"
                     class="menu-item"
@@ -276,7 +290,7 @@
     </div>
 </template>
 <template id="tableFramework">
-    <div>
+    <div class="row">
         <table class="mainContent table table-striped table-bordered table-condensed" border="1"
                style="text-align: center;">
             <!--
@@ -578,7 +592,7 @@
         <tbody>
         <tr>
             <th>登录名</th>
-            <td>admin</td>
+            <td id="changeName"></td>
         </tr>
         <tr>
             <th>旧密码</th>
@@ -625,6 +639,125 @@
             <button  class="changeOut" data-id="${id}">注销</button>
             <button  class="changePrivilege" data-id="${id}">修改权限</button>
         </td>
+    </tr>
+</template>
+<template id="bookStatsInfoFilter">
+    <div class="col-xs-10"  id='panel-container'style="padding:0px;">
+        <div class="row">
+             <span class="row col-xs-9">
+                 <ul class="nav nav-pills" >
+                     <li id="userLi" role="presentation" class="change"><a href="#check" id="userInfo"  role="tab" data-toggle="tab" >用户</a></li>
+                     <li id="bookLi" role="presentation" class="change "><a href="#pass" id="bookInfo"  role="tab" data-toggle="tab" >图书</a></li>
+                     <li id="deviceLi" role="presentation" class="change "><a href="#roleCreate" id="deviceInfo"  role="tab" data-toggle="tab" >设备</a></li>
+                 </ul>
+
+              </span>
+        </div>
+        <div class="tab-content" id="filterChange">
+            <div class="tab-pane padding-l-0 personInfoStyle active" id="check" >
+                <table style="width: 100%;">
+                    <tbody>
+                        <tr>
+                            <th class="first"><label for="setupTime">按时间段查询</label></th>
+                            <td class="first-value">
+                                <input type="date" id="fromTimeUser" style="border-radius:5px;"/>
+                                <label for="setupStopTime">到</label></th><input type="date" id="toTimeUser" style="border-radius:5px;"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane padding-l-0 personInfoStyle" id="pass" style="padding: 0px;margin: 0px;">
+                <table style="width: 100%;">
+                    <tbody>
+                    <tr>
+                        <th class="first"><label for="setupTime">图书种类</label></th>
+                        <td class="first-value">
+                            <select id="selectBook" ></select>
+                        </td>
+                        <th class="first"><label for="setupTime">按时间查询</label></th>
+                        <td class="first-value">
+                            <input type="date" id="fromTimeBook" style="border-radius:5px;"/>
+                            <label for="setupStopTime">到</label></th><input type="date" id="toTimeBook" style="border-radius:5px;"/>
+                        </td>
+                        <th class="first"></th>
+                        <!--<td class="first-value">-->
+                            <!--<button id="bookInfoOut" style="background-color: #bbbbbb;"> 导出统计信息</button>-->
+                        <!--</td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane padding-l-0 personInfoStyle" id="roleCreate">
+                <table style="width: 100%;">
+                    <tbody>
+                    <tr>
+                        <th class="first"><label for="setupTime">借阅机</label></th>
+                        <td class="first-value">
+                            <select id="selectDevice" ></select>
+                        </td>
+                        <th class="first"><label for="setupTime">按时间查询</label></th>
+                        <td class="first-value">
+                            <input type="date" id="fromTimeDevice" style="border-radius:5px;"/>
+                            <label for="setupStopTime">到</label></th><input type="date" id="toTimeDevice" style="border-radius:5px;"/>
+                        </td>
+                        <th class="first"></th>
+                        <!--<td class="first-value">-->
+                            <!--<button id="deviceInfoOut" style="background-color: #bbbbbb;"> 导出统计信息</button>-->
+                        <!--</td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</template>
+<template id="userInfoHeader">
+    <tr>
+        <th style="text-align:center;">时间</th>
+        <th style="text-align:center;">用户总数</th>
+        <th style="text-align:center;">新增</th>
+    </tr>
+</template>
+<template id="bookInfoHeader">
+    <tr>
+        <th style="text-align:center;">图书种类</th>
+        <th style="text-align:center;">关注</th>
+        <th style="text-align:center;">下载</th>
+        <th style="text-align:center;">阅读</th>
+    </tr>
+</template>
+<template id="deviceInfoHeader">
+    <tr>
+        <th style="text-align:center;">借阅机</th>
+        <th style="text-align:center;">借阅总人数</th>
+        <th style="text-align:center;">总下载数</th>
+        <th style="text-align:center;">总阅读数</th>
+        <th style="text-align:center;">总关注数</th>
+    </tr>
+</template>
+<template id="userStateInfo">
+    <tr>
+        <td>${date}</td>
+        <td>${totalCount}</td>
+        <td>${count}</td>
+    </tr>
+</template>
+<template id="bookStateInfo">
+    <tr>
+        <td>${name}</td>
+        <td>${Follow}</td>
+        <td>${Download}</td>
+        <td>${View}</td>
+    </tr>
+</template>
+<template id="deviceStateInfo">
+    <tr>
+        <td>${name}</td>
+        <td>${totalUser}</td>
+        <td>${Follow}</td>
+        <td>${Download}</td>
+        <td>${View}</td>
     </tr>
 </template>
 <template id="createAdminInfo">
