@@ -30,7 +30,7 @@ class administrators
         $data = NULL; //data is table-like
         //step2: write to client
         $request['response']['headers']['Content-Type'] = 'text/csv';
-        $request['response']['headers']['Content-Type'] = 'text/csv';
+        //$request['response']['headers']['Content-Disposition'] = 'attachment;filename=' . $filename;
         $filename = NULL; //random string
         $file = fopen($filename, 'w');
         //fputcsv($file, array_keys($row)); //write header for csv or not??
