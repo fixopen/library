@@ -20,8 +20,8 @@ window.addEventListener('load', function (e) {
     var doc = document
     //new Date().getTime() / 1000.0
     //var d = Date(s * 1000.0)
-    var userName =location.href.split('=')[1];
-    doc.getElementById('loginName').innerHTML=userName
+    var userName = location.href.split('=')[1];
+    doc.getElementById('loginName').innerHTML = userName
     doc.getElementById('timeNow').innerHTML = Date()
     var logout = doc.getElementById('logout')
     logout.addEventListener('click', function (e) {
@@ -130,7 +130,7 @@ window.addEventListener('load', function (e) {
                             baseInfo.deviceCount = d.data.value
                         }
                         //else if(d.meta.code == 401){
-                        //    alert('该用户没有访问权限');
+                        //    alert('该用户没有访问权限')
                         //}
                     })
                     g.getData('/api/devices/statistics/count?filter=' + encodeURIComponent(JSON.stringify({isOnline: true})), genericHeaders, function (d) {
@@ -163,7 +163,7 @@ window.addEventListener('load', function (e) {
             pageSize: 10,
             total: -1,
             currentPage: 0,
-            oldPage:1,
+            oldPage: 1,
             standardClassifierIsInit: false,
             standardClassifier: [],
             classifierIsInit: false,
@@ -190,7 +190,7 @@ window.addEventListener('load', function (e) {
                         data.books.classifierIsInit = true
                     }
                     //else if(d.meta.code == 401){
-                    //    alert('该用户没有访问权限');
+                    //    alert('该用户没有访问权限')
                     //}
                 })
             },
@@ -274,7 +274,7 @@ window.addEventListener('load', function (e) {
                             books.content = d.data
                         }
                         //else if(d.meta.code == 401){
-                        //    alert('该用户没有访问权限');
+                        //    alert('该用户没有访问权限')
                         //}
                     })
                 }
@@ -282,7 +282,7 @@ window.addEventListener('load', function (e) {
             render: function () {
                 var books = data.books
                 while (books.container.rows.length > 0) {
-                    books.container.deleteRow(-1);
+                    books.container.deleteRow(-1)
                 }
                 var contents = books.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
@@ -300,8 +300,8 @@ window.addEventListener('load', function (e) {
                     g.bind(body, contents[i])
                     body.querySelector('.biz').addEventListener('click', function (e) {
                         //图书详情点击状态
-                        clickState.name = "book";
-                        clickState.value =  e.target.dataset.id
+                        clickState.name = "book"
+                        clickState.value = e.target.dataset.id
                         //
                         var actionStats = data.actionStats
                         actionStats.reset()
@@ -310,22 +310,21 @@ window.addEventListener('load', function (e) {
                     }, false)
                     body.querySelector('.ban').addEventListener('click', function (e) {
                         //修改上下架状态
-                        var patchData = {};
+                        var patchData = {}
                         var info = ""
-                        books.content.forEach(function(item,index){
-                            if(item.id == e.target.dataset.id){
-                                if(item.isBan == true){
+                        books.content.forEach(function (item, index) {
+                            if (item.id == e.target.dataset.id) {
+                                if (item.isBan == true) {
                                     patchData = {"isBan": false}
-                                    info = "是否上架图书ID为（"+e.target.dataset.id+")的书籍"
-                                }else{
+                                    info = "是否上架图书ID为（" + e.target.dataset.id + ")的书籍"
+                                } else {
                                     patchData = {"isBan": true}
-                                    info = "是否下架图书ID为（"+e.target.dataset.id+")的书籍"
+                                    info = "是否下架图书ID为（" + e.target.dataset.id + ")的书籍"
                                 }
                             }
                         })
-                        var r=confirm(info)
-                        if (r==true)
-                        {
+                        var r = confirm(info)
+                        if (r == true) {
                             g.patchData('/api/books/' + e.target.dataset.id, genericHeaders, patchData, function (r) {
                                 //books.handler(books.currentPage)
                             })
@@ -375,7 +374,10 @@ window.addEventListener('load', function (e) {
                         books.drmDuration = param.value
                     } else {
                         books.drmDuration = 90
-                        g.postData('/api/systemParameters', genericHeaders, {name: "drmDuration", value: 90}, function(e) {
+                        g.postData('/api/systemParameters', genericHeaders, {
+                            name: "drmDuration",
+                            value: 90
+                        }, function (e) {
                             //
                             //if(e.meta.data==401){
                             //    alert('用户没有修改权限')
@@ -393,7 +395,7 @@ window.addEventListener('load', function (e) {
                 setDrmDuration.addEventListener('click', function (e) {
                     var drmDuration = doc.getElementById('drmDuration')
                     var v = drmDuration.value.trim()
-                    if(parseInt(v)>1&&parseInt(v)<366){
+                    if (parseInt(v) > 1 && parseInt(v) < 366) {
                         if (parseInt(v) == v) {
                             g.patchData('/api/systemParameters/drmDuration', genericHeaders, {value: v}, function (r) {
                                 if (r.meta.code < 400) {
@@ -406,7 +408,7 @@ window.addEventListener('load', function (e) {
                         } else {
                             alert('必须填写正确的天数')
                         }
-                    }else{
+                    } else {
                         alert('请输入1-365数字')
                     }
                 }, false)
@@ -491,7 +493,7 @@ window.addEventListener('load', function (e) {
                         data.devices.total = d.data.value
                     }
                     //else if(d.meta.code == 401){
-                    //    alert('该用户没有访问权限');
+                    //    alert('该用户没有访问权限')
                     //}
                 })
             },
@@ -510,7 +512,7 @@ window.addEventListener('load', function (e) {
                             devices.content = d.data
                         }
                         //else if(d.meta.code == 401){
-                        //    alert('该用户没有访问权限');
+                        //    alert('该用户没有访问权限')
                         //}
                     })
                 }
@@ -523,8 +525,8 @@ window.addEventListener('load', function (e) {
                 var contents = devices.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('deviceItem').content.cloneNode(true).children[0]
-                    if(contents[i].setupTime != null){
-                        contents[i].setupTime = contents[i].setupTime.substr(0,10)
+                    if (contents[i].setupTime != null) {
+                        contents[i].setupTime = contents[i].setupTime.substr(0, 10)
                     }
                     contents[i].state = '心跳'
                     var currentTime = new Date()
@@ -535,14 +537,14 @@ window.addEventListener('load', function (e) {
                     g.bind(body, contents[i])
                     body.querySelector('.remove').addEventListener('click', function (e) {
                         g.deleteData('/api/devices/' + e.target.dataset.id, genericHeaders, function (r) {
-                            if(r.meta.code == 200){
+                            if (r.meta.code == 200) {
                                 data.devices.currentPage = 0;
-                                data.devices.content=[]
+                                data.devices.content = []
                                 data.devices.total = -1
                                 data.switchTo(deviceList)
                                 data.devices.do()
-                            }else{
-                                alert("删除借阅机ID（"+ e.target.dataset.id+"）失败，请查看是否存在借阅信息")
+                            } else {
+                                alert("删除借阅机ID（" + e.target.dataset.id + "）失败，请查看是否存在借阅信息")
                             }
                             //books.handler(books.currentPage)
                         })
@@ -592,17 +594,17 @@ window.addEventListener('load', function (e) {
                 }
                 var registerStartTimeValue = registerStartTime.value
                 if (registerStartTimeValue != '') {
-                    filter.fromTime =(new Date(registerStartTime.value)).getTime()/1000
+                    filter.fromTime = (new Date(registerStartTime.value)).getTime() / 1000
                     hasCondition = true
                 }
                 var registerStopTimeValue = registerStopTime.value
                 if (registerStopTimeValue != '') {
                     //filter.toTime = registerStopTimeValue
-                    filter.toTime = (new Date(registerStopTime.value)).getTime()/1000
+                    filter.toTime = (new Date(registerStopTime.value)).getTime() / 1000
                     hasCondition = true
                 }
                 //if (hasCondition) {
-                    result = encodeURIComponent(JSON.stringify(filter))
+                result = encodeURIComponent(JSON.stringify(filter))
                 //}
                 return result
             },
@@ -615,8 +617,8 @@ window.addEventListener('load', function (e) {
                     if (d.meta.code == 200) {
                         data.users.total = d.data.value
                     }
-                    //else if(d.meta.code == 401){
-                    //    alert('该用户没有访问权限');
+                    //else if (d.meta.code == 401) {
+                    //    alert('该用户没有访问权限')
                     //}
                 })
             },
@@ -630,15 +632,15 @@ window.addEventListener('load', function (e) {
                     users.currentPage = pageNo
                     var offset = users.pageSize * (users.currentPage - 1)
                     var orderBy = encodeURIComponent(JSON.stringify({id: 'asc'}))
-                    var url = '/api/users';
-                    url += '?filter=' + filter + '&offset=' + offset + '&count=' + users.pageSize + '&orderBy=' + orderBy;
+                    var url = '/api/users'
+                    url += '?filter=' + filter + '&offset=' + offset + '&count=' + users.pageSize + '&orderBy=' + orderBy
                     //alert(url)
                     g.getData(url, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             users.content = d.data
                         }
                         //else if(d.meta.code == 401){
-                        //    alert('该用户没有访问权限');
+                        //    alert('该用户没有访问权限')
                         //}
                     })
                 }
@@ -646,7 +648,7 @@ window.addEventListener('load', function (e) {
             render: function () {
                 var users = data.users
                 while (users.container.rows.length > 0) {
-                    users.container.deleteRow(-1);
+                    users.container.deleteRow(-1)
                 }
                 var contents = users.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
@@ -821,7 +823,7 @@ window.addEventListener('load', function (e) {
                         data.actionStats.total = d.data.value
                     }
                     //else if(d.meta.code == 401){
-                    //    alert('该用户没有访问权限');
+                    //    alert('该用户没有访问权限')
                     //}
                 })
             },
@@ -840,7 +842,7 @@ window.addEventListener('load', function (e) {
                             actionStats.content = d.data
                         }
                         //else if(d.meta.code == 401){
-                        //    alert('该用户没有访问权限');
+                        //    alert('该用户没有访问权限')
                         //}
                     })
                 }
@@ -848,19 +850,19 @@ window.addEventListener('load', function (e) {
             render: function () {
                 var actionStats = data.actionStats
                 while (actionStats.container.rows.length > 0) {
-                    actionStats.container.deleteRow(-1);
+                    actionStats.container.deleteRow(-1)
                 }
                 var contents = actionStats.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('statsItem').content.cloneNode(true).children[0]
-                    if(contents[i].time != null){
-                        contents[i].time = contents[i].time.substr(0,10)
+                    if (contents[i].time != null) {
+                        contents[i].time = contents[i].time.substr(0, 10)
                     }
-                    if(contents[i].action == "Download"){
+                    if (contents[i].action == "Download") {
                         contents[i].action = "下载"
-                    }else if(contents[i].action == "View"){
+                    } else if (contents[i].action == "View") {
                         contents[i].action = "阅读"
-                    }else if(contents[i].action == "Follow"){
+                    } else if (contents[i].action == "Follow") {
                         contents[i].action = "关注"
                     }
                     g.bind(body, contents[i])
@@ -973,7 +975,7 @@ window.addEventListener('load', function (e) {
                                     bookStats.isFollowBooksGet = true
                                 }
                                 //else if(d.meta.code == 401){
-                                //    alert('该用户没有访问权限');
+                                //    alert('该用户没有访问权限')
                                 //}
                             })
                         }
@@ -986,7 +988,7 @@ window.addEventListener('load', function (e) {
                                     bookStats.isViewBooksGet = true
                                 }
                                 //else if(d.meta.code == 401){
-                                //    alert('该用户没有访问权限');
+                                //    alert('该用户没有访问权限')
                                 //}
                             })
                         }
@@ -999,7 +1001,7 @@ window.addEventListener('load', function (e) {
                                     bookStats.isDownloadBooksGet = true
                                 }
                                 //else if(d.meta.code == 401){
-                                //    alert('该用户没有访问权限');
+                                //    alert('该用户没有访问权限')
                                 //}
                             })
                         }
@@ -1078,9 +1080,9 @@ window.addEventListener('load', function (e) {
                     data.bookStats.container.deleteRow(-1);
                 }
                 for (var i = 0, c = dataInfo.length; i < c; ++i) {
-                    if(dataInfo[i].name.length > 20){
-                        dataInfo[i].shortName = dataInfo[i].name.substr(0 , 15)+"..."
-                    }else{
+                    if (dataInfo[i].name.length > 20) {
+                        dataInfo[i].shortName = dataInfo[i].name.substr(0, 15) + "..."
+                    } else {
                         dataInfo[i].shortName = dataInfo[i].name
                     }
                     var body = doc.getElementById('bookStatsItem').content.cloneNode(true).children[0]
@@ -1090,8 +1092,8 @@ window.addEventListener('load', function (e) {
 
             }
         },
-        bookStatsInfo:{
-            selectDevice:[],
+        bookStatsInfo: {
+            selectDevice: [],
             classifierIsInit: false,
             classifier: [],
             followBooks: [],
@@ -1102,12 +1104,12 @@ window.addEventListener('load', function (e) {
             isDownloadBooksGet: false,
             currentBookType: 'download', //follow, view
             total: -1,
-            pageSize:10,
+            pageSize: 10,
             container: null,
-            content:[],
+            content: [],
             currentPage: 0,
             pageIndexContainer: null,
-            tableName:'users',
+            tableName: 'users',
             setContainer: function (c) {
                 data.bookStatsInfo.container = c
             },
@@ -1119,8 +1121,8 @@ window.addEventListener('load', function (e) {
             },
             getTotal: function (filter) {
                 var bookStatsInfo = data.bookStatsInfo
-                if(bookStatsInfo.tableName == 'users'){
-                    var uri = '/api/'+bookStatsInfo.tableName+'/top/count'
+                if (bookStatsInfo.tableName == 'users') {
+                    var uri = '/api/' + bookStatsInfo.tableName + '/top/count'
                     if (!filter) {
                         //uri += '?filter=' + filter
                         g.getData(uri, genericHeaders, function (d) {
@@ -1128,14 +1130,14 @@ window.addEventListener('load', function (e) {
                                 bookStatsInfo.total = d.data[0].count
                             }
                             //else if(d.meta.code == 401){
-                            //    alert('该用户没有访问权限');
+                            //    alert('该用户没有访问权限')
                             //}
                         })
-                    }else{
+                    } else {
                         bookStatsInfo.total = 1
                     }
 
-                }else if(bookStatsInfo.tableName=="books"){
+                } else if (bookStatsInfo.tableName == "books") {
                     var uri = '/api/books/groups/firstLevelClassify'
                     if (!filter) {
                         uri += '?filter=' + filter
@@ -1145,14 +1147,14 @@ window.addEventListener('load', function (e) {
                                 bookStatsInfo.total = d.data.length
                             }
                             //else if(d.meta.code == 401){
-                            //    alert('该用户没有访问权限');
+                            //    alert('该用户没有访问权限')
                             //}
                         })
-                    }else{
+                    } else {
                         bookStatsInfo.total = 1
                     }
 
-                }else if(data.bookStatsInfo.tableName=="devices"){
+                } else if (data.bookStatsInfo.tableName == "devices") {
                     var uri = '/api/devices'
                     if (!filter) {
                         uri += '?filter=' + filter
@@ -1165,7 +1167,7 @@ window.addEventListener('load', function (e) {
                             //    alert('该用户没有访问权限');
                             //}
                         })
-                    }else{
+                    } else {
                         bookStatsInfo.total = 1
                     }
 
@@ -1174,56 +1176,56 @@ window.addEventListener('load', function (e) {
             },
             getFilter: function () {
                 var result = null
-                var userFrom=doc.getElementById('fromTimeUser')
+                var userFrom = doc.getElementById('fromTimeUser')
                 var userTo = doc.getElementById('toTimeUser')
-                var bookSelect =doc.getElementById('selectBook')
+                var bookSelect = doc.getElementById('selectBook')
                 var bookFrom = doc.getElementById('fromTimeBook')
                 var bookTo = doc.getElementById('toTimeBook')
-                var deviceSelect =doc.getElementById('selectDevice')
+                var deviceSelect = doc.getElementById('selectDevice')
                 var deviceFrom = doc.getElementById('fromTimeDevice')
                 var deviceTo = doc.getElementById('toTimeDevice')
                 var hasCondition = false
                 var filter = {}
-                if(data.bookStatsInfo.tableName=="users"){
+                if (data.bookStatsInfo.tableName == "users") {
                     var userFromValue = userFrom.value
                     var userToValue = userTo.value
-                    if(userFromValue!=''){
+                    if (userFromValue != '') {
                         filter.userFrom = userFromValue
                         hasCondition = true
                     }
-                    if(userToValue!=''){
+                    if (userToValue != '') {
                         filter.userTo = userToValue
                         hasCondition = true
                     }
-                }else if(data.bookStatsInfo.tableName=="books"){
+                } else if (data.bookStatsInfo.tableName == "books") {
                     var bookSelectValue = bookSelect.value
                     var bookFromValue = bookFrom.value
                     var bookToValue = bookTo.value
-                    if(bookSelectValue!=''&&bookSelectValue!='全部'){
+                    if (bookSelectValue != '' && bookSelectValue != '全部') {
                         filter.bookSelect = bookSelectValue
                         hasCondition = true
                     }
-                    if(bookFromValue!=''){
+                    if (bookFromValue != '') {
                         filter.bookFrom = bookFromValue
                         hasCondition = true
                     }
-                    if(bookToValue!=''){
+                    if (bookToValue != '') {
                         filter.bookTo = bookToValue
                         hasCondition = true
                     }
-                }else if(data.bookStatsInfo.tableName=="devices"){
+                } else if (data.bookStatsInfo.tableName == "devices") {
                     var deviceSelectValue = deviceSelect.value
                     var deviceFromValue = deviceFrom.value
                     var deviceToValue = deviceTo.value
-                    if(deviceSelectValue!=''&&deviceSelectValue!='全部'){
+                    if (deviceSelectValue != '' && deviceSelectValue != '全部') {
                         filter.deviceSelect = deviceSelectValue
                         hasCondition = true
                     }
-                    if(deviceFromValue!=''){
+                    if (deviceFromValue != '') {
                         filter.deviceFrom = deviceFromValue
                         hasCondition = true
                     }
-                    if(deviceToValue!=''){
+                    if (deviceToValue != '') {
                         filter.deviceTo = deviceToValue
                         hasCondition = true
                     }
@@ -1233,11 +1235,11 @@ window.addEventListener('load', function (e) {
                 }
                 return result
             },
-            loadData:function (pageNo){
+            loadData: function (pageNo) {
                 var bookStatsInfo = data.bookStatsInfo
                 var filter = bookStatsInfo.getFilter()
                 //if(filter){
-                    bookStatsInfo.getTotal(filter)
+                bookStatsInfo.getTotal(filter)
                 //}
                 var filterChange = doc.getElementById('filterChange')
                 filterChange.addEventListener('change', function (e) {
@@ -1246,56 +1248,56 @@ window.addEventListener('load', function (e) {
                     bookStatsInfo.content = []
                     bookStatsInfo.handler(1)
                 }, false)
-                    bookStatsInfo.currentPage = pageNo
-                    if(data.bookStatsInfo.tableName=="users"){
-                        var uri = '/api/'+bookStatsInfo.tableName+'/top/page'
-                        if (filter) {
-                            uri += '?filter=' + filter + '&offset=' + bookStatsInfo.pageSize*(pageNo-1) + '&count=' + bookStatsInfo.pageSize
-                        }else{
-                            uri += '?offset=' + bookStatsInfo.pageSize*(pageNo-1)  + '&count=' + bookStatsInfo.pageSize
-                        }
-                        g.getData(uri, genericHeaders, function (d) {
-                            if (d.meta.code == 200) {
-                                bookStatsInfo.content = d.data
-                                bookStatsInfo.render("userStateInfo")
-                            }
-                            //else if(d.meta.code == 401){
-                            //    alert('该用户没有访问权限');
-                            //}
-                        })
-                    }else if(data.bookStatsInfo.tableName=="books"){
-                        var uri = '/api/'+bookStatsInfo.tableName+'/counted'
-                        if (filter) {
-                            uri += '?filter=' + filter + '&offset=' + bookStatsInfo.pageSize*(pageNo-1) + '&count=' + bookStatsInfo.pageSize
-                        }else{
-                            uri += '?offset=' + bookStatsInfo.pageSize*(pageNo-1)  + '&count=' + bookStatsInfo.pageSize
-                        }
-                        g.getData(uri, genericHeaders, function (d) {
-                            if (d.meta.code == 200) {
-                                bookStatsInfo.content = d.data
-                                bookStatsInfo.render("bookStateInfo")
-                            }
-                            //else if(d.meta.code == 401){
-                            //    alert('该用户没有访问权限');
-                            //}
-                        })
-                    }else if(data.bookStatsInfo.tableName=="devices"){
-                        var uri = '/api/'+bookStatsInfo.tableName+'/counted'
-                        if (filter) {
-                            uri += '?filter=' + filter + '&offset=' + bookStatsInfo.pageSize*(pageNo-1) + '&count=' + bookStatsInfo.pageSize
-                        }else{
-                            uri += '?offset=' + bookStatsInfo.pageSize*(pageNo-1)  + '&count=' + bookStatsInfo.pageSize
-                        }
-                        g.getData(uri, genericHeaders, function (d) {
-                            if (d.meta.code == 200) {
-                                bookStatsInfo.content = d.data
-                                bookStatsInfo.render("deviceStateInfo")
-                            }
-                            //else if(d.meta.code == 401){
-                            //    alert('该用户没有访问权限');
-                            //}
-                        })
+                bookStatsInfo.currentPage = pageNo
+                if (data.bookStatsInfo.tableName == "users") {
+                    var uri = '/api/' + bookStatsInfo.tableName + '/top/page'
+                    if (filter) {
+                        uri += '?filter=' + filter + '&offset=' + bookStatsInfo.pageSize * (pageNo - 1) + '&count=' + bookStatsInfo.pageSize
+                    } else {
+                        uri += '?offset=' + bookStatsInfo.pageSize * (pageNo - 1) + '&count=' + bookStatsInfo.pageSize
                     }
+                    g.getData(uri, genericHeaders, function (d) {
+                        if (d.meta.code == 200) {
+                            bookStatsInfo.content = d.data
+                            bookStatsInfo.render("userStateInfo")
+                        }
+                        //else if(d.meta.code == 401){
+                        //    alert('该用户没有访问权限')
+                        //}
+                    })
+                } else if (data.bookStatsInfo.tableName == "books") {
+                    var uri = '/api/' + bookStatsInfo.tableName + '/counted'
+                    if (filter) {
+                        uri += '?filter=' + filter + '&offset=' + bookStatsInfo.pageSize * (pageNo - 1) + '&count=' + bookStatsInfo.pageSize
+                    } else {
+                        uri += '?offset=' + bookStatsInfo.pageSize * (pageNo - 1) + '&count=' + bookStatsInfo.pageSize
+                    }
+                    g.getData(uri, genericHeaders, function (d) {
+                        if (d.meta.code == 200) {
+                            bookStatsInfo.content = d.data
+                            bookStatsInfo.render("bookStateInfo")
+                        }
+                        //else if(d.meta.code == 401){
+                        //    alert('该用户没有访问权限')
+                        //}
+                    })
+                } else if (data.bookStatsInfo.tableName == "devices") {
+                    var uri = '/api/' + bookStatsInfo.tableName + '/counted'
+                    if (filter) {
+                        uri += '?filter=' + filter + '&offset=' + bookStatsInfo.pageSize * (pageNo - 1) + '&count=' + bookStatsInfo.pageSize
+                    } else {
+                        uri += '?offset=' + bookStatsInfo.pageSize * (pageNo - 1) + '&count=' + bookStatsInfo.pageSize
+                    }
+                    g.getData(uri, genericHeaders, function (d) {
+                        if (d.meta.code == 200) {
+                            bookStatsInfo.content = d.data
+                            bookStatsInfo.render("deviceStateInfo")
+                        }
+                        //else if(d.meta.code == 401){
+                        //    alert('该用户没有访问权限');
+                        //}
+                    })
+                }
             },
             render: function (elementId) {
                 var dataInfo = data.bookStatsInfo.content
@@ -1304,16 +1306,16 @@ window.addEventListener('load', function (e) {
                 }
                 for (var i = 0, c = dataInfo.length; i < c; ++i) {
                     var body = doc.getElementById(elementId).content.cloneNode(true).children[0]
-                    if(data.bookStatsInfo.tableName=="users"){
-                        if(!dataInfo[i].date){
-                            if(dataInfo[i].from){
-                                dataInfo[i].date = dataInfo[i].from+"--"
-                            }else{
-                                dataInfo[i].date = "...."+"--"
+                    if (data.bookStatsInfo.tableName == "users") {
+                        if (!dataInfo[i].date) {
+                            if (dataInfo[i].from) {
+                                dataInfo[i].date = dataInfo[i].from + "--"
+                            } else {
+                                dataInfo[i].date = "...." + "--"
                             }
-                            if(dataInfo[i].to){
+                            if (dataInfo[i].to) {
                                 dataInfo[i].date += dataInfo[i].to
-                            }else{
+                            } else {
                                 dataInfo[i].date += "...."
                             }
                         }
@@ -1324,23 +1326,23 @@ window.addEventListener('load', function (e) {
                 }
 
             },
-            do:function(name,filter,header,info){
-                data.do(name,filter,header,info)
-                if(data.bookStatsInfo.tableName == "books"){
+            do: function (name, filter, header, info) {
+                data.do(name, filter, header, info)
+                if (data.bookStatsInfo.tableName == "books") {
                     data.fillSelect('selectBook', data.bookStatsInfo.classifier, true)
-                }else if(data.bookStatsInfo.tableName == "devices"){
+                } else if (data.bookStatsInfo.tableName == "devices") {
                     var deviceNo = []
-                    data.bookStatsInfo.selectDevice.forEach(function(e){
+                    data.bookStatsInfo.selectDevice.forEach(function (e) {
                         deviceNo.push(e.no);
                     })
                     data.fillSelect('selectDevice', deviceNo, true)
                 }
                 var userInfo = doc.getElementById('userInfo')
                 userInfo.addEventListener('click', function (event) {
-                    data.bookStatsInfo.total=-1
-                    data.bookStatsInfo.tableName='users'
+                    data.bookStatsInfo.total = -1
+                    data.bookStatsInfo.tableName = 'users'
                     data.switchTo(userInfo)
-                    data.bookStatsInfo.do('统计信息','bookStatsInfoFilter','userInfoHeader', data.bookStatsInfo)
+                    data.bookStatsInfo.do('统计信息', 'bookStatsInfoFilter', 'userInfoHeader', data.bookStatsInfo)
                     $('.change').removeClass("active")
                     doc.getElementById('userLi').addClass('active')
                     //$('#userInfo').parentNode.class="active"
@@ -1350,10 +1352,10 @@ window.addEventListener('load', function (e) {
                 }, false)
                 var bookInfo = doc.getElementById('bookInfo')
                 bookInfo.addEventListener('click', function (event) {
-                    data.bookStatsInfo.total=-1
-                    data.bookStatsInfo.tableName='books'
+                    data.bookStatsInfo.total = -1
+                    data.bookStatsInfo.tableName = 'books'
                     data.switchTo(bookInfo)
-                    data.bookStatsInfo.do('统计信息','bookStatsInfoFilter','bookInfoHeader', data.bookStatsInfo)
+                    data.bookStatsInfo.do('统计信息', 'bookStatsInfoFilter', 'bookInfoHeader', data.bookStatsInfo)
                     $('.change').removeClass("active")
                     doc.getElementById('bookLi').addClass('active')
                     //$('#bookInfo').parentNode.class="active"
@@ -1363,10 +1365,10 @@ window.addEventListener('load', function (e) {
                 }, false)
                 var deviceInfo = doc.getElementById('deviceInfo')
                 deviceInfo.addEventListener('click', function (event) {
-                    data.bookStatsInfo.total=-1
-                    data.bookStatsInfo.tableName='devices'
+                    data.bookStatsInfo.total = -1
+                    data.bookStatsInfo.tableName = 'devices'
                     data.switchTo(deviceInfo)
-                    data.bookStatsInfo.do('统计信息','bookStatsInfoFilter','deviceInfoHeader', data.bookStatsInfo)
+                    data.bookStatsInfo.do('统计信息', 'bookStatsInfoFilter', 'deviceInfoHeader', data.bookStatsInfo)
                     $('.change').removeClass("active")
                     doc.getElementById('deviceLi').addClass('active')
                     //$('#deviceInfo').parentNode.class="active"
@@ -1376,7 +1378,7 @@ window.addEventListener('load', function (e) {
                 }, false)
             }
         },
-        administrator:{
+        administrator: {
             pageSize: 15,
             total: -1,
             currentPage: 0,
@@ -1400,13 +1402,13 @@ window.addEventListener('load', function (e) {
                 }
                 var registerStartTimeValue = registerStartTime.value
                 if (registerStartTimeValue != '') {
-                    filter.fromTime =(new Date(registerStartTime.value)).getTime()/1000
+                    filter.fromTime = (new Date(registerStartTime.value)).getTime() / 1000
                     hasCondition = true
                 }
                 var registerStopTimeValue = registerStopTime.value
                 if (registerStopTimeValue != '') {
                     //filter.toTime = registerStopTimeValue
-                    filter.toTime = (new Date(registerStopTime.value)).getTime()/1000
+                    filter.toTime = (new Date(registerStopTime.value)).getTime() / 1000
                     hasCondition = true
                 }
                 //if (hasCondition) {
@@ -1454,30 +1456,30 @@ window.addEventListener('load', function (e) {
             render: function () {
                 var administrator = data.administrator
                 while (administrator.container.rows.length > 0) {
-                    administrator.container.deleteRow(-1);
+                    administrator.container.deleteRow(-1)
                 }
                 var contents = administrator.content
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('administratorInfo').content.cloneNode(true).children[0]
-                    var date = new Date(contents[i].lastOperationTime*1000)
-                    contents[i].lastOperationTime = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+                    var date = new Date(contents[i].lastOperationTime * 1000)
+                    contents[i].lastOperationTime = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
                     g.bind(body, contents[i])
                     //修改用户权限
                     body.querySelector('.changePrivilege').addEventListener('click', function (e) {
-                        data.createAdmin.userId =  e.target.dataset.id
+                        data.createAdmin.userId = e.target.dataset.id
                         data.switchTo(doc.getElementById('createAdmin'))
                         data.createAdmin.do()
                     }, false)
 
                     //注销用户
                     body.querySelector('.changeOut').addEventListener('click', function (e) {
-                        var value =  e.target.dataset.id
+                        var value = e.target.dataset.id
                         data.administrator.changeOut(value)
                     }, false)
                     administrator.container.appendChild(body)
                 }
             },
-            changeOut:function(value){
+            changeOut: function (value) {
                 g.deleteData()
             },
             handler: function (pageNo) {
@@ -1490,27 +1492,27 @@ window.addEventListener('load', function (e) {
                 data.do('权限管理', 'administratorInfoFilter', 'administratorInfoHeader', data.administrator)
             }
         },
-        createAdmin:{
+        createAdmin: {
             isInit: false,
             userCount: 0,
             bookCount: 0, normalBookCount: 0,
             deviceCount: 0, liveDeviceCount: 0,
-            userInfo:{},
-            userId:0,
-            getInfo:function(){
+            userInfo: {},
+            userId: 0,
+            getInfo: function () {
                 //var userName = doc.getElementById('userName')
-                var result=false;
+                var result = false;
                 var userName = doc.getElementById('userName').value.trim()
                 var userPassword = doc.getElementById('userPassword').value.trim()
-                if(userName!=""&&userPassword!=""){
-                    data.createAdmin.userInfo.userName=userName
-                    data.createAdmin.userInfo.userPassword=userPassword
-                    data.createAdmin.userInfo.stage = [15001];
-                    var stageChks=$("[name='select']:checked").each(function(c){
+                if (userName != "" && userPassword != "") {
+                    data.createAdmin.userInfo.userName = userName
+                    data.createAdmin.userInfo.userPassword = userPassword
+                    data.createAdmin.userInfo.stage = [15001]
+                    var stageChks = $("[name='select']:checked").each(function (c) {
                         data.createAdmin.userInfo.stage.push($(this).val())
                     });
-                    return result = data.createAdmin.userInfo;
-                }else{
+                    return result = data.createAdmin.userInfo
+                } else {
                     alert("请输入用户名，密码")
                 }
                 return result
@@ -1520,15 +1522,15 @@ window.addEventListener('load', function (e) {
                 mainContainer.innerHTML = ''
                 var firstPageContent = doc.getElementById('createAdminInfo').content.cloneNode(true).children[0]
                 mainContainer.appendChild(firstPageContent)
-                if(data.createAdmin.userId==0){
+                if (data.createAdmin.userId == 0) {
                     //保存用户，privilege关联
-                    doc.getElementById('createUser').addEventListener('click',function(){
-                        var dataInfo = data.createAdmin.getInfo();
-                        if(dataInfo != false){
-                            g.getData('/api/administrators?filter='+encodeURIComponent(JSON.stringify({name:dataInfo.userName})),genericHeaders,function(user){
-                                if(user.meta.code==404){
+                    doc.getElementById('createUser').addEventListener('click', function () {
+                        var dataInfo = data.createAdmin.getInfo()
+                        if (dataInfo != false) {
+                            g.getData('/api/administrators?filter=' + encodeURIComponent(JSON.stringify({name: dataInfo.userName})), genericHeaders, function (user) {
+                                if (user.meta.code == 404) {
                                     g.postData('/api/administrators/full', genericHeaders, dataInfo, function (d) {
-                                        if(d.meta.code == 200){
+                                        if (d.meta.code == 200) {
                                             alert("创建成功")
                                             data.createAdmin.userId = 0
                                             data.switchTo(doc.getElementById('administrator'))
@@ -1538,26 +1540,26 @@ window.addEventListener('load', function (e) {
                                         //    alert('用户没有修改权限')
                                         //}
                                     })
-                                }else{
+                                } else {
                                     alert("用户名已存在")
                                 }
                             })
 
                         }
-                    },false)
-                }else{
+                    }, false)
+                } else {
                     //输出姓名   编辑用户信息
-                    g.getData('/api/administrators/'+data.createAdmin.userId, genericHeaders, function (d) {
+                    g.getData('/api/administrators/' + data.createAdmin.userId, genericHeaders, function (d) {
                         if (d.meta.code == 200) {
-                            doc.getElementById('userName').value= d.data.name
-                            doc.getElementById('userName').readOnly=true
-                            doc.getElementById('userPassword').value= d.data.password
-                            doc.getElementById('userPassword').readOnly=true
+                            doc.getElementById('userName').value = d.data.name
+                            doc.getElementById('userName').readOnly = true
+                            doc.getElementById('userPassword').value = d.data.password
+                            doc.getElementById('userPassword').readOnly = true
                             //添加勾选信息
-                            g.getData('/api/privileges/byMap/privilegeId/administratorPrivilegeMap/administratorId/'+ d.data.id,genericHeaders,function(e){
+                            g.getData('/api/privileges/byMap/privilegeId/administratorPrivilegeMap/administratorId/' + d.data.id, genericHeaders, function (e) {
                                 if (e.meta.code == 200) {
-                                    e.data.forEach(function(a){
-                                        if(doc.getElementById(a.id)){
+                                    e.data.forEach(function (a) {
+                                        if (doc.getElementById(a.id)) {
                                             doc.getElementById(a.id).checked = true
                                         }
 
@@ -1566,20 +1568,20 @@ window.addEventListener('load', function (e) {
                             })
                         }
                         //else if(d.meta.code == 401){
-                        //    alert('该用户没有访问权限');
+                        //    alert('该用户没有访问权限')
                         //}
                     })
                     //修改用户，privilege关联
-                    doc.getElementById('createUser').addEventListener('click',function(){
-                        var dataInfo=[];
+                    doc.getElementById('createUser').addEventListener('click', function () {
+                        var dataInfo = []
                         var result = data.createAdmin.getInfo()
-                        result.stage.forEach(function(s){
-                            dataInfo.push({"administratorId":data.createAdmin.userId,"privilegeId":s})
+                        result.stage.forEach(function (s) {
+                            dataInfo.push({"administratorId": data.createAdmin.userId, "privilegeId": s})
                         })
-                        g.deleteData('/api/administratorPrivilegeMaps?filter='+encodeURIComponent(JSON.stringify({administratorId: data.createAdmin.userId})), genericHeaders, function (d) {
-                            if(d.meta.code == 200|| d.meta.code ==404){
+                        g.deleteData('/api/administratorPrivilegeMaps?filter=' + encodeURIComponent(JSON.stringify({administratorId: data.createAdmin.userId})), genericHeaders, function (d) {
+                            if (d.meta.code == 200 || d.meta.code == 404) {
                                 g.postData('/api/administratorPrivilegeMaps', genericHeaders, dataInfo, function (d) {
-                                    if(d.meta.code == 201){
+                                    if (d.meta.code == 201) {
                                         alert("创建成功")
                                         data.createAdmin.userId = 0
                                         data.switchTo(doc.getElementById('administrator'))
@@ -1591,7 +1593,7 @@ window.addEventListener('load', function (e) {
                             //    alert('用户没有修改权限')
                             //}
                         })
-                    },false)
+                    }, false)
                 }
 
 
@@ -1600,7 +1602,7 @@ window.addEventListener('load', function (e) {
     }
     var firstPage = doc.getElementById('firstPage')
     firstPage.addEventListener('click', function (event) {
-        data.baseInfo.isInit = false;
+        data.baseInfo.isInit = false
         data.switchTo(firstPage)
         data.baseInfo.do()
     }, false)
@@ -1613,15 +1615,15 @@ window.addEventListener('load', function (e) {
     }, false)
     var deviceList = doc.getElementById('deviceList')
     deviceList.addEventListener('click', function (event) {
-        data.devices.currentPage = 0;
-        data.devices.content=[]
+        data.devices.currentPage = 0
+        data.devices.content = []
         data.devices.total = -1
         data.switchTo(deviceList)
         data.devices.do()
     }, false)
     var userManagement = doc.getElementById('userManagement')
     userManagement.addEventListener('click', function (event) {
-        data.users.currentPage = 0;
+        data.users.currentPage = 0
         data.users.total = -1
         data.switchTo(userManagement)
         data.users.do()
@@ -1630,7 +1632,7 @@ window.addEventListener('load', function (e) {
     administratorManagement.addEventListener('click', function (event) {
         data.switchTo(administratorManagement)
         data.admin.do()
-        doc.getElementById('changeName').innerHTML=userName
+        doc.getElementById('changeName').innerHTML = userName
     }, false)
     //用户权限
     var administrator = doc.getElementById('administrator')
@@ -1653,9 +1655,9 @@ window.addEventListener('load', function (e) {
     var statsInfo = doc.getElementById('statsInfo')
     statsInfo.addEventListener('click', function (event) {
         data.switchTo(statsInfo)
-        data.bookStatsInfo.do('统计信息','bookStatsInfoFilter','userInfoHeader', data.bookStatsInfo)
+        data.bookStatsInfo.do('统计信息', 'bookStatsInfoFilter', 'userInfoHeader', data.bookStatsInfo)
         doc.getElementById('userLi').addClass('active')
-        //doc.getElementById('userLi').style.color='white';
+        //doc.getElementById('userLi').style.color='white'
     }, false)
     var createDevice = doc.querySelector('#createDevice .btn-primary')
     createDevice.addEventListener('click', function (e) {
@@ -1675,14 +1677,14 @@ window.addEventListener('load', function (e) {
         device.controlPassword = controlPassword.value.trim()
         device.ipAddress = ipAddress.value.trim()
         //alert(JSON.stringify(device))
-        var sameOrNot = encodeURIComponent(JSON.stringify({'id':device.id}));
+        var sameOrNot = encodeURIComponent(JSON.stringify({'id': device.id}));
         //验证时间格式   与  id是否唯一
-        if(device.setupTime!=""){
-            if(device.id.match(/^[0-9]*[1-9][0-9]*$/)){
-                g.getData('/api/devices?filter=' +sameOrNot , genericHeaders, function (d) {
-                    if (d.meta.code == 200&& d.data.length>0) {
-                        alert(device.id+"已存在")
-                    }else{
+        if (device.setupTime != "") {
+            if (device.id.match(/^[0-9]*[1-9][0-9]*$/)) {
+                g.getData('/api/devices?filter=' + sameOrNot, genericHeaders, function (d) {
+                    if (d.meta.code == 200 && d.data.length > 0) {
+                        alert(device.id + "已存在")
+                    } else {
                         g.postData('/api/devices/' + device.id, genericHeaders, device, function (d) {
                             var title = doc.querySelector('#createDevice h4')
                             title.textContent = '借阅机创建成功'
@@ -1691,9 +1693,9 @@ window.addEventListener('load', function (e) {
                                 $('#createDevice').modal('hide')
                                 //add device to data.devices.content
                             }, 2000)
-                            data.devices.currentPage = 0;
+                            data.devices.currentPage = 0
                             data.devices.total = -1
-                            data.devices.content=[]
+                            data.devices.content = []
                             data.switchTo(deviceList)
                             data.devices.do()
                             //alert('借阅机创建成功')
@@ -1701,14 +1703,12 @@ window.addEventListener('load', function (e) {
                     }
                 })
 
-            }else{
+            } else {
                 alert("请输入正确ID(数字)")
             }
-        }else{
+        } else {
             alert("时间不能为空")
         }
-
-
     }, false)
     var e = doc.createEvent('Event')
     e.initEvent('click', false, false)

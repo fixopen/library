@@ -21,8 +21,25 @@ class administrators
 
     private static $classSpecSubresource = array(
         'full' => 'fullProc',
+        'export' => 'exportProc',
         'out' =>'query_to_csv'
     );
+
+    function exportProc(array &$request) {
+        //step1: get data from database
+        $data = NULL; //data is table-like
+        //step2: write to client
+        $request['response']['headers']['Content-Type'] = 'text/csv';
+        $request['response']['headers']['Content-Type'] = 'text/csv';
+        $filename = NULL; //random string
+        $file = fopen($filename, 'w');
+        //fputcsv($file, array_keys($row)); //write header for csv or not??
+        foreach ($data as $row) {
+            fputcsv($file, $row);
+        }
+        fclose($file);
+        $request['response']['body'] = file_get_contents($filename);
+    }
 
     function query_to_csv($db_conn, $query, $filename, $attachment = false, $headers = true) {
 
