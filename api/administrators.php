@@ -28,9 +28,7 @@ class administrators
     function exportProc(array &$request) {
         //step1: get data from database
         $data = NULL; //data is table-like
-        //step2: write to client
-        $request['response']['headers']['Content-Type'] = 'text/csv';
-        //$request['response']['headers']['Content-Disposition'] = 'attachment;filename=' . $filename;
+        //step2: write to file
         $filename = NULL; //random string
         $file = fopen($filename, 'w');
         //fputcsv($file, array_keys($row)); //write header for csv or not??
@@ -38,6 +36,9 @@ class administrators
             fputcsv($file, $row);
         }
         fclose($file);
+        //step3: fill response for client
+        $request['response']['headers']['Content-Type'] = 'text/csv';
+        //$request['response']['headers']['Content-Disposition'] = 'attachment;filename=' . $filename;
         $request['response']['body'] = file_get_contents($filename);
     }
 
