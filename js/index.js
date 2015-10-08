@@ -1376,6 +1376,23 @@ window.addEventListener('load', function (e) {
                     //deviceInfo.parentNode.class="active"
 
                 }, false)
+                var bookInfoOut = doc.getElementById('bookInfoOut')
+                bookInfoOut.addEventListener('click',function(event){
+                    g.getData("/api/books/export/count",genericHeaders,function(d){
+                        if (d.meta.code == 200) {
+
+                        }
+                    })
+                },false)
+                var deviceInfoOut = doc.getElementById('deviceInfoOut')
+                deviceInfoOut.addEventListener('click',function(event){
+                    g.getData("/api/devices/export/count",genericHeaders,function(d){
+                        if (d.meta.code == 200) {
+
+                        }
+                    })
+                },false)
+
             }
         },
         administrator: {

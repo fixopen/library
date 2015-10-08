@@ -27,9 +27,12 @@ class administrators
 
     function exportProc(array &$request) {
         //step1: get data from database
+
         $data = NULL; //data is table-like
+
         //step2: write to file
         $filename = NULL; //random string
+
         $file = fopen($filename, 'w');
         //fputcsv($file, array_keys($row)); //write header for csv or not??
         foreach ($data as $row) {
@@ -71,16 +74,6 @@ class administrators
 
         fclose($fp);
     }
-
-    // Using the function
-//$sql = "SELECT * FROM table";
-    // $db_conn should be a valid db handle
-
-    // output as an attachment
-//query_to_csv($db_conn, $sql, "test.csv", true);
-
-    // output to file system
-//query_to_csv($db_conn, $sql, "test.csv", false);
 
     public static function fullProc(array &$request)
     {

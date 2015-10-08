@@ -30,7 +30,76 @@ class users
 // [{time, total, distance}, ...]
 
 //SELECT count(*) FROM users WHERR register < ..
-    private static $classSpecSubresource = array('top' => 'topProc');
+    private static $classSpecSubresource = array(
+        'top' => 'topProc',
+        'export' => 'exportProc'
+        );
+    function exportProc(array &$request) {
+        //step1: get data from database
+        $filter = $request['params']['filter'];
+        if ($filter != '') {
+            $filterJson = json_decode($filter);
+            $where = array();
+            foreach ($filterJson as $key => $value) {
+                $condition = self::specFilter($key, $value);
+                if ($condition == '') {
+                    if (is_null($value)) {
+                        $where[] = self::Mark($key) . ' IS NULL';
+                    } else {
+                        $where[] = self::Mark($key) . ' = ' . self::DatabaseQuote($value, self::GetTypeByName($key));
+                    }
+                } else {
+                    $where[] = $condition;
+                }
+            }
+            //print_r($where);
+            $whereClause = ' AND ' . implode(' AND ', $where);
+        }
+        $dir = array_shift($request['paths']);
+        switch ($dir) {
+            case 'count':
+                if($whereClause){
+                    $query = 'SELECT "registerTime","no","lastOperationTime" From "user" WHERE 1=1'.$whereClause.' ORDER BY "registerTime" ASC';
+                }else{
+                    $query = 'SELECT "registerTime","no","lastOperationTime" From "user" ORDER BY "registerTime" ASC';
+                }
+                $r = Database::GetInstance()->query($query, PDO::FETCH_ASSOC);
+                if ($r) {
+                    foreach ($r as $row) {
+                        $item = new stdClass();
+                        $item->registerTime =date("Y-m-d",$row['registerTime']);
+                        $item->no =$row['no'];
+                        $item->lastOperationTime =date("Y-m-d",$row['lastOperationTime']);
+                        $result[] = $item;
+                    }
+                }
+                break;
+            default:
+                $request['code'] = 400; //bad request
+                break;
+        }
+
+        $data = $result; //data is table-like
+
+        //step2: write to file
+        $filename ="export-users.csv"; //random string
+        $file = fopen($filename, 'w');
+//        print_r($file.'>>>>>>>>>>>>>>>');
+        //fputcsv($file, array_keys($row)); //write header for csv or not??
+//        print_r($data);
+        foreach ($data as $row) {
+//            print_r($row);
+            fputcsv($file, $row);
+        }
+        fclose($file);
+        //step3: fill response for client
+//        $request['response']['headers']['Content-Type'] = 'text/csv';
+//        $request['response']['headers']['Content-Disposition'] = 'attachment;filename=' . $filename;
+//        $item = new stdClass();
+//        $item->fileName=$filename;
+//        $name[]=$item;
+        $request['response']['body'] = $filename;
+    }
 
     public static function topProc(array &$request)
     {

@@ -9,7 +9,74 @@ class books
         'updateSince' => 'updateSinceProc',
         'groups' => 'groupsProc',
         'counted' => 'countedProc',
+        'export' => 'exportProc'
     );
+    function exportProc(array &$request) {
+        //step1: get data from database
+        $filter = $request['params']['filter'];
+        if ($filter != '') {
+            $filterJson = json_decode($filter);
+            $where = array();
+            foreach ($filterJson as $key => $value) {
+                $condition = self::specFilter($key, $value);
+                if ($condition == '') {
+                    if (is_null($value)) {
+                        $where[] = self::Mark($key) . ' IS NULL';
+                    } else {
+                        $where[] = self::Mark($key) . ' = ' . self::DatabaseQuote($value, self::GetTypeByName($key));
+                    }
+                } else {
+                    $where[] = $condition;
+                }
+            }
+            //print_r($where);
+            $whereClause = ' AND ' . implode(' AND ', $where);
+        }
+        $dir = array_shift($request['paths']);
+        switch ($dir) {
+            case 'count':
+                if($whereClause){
+                    $sql = 'select "name","author","authorAlias","publisher","isbn","firstLevelClassify","secondLevelClassify","keywords","abstract" from book where 1=1 '.$whereClause;
+                }else{
+                    $sql = 'select "name","author","authorAlias","publisher","isbn","firstLevelClassify","secondLevelClassify","keywords","abstract" from book ';
+                }
+                $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+                if ($r) {
+                    foreach ($r as $row) {
+                        $item = new stdClass();
+                        $item->name =$row['name'];
+                        $item->author =$row['author'];
+                        $item->authorAlias =$row['authorAlias'];
+                        $item->publisher =$row['publisher'];
+                        $item->isbn =$row['isbn'];
+                        $item->firstLevelClassify =$row['firstLevelClassify'];
+                        $item->secondLevelClassify =$row['secondLevelClassify'];
+                        $item->keywords =$row['keywords'];
+                        $item->abstract =$row['abstract'];
+                        $result[] = $item;
+                    }
+                }
+                break;
+            default:
+                $request['code'] = 400; //bad request
+                break;
+        }
+
+        $data = $result; //data is table-like
+
+        //step2: write to file
+        $filename ="export-books.csv"; //random string
+        $file = fopen($filename, 'w');
+        //fputcsv($file, array_keys($row)); //write header for csv or not??
+//        print_r($file);
+        foreach ($data as $row) {
+//            print_r($row);
+            fputcsv($file, $row);
+        }
+        fclose($file);
+        $request['response']['body'] = $filename;
+    }
+
     public static function countedProc(array &$request){
         $count = count($request['paths']);
         switch ($request['method']) {
