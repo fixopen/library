@@ -90,6 +90,7 @@ function writeResponse($response)
         header('Content-Length: ' . strlen($response['body']));
     }
     if (array_key_exists('sessionId', $response['cookies'])) {
+//        print_r( $response['cookies']);
         //session_start();
         //session_id($sessionId);
         session_id($response['cookies']['sessionId']);
@@ -114,6 +115,7 @@ function writeResponse($response)
 
     //body: {"state": code, "type": "user|contact|group|message|log|markup|device|...", data: {json-object}|[json-array]}
     print $response['body'];
+//    print_r($response);
 }
 
 function testBed()
