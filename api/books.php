@@ -41,6 +41,17 @@ class books
                     $sql = 'select "name","author","authorAlias","publisher","isbn","firstLevelClassify","secondLevelClassify","keywords","abstract" from book ';
                 }
                 $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+                $one = new stdClass();
+                $one->name ='名称';
+                $one->author ='作者';
+                $one->authorAlias ='作者';
+                $one->publisher ='出版社';
+                $one->isbn ='书籍编号';
+                $one->firstLevelClassify ='一级分类';
+                $one->secondLevelClassify ='二级分类';
+                $one->keywords ='关键字';
+                $one->abstract ='描述';
+                $result[] = $one;
                 if ($r) {
                     foreach ($r as $row) {
                         $item = new stdClass();
@@ -65,15 +76,17 @@ class books
         $data = $result; //data is table-like
 
         //step2: write to file
-        $filename ="export-books.csv"; //random string
+        $filename ="../var/export-books.csv"; //random string
         $file = fopen($filename, 'w');
-        //fputcsv($file, array_keys($row)); //write header for csv or not??
+        //fputcsv($file, array_keys($row)); //write header for csv or not ??
         foreach ($data as $row) {
             fputcsv($file, (array)$row);
         }
         fclose($file);
         $request['response']['headers']['Content-Type'] = 'text/csv';
         $request['response']['body'] =file_get_contents($filename);
+//        print_r($request);
+        return $request;
     }
 
     public static function countedProc(array &$request){

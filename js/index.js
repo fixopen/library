@@ -25,8 +25,8 @@ window.addEventListener('load', function (e) {
     doc.getElementById('timeNow').innerHTML = Date()
     var logout = doc.getElementById('logout')
     logout.addEventListener('click', function (e) {
-        //g.deleteData('/api/administrators/'+userName+'/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
-        g.deleteData('/api/administrators/admin/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
+        g.deleteData('/api/administrators/'+userName+'/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
+        //g.deleteData('/api/administrators/admin/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
             if (r.meta.code < 400) {
                 alert('logout ok!')
                 //clear sessionId
@@ -911,8 +911,8 @@ window.addEventListener('load', function (e) {
                 var setPassword = changePasswordPanel.querySelector('#setPassword')
                 setPassword.addEventListener('click', function (e) {
                     var oldPassword = document.querySelector('#oldPassword')
-                    //var u = {name: userName, password: oldPassword.value.trim()}
-                    var u = {name: "admin", password: oldPassword.value.trim()}
+                    var u = {name: userName, password: oldPassword.value.trim()}
+                    //var u = {name: "admin", password: oldPassword.value.trim()}
                     g.getData('/api/administrators?filter=' + encodeURIComponent(JSON.stringify(u)), genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             if (d.data.length == 1) {
@@ -1380,7 +1380,7 @@ window.addEventListener('load', function (e) {
                 bookInfoOut.addEventListener('click',function(event){
                     g.getData("/api/books/export/count",genericHeaders,function(d){
                         if (d.meta.code == 200) {
-
+                            doc.getElementById('bookInfoOutA').click();
                         }
                     })
                 },false)
@@ -1388,11 +1388,10 @@ window.addEventListener('load', function (e) {
                 deviceInfoOut.addEventListener('click',function(event){
                     g.getData("/api/devices/export/count",genericHeaders,function(d){
                         if (d.meta.code == 200) {
-
+                            doc.getElementById('deviceInfoOutA').click();
                         }
                     })
                 },false)
-
             }
         },
         administrator: {
@@ -1479,7 +1478,7 @@ window.addEventListener('load', function (e) {
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('administratorInfo').content.cloneNode(true).children[0]
                     var date = new Date(contents[i].lastOperationTime * 1000)
-                    contents[i].lastOperationTime = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+                    contents[i].time = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
                     g.bind(body, contents[i])
                     //修改用户权限
                     body.querySelector('.changePrivilege').addEventListener('click', function (e) {
@@ -1524,7 +1523,7 @@ window.addEventListener('load', function (e) {
                 if (userName != "" && userPassword != "") {
                     data.createAdmin.userInfo.userName = userName
                     data.createAdmin.userInfo.userPassword = userPassword
-                    data.createAdmin.userInfo.stage = [15001]
+                    data.createAdmin.userInfo.stage = [15000,15001]//修改密码
                     var stageChks = $("[name='select']:checked").each(function (c) {
                         data.createAdmin.userInfo.stage.push($(this).val())
                     });
@@ -1652,18 +1651,25 @@ window.addEventListener('load', function (e) {
         doc.getElementById('changeName').innerHTML = userName
     }, false)
     //用户权限
-    var administrator = doc.getElementById('administrator')
-    administrator.addEventListener('click', function (event) {
-        data.switchTo(administrator)
-        data.administrator.do()
-        //创建用户
-        var createUser = doc.getElementById('createAdmin')
-        createUser.addEventListener('click', function (event) {
-            data.createAdmin.userId = 0
-            data.switchTo(createUser)
-            data.createAdmin.do()
+
+        var administrator = doc.getElementById('administrator')
+        administrator.addEventListener('click', function (event) {
+            if(userName=="admin"){
+                data.switchTo(administrator)
+                data.administrator.do()
+                //创建用户
+                var createUser = doc.getElementById('createAdmin')
+                createUser.addEventListener('click', function (event) {
+                    data.createAdmin.userId = 0
+                    data.switchTo(createUser)
+                    data.createAdmin.do()
+                }, false)
+            }else{
+                alert("该权限只可以 admin 用户访问")
+            }
         }, false)
-    }, false)
+
+
     var stats = doc.getElementById('stats')
     stats.addEventListener('click', function (event) {
         data.switchTo(stats)

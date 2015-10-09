@@ -634,7 +634,7 @@
 <template id="administratorInfo">
     <tr>
         <td>${name}</td>
-        <td>${lastOperationTime}</td>
+        <td>${time}</td>
         <td>
             <button  class="changeOut" data-id="${id}">注销</button>
             <button  class="changePrivilege" data-id="${id}">修改权限</button>
@@ -682,7 +682,7 @@
                         </td>
                         <th class="first"></th>
                         <td class="first-value">
-                            <button id="bookInfoOut" style="background-color: #bbbbbb;"> 导出统计信息</button>
+                            <button id="bookInfoOut" style="background-color: #bbbbbb;">   <a id="bookInfoOutA"  href="/library/var/export-books.csv" ></a>导出统计信息</button>
                         </td>
                     </tr>
                     </tbody>
@@ -703,7 +703,8 @@
                         </td>
                         <th class="first"></th>
                         <td class="first-value">
-                            <button id="deviceInfoOut" style="background-color: #bbbbbb;"> 导出统计信息</button>
+                            <button id="deviceInfoOut" style="background-color: #bbbbbb;">  <a id="deviceInfoOutA" href="/library/var/export-devices.csv" ></a>导出统计信息</button>
+
                         </td>
                     </tr>
                     </tbody>
