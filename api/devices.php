@@ -119,7 +119,7 @@ class devices
         $file = fopen($filename, 'w');
         //fputcsv($file, array_keys($row)); //write header for csv or not??
         foreach ($data as $row) {
-            print_r($row);
+//            print_r($row);
             fputcsv($file, (array)$row);
         }
         fclose($file);

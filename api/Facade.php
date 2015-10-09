@@ -92,11 +92,11 @@ trait Facade
                 } else {
                     switch ($request['method']) {
                         case 'POST':
-                            print '***************************<br />';
-                            print_r($request);
-                            print '***************************<br />';
+                            //print '***************************<br />';
+                            //print_r($request);
+                            //print '***************************<br />';
                             self::SingleInsert($request, $request['temp']['child']);
-                            print '***************************<br />';
+                            //print '***************************<br />';
                             break;
                         case 'PUT':
                             $request['response']['code'] = 400; //bad request, resource exist
