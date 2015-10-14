@@ -1080,11 +1080,16 @@ window.addEventListener('load', function (e) {
                     data.bookStats.container.deleteRow(-1);
                 }
                 for (var i = 0, c = dataInfo.length; i < c; ++i) {
-                    if (dataInfo[i].name.length > 20) {
-                        dataInfo[i].shortName = dataInfo[i].name.substr(0, 15) + "..."
-                    } else {
-                        dataInfo[i].shortName = dataInfo[i].name
+                    if(dataInfo[i].name){
+                        if (dataInfo[i].name.length > 20) {
+                            dataInfo[i].shortName = dataInfo[i].name.substr(0, 15) + "..."
+                        } else {
+                            dataInfo[i].shortName = dataInfo[i].name
+                        }
+                    } else{
+                        dataInfo[i].shortName = ""
                     }
+
                     var body = doc.getElementById('bookStatsItem').content.cloneNode(true).children[0]
                     g.bind(body, dataInfo[i])
                     data.bookStats.container.appendChild(body)
@@ -1194,6 +1199,10 @@ window.addEventListener('load', function (e) {
                         hasCondition = true
                     }
                     if (userToValue != '') {
+                        //userToValue = new Date(userToValue);
+                        //userToValue = +userToValue + 1000*60*60*24-1000;
+                        //userToValue = new Date(userToValue);
+                        //filter.userTo = userToValue.getFullYear()+"-"+(userToValue.getMonth()+1)+"-"+userToValue.getDate();
                         filter.userTo = userToValue
                         hasCondition = true
                     }

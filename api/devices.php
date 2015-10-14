@@ -72,9 +72,9 @@ class devices
         $one = new stdClass();
         $one->name ='设备名称';
         $one->totalUser ='用户总数';
-        $one->Download ='下载总数';
         $one->View ='借阅总数';
         $one->Follow ='关注总数';
+        $one->Download ='下载总数';
         $result[] = $one;
         foreach($bookKind as $one){
             $item = new stdClass();
