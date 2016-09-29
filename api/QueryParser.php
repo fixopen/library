@@ -2,7 +2,6 @@
 
 class QueryParser
 {
-
     private static $pathPrefix = '/api/';
 
     private static function parseParams($queryString)
@@ -71,7 +70,4 @@ class QueryParser
             'response' => array('code' => 200, 'headers' => array(), 'cookies' => array(), 'body' => '')
         );
     }
-
 }
-
-?>

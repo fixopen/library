@@ -74,7 +74,7 @@ class books
             fputcsv($file, $row);
         }
         fclose($file);
-        $request['response']['body'] = $filename;
+        $request['response']['body'] = get_file_contents($filename);
     }
 
     public static function countedProc(array &$request){
@@ -135,7 +135,7 @@ class books
                         $item->name = $one->name;
 //                        print_r($one);
                         if($whereClause){
-                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" .$whereClause.' and b.id = bu."bookId" and bu.action='."'".Download."'";
+                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" . $whereClause.' and b.id = bu."bookId" and bu.action='."'".Download."'";
                         }else{
                             $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" . ' and b.id = bu."bookId" and bu.action='."'".Download."'";
                         }

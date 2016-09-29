@@ -1380,7 +1380,7 @@ window.addEventListener('load', function (e) {
                 bookInfoOut.addEventListener('click',function(event){
                     g.getData("/api/books/export/count",genericHeaders,function(d){
                         if (d.meta.code == 200) {
-
+                            var fileContent = d.data
                         }
                     })
                 },false)
