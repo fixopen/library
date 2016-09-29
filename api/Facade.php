@@ -92,11 +92,11 @@ trait Facade
                 } else {
                     switch ($request['method']) {
                         case 'POST':
-                            print '***************************<br />';
-                            print_r($request);
-                            print '***************************<br />';
+//                            print '***************************<br />';
+//                            print_r($request);
+//                            print '***************************<br />';
                             self::SingleInsert($request, $request['temp']['child']);
-                            print '***************************<br />';
+//                            print '***************************<br />';
                             break;
                         case 'PUT':
                             $request['response']['code'] = 400; //bad request, resource exist
@@ -350,13 +350,15 @@ trait Facade
         $subject = self::GetSubjectByQuery($request);
         //$subject = NULL;
         $attributeBag = [];
-
         if ($subject) {
             $regionExpression = self::CheckPermission($subject, $request['method'], self::$tableName, $attributeBag);
-            if (!$regionExpression) {
-                $request['response']['code'] = 401; //Unauthorized
-                return;
+            if(get_class($subject) != 'devices'){
+                if (!$regionExpression) {
+                    $request['response']['code'] = 401; //Unauthorized
+                    return;
+                }
             }
+
             $request['temp']['regionExpression'] = $regionExpression;
         } else {
             //only for login

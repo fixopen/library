@@ -11,7 +11,9 @@ class books
         'counted' => 'countedProc',
         'export' => 'exportProc'
     );
-    function exportProc(array &$request) {
+
+    function exportProc(array &$request)
+    {
         //step1: get data from database
         $filter = $request['params']['filter'];
         if ($filter != '') {
@@ -35,24 +37,35 @@ class books
         $dir = array_shift($request['paths']);
         switch ($dir) {
             case 'count':
-                if($whereClause){
-                    $sql = 'select "name","author","authorAlias","publisher","isbn","firstLevelClassify","secondLevelClassify","keywords","abstract" from book where 1=1 '.$whereClause;
-                }else{
-                    $sql = 'select "name","author","authorAlias","publisher","isbn","firstLevelClassify","secondLevelClassify","keywords","abstract" from book ';
+                if ($whereClause) {
+                    $sql = 'SELECT "name","author","authorAlias","publisher","isbn","firstLevelClassify","secondLevelClassify","keywords","abstract" FROM book WHERE 1=1 ' . $whereClause;
+                } else {
+                    $sql = 'SELECT "name","author","authorAlias","publisher","isbn","firstLevelClassify","secondLevelClassify","keywords","abstract" FROM book ';
                 }
                 $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+                $one = new stdClass();
+                $one->name = '名称';
+                $one->author = '作者';
+                $one->authorAlias = '作者';
+                $one->publisher = '出版社';
+                $one->isbn = '书籍编号';
+                $one->firstLevelClassify = '一级分类';
+                $one->secondLevelClassify = '二级分类';
+                $one->keywords = '关键字';
+                $one->abstract = '描述';
+                $result[] = $one;
                 if ($r) {
                     foreach ($r as $row) {
                         $item = new stdClass();
-                        $item->name =$row['name'];
-                        $item->author =$row['author'];
-                        $item->authorAlias =$row['authorAlias'];
-                        $item->publisher =$row['publisher'];
-                        $item->isbn =$row['isbn'];
-                        $item->firstLevelClassify =$row['firstLevelClassify'];
-                        $item->secondLevelClassify =$row['secondLevelClassify'];
-                        $item->keywords =$row['keywords'];
-                        $item->abstract =$row['abstract'];
+                        $item->name = $row['name'];
+                        $item->author = $row['author'];
+                        $item->authorAlias = $row['authorAlias'];
+                        $item->publisher = $row['publisher'];
+                        $item->isbn = $row['isbn'];
+                        $item->firstLevelClassify = $row['firstLevelClassify'];
+                        $item->secondLevelClassify = $row['secondLevelClassify'];
+                        $item->keywords = $row['keywords'];
+                        $item->abstract = $row['abstract'];
                         $result[] = $item;
                     }
                 }
@@ -65,19 +78,19 @@ class books
         $data = $result; //data is table-like
 
         //step2: write to file
-        $filename ="export-books.csv"; //random string
+        $filename = "../var/export-books.csv"; //random string
         $file = fopen($filename, 'w');
-        //fputcsv($file, array_keys($row)); //write header for csv or not??
-//        print_r($file);
         foreach ($data as $row) {
 //            print_r($row);
             fputcsv($file, $row);
         }
         fclose($file);
-        $request['response']['body'] = get_file_contents($filename);
+        $request['response']['headers']['Content-Type'] = 'text/csv';
+        $request['response']['body'] = file_get_contents($filename);
     }
 
-    public static function countedProc(array &$request){
+    public static function countedProc(array &$request)
+    {
         $count = count($request['paths']);
         switch ($request['method']) {
             case 'POST':
@@ -116,55 +129,55 @@ class books
                         $whereClause = ' AND ' . implode(' AND ', $where);
                     }
 //                    $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='小说' and b.id = bu."bookId" and bu.action='Download';'
-                    $bookKind= [];
-                    if($whereClause){
-                        $sql = 'select "firstLevelClassify" from book where 1=1 '.$whereClause.' group by "firstLevelClassify"';
-                    }else{
-                        $sql = 'select "firstLevelClassify" from book group by "firstLevelClassify"';
+                    $bookKind = [];
+                    if ($whereClause) {
+                        $sql = 'SELECT "firstLevelClassify" FROM book WHERE 1=1 ' . $whereClause . ' GROUP BY "firstLevelClassify"';
+                    } else {
+                        $sql = 'SELECT "firstLevelClassify" FROM book GROUP BY "firstLevelClassify"';
                     }
                     $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
                     if ($r) {
                         foreach ($r as $row) {
                             $item = new stdClass();
-                            $item->name =$row['firstLevelClassify'];
+                            $item->name = $row['firstLevelClassify'];
                             $bookKind[] = $item;
                         }
                     }
-                    foreach($bookKind as $one){
+                    foreach ($bookKind as $one) {
                         $item = new stdClass();
                         $item->name = $one->name;
 //                        print_r($one);
-                        if($whereClause){
-                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" . $whereClause.' and b.id = bu."bookId" and bu.action='."'".Download."'";
-                        }else{
-                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" . ' and b.id = bu."bookId" and bu.action='."'".Download."'";
+                        if ($whereClause) {
+                            $sql = 'SELECT count(bu.*) FROM book b, business bu WHERE "firstLevelClassify"=' . "'" . $one->name . "'" . $whereClause . ' AND b.id = bu."bookId" AND bu.action=' . "'" . Download . "'";
+                        } else {
+                            $sql = 'SELECT count(bu.*) FROM book b, business bu WHERE "firstLevelClassify"=' . "'" . $one->name . "'" . ' AND b.id = bu."bookId" AND bu.action=' . "'" . Download . "'";
                         }
                         $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
                         if ($r) {
                             foreach ($r as $row) {
-                                $item->Download =$row['count'];
+                                $item->Download = $row['count'];
                             }
                         }
-                        if($whereClause){
-                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" .$whereClause.' and b.id = bu."bookId" and bu.action='."'".View."'";
-                        }else{
-                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" . ' and b.id = bu."bookId" and bu.action='."'".View."'";
+                        if ($whereClause) {
+                            $sql = 'SELECT count(bu.*) FROM book b, business bu WHERE "firstLevelClassify"=' . "'" . $one->name . "'" . $whereClause . ' AND b.id = bu."bookId" AND bu.action=' . "'" . View . "'";
+                        } else {
+                            $sql = 'SELECT count(bu.*) FROM book b, business bu WHERE "firstLevelClassify"=' . "'" . $one->name . "'" . ' AND b.id = bu."bookId" AND bu.action=' . "'" . View . "'";
                         }
                         $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
                         if ($r) {
                             foreach ($r as $row) {
-                                $item->View =$row['count'];
+                                $item->View = $row['count'];
                             }
                         }
-                        if($whereClause){
-                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" .$whereClause.' and b.id = bu."bookId" and bu.action='."'".Follow."'";
-                        }else{
-                            $sql ='select count(bu.*) from book b, business bu where "firstLevelClassify"='."'" . $one->name. "'" . ' and b.id = bu."bookId" and bu.action='."'".Follow."'";
+                        if ($whereClause) {
+                            $sql = 'SELECT count(bu.*) FROM book b, business bu WHERE "firstLevelClassify"=' . "'" . $one->name . "'" . $whereClause . ' AND b.id = bu."bookId" AND bu.action=' . "'" . Follow . "'";
+                        } else {
+                            $sql = 'SELECT count(bu.*) FROM book b, business bu WHERE "firstLevelClassify"=' . "'" . $one->name . "'" . ' AND b.id = bu."bookId" AND bu.action=' . "'" . Follow . "'";
                         }
                         $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
                         if ($r) {
                             foreach ($r as $row) {
-                                $item->Follow =$row['count'];
+                                $item->Follow = $row['count'];
                             }
                         }
                         $result[] = $item;
@@ -206,7 +219,7 @@ class books
             case 'GET':
                 if ($count == 1) {
                     $time = urldecode(array_shift($request['paths']));
-                    $where = ' WHERE ' . self::mark('lastUpdateTime') . ' > CAST ( \'' . $time . '\' AS TIMESTAMP WITHOUT TIME ZONE) ORDER BY '  . self::mark('lastUpdateTime') . ' ASC ';
+                    $where = ' WHERE ' . self::mark('lastUpdateTime') . ' > CAST ( \'' . $time . '\' AS TIMESTAMP WITHOUT TIME ZONE) ORDER BY ' . self::mark('lastUpdateTime') . ' ASC ';
                     $books = self::CustomSelect($where);
                     $syncInfo = array();
                     foreach ($books as $book) {
@@ -327,7 +340,8 @@ class books
     private $mimeType = '';
     private $isBan = FALSE;
 
-    private static function specFilter($name, $value) {
+    private static function specFilter($name, $value)
+    {
         $result = self::commonSpecFilter($name, $value);
         if ($name === 'isBan') {
             if ($value === 'isBan' || $value === TRUE) {
@@ -339,23 +353,23 @@ class books
                 //still empty
             }
         }
-        if($name === 'name'){
+        if ($name === 'name') {
             $result = '"name" like ' . "'%{$value}%'";
         }
-        if($name === 'author'){
+        if ($name === 'author') {
             $result = '"author" like ' . "'%{$value}%'";
         }
-        if($name === 'publisher'){
+        if ($name === 'publisher') {
             $result = '"publisher" like ' . "'%{$value}%'";
         }
-        if($name === 'bookSelect'){
+        if ($name === 'bookSelect') {
             $result = '"firstLevelClassify" = ' . "'{$value}'";
         }
         if ($name === 'bookFrom') {
-            $result = '"lastUpdateTime" > ' ."'{$value}'"  ;
+            $result = '"lastUpdateTime" > ' . "'{$value}'";
         }
         if ($name === 'bookTo') {
-            $result = '"lastUpdateTime" < ' ."'{$value}'";
+            $result = '"lastUpdateTime" < ' . "'{$value}'";
         }
         return $result;
     }

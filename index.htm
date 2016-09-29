@@ -594,7 +594,7 @@
             <th>登录名</th>
             <td id="changeName"></td>
         </tr>
-        <tr>
+        <tr id="oldPasswordTr">
             <th>旧密码</th>
             <td><input id="oldPassword" style="border-radius:5px;margin: 5px;"/></td>
         </tr>
@@ -618,7 +618,7 @@
     <table style="width: 100%;">
         <tbody>
         <tr>
-            <th class="filter-title"><button id="createAdmin" >创建用户</button></th>
+            <th class="filter-title"><button id="createAdmin" >创建管理员</button></th>
         </tr>
 
         </tbody>
@@ -634,10 +634,11 @@
 <template id="administratorInfo">
     <tr>
         <td>${name}</td>
-        <td>${lastOperationTime}</td>
+        <td>${time}</td>
         <td>
-            <button  class="changeOut" data-id="${id}">注销</button>
+            <button  class="changeOut" data-id="${id}" >注销</button>
             <button  class="changePrivilege" data-id="${id}">修改权限</button>
+            <button  class="changePassword" data-id="${id}" data-name="${name}">修改密码</button>
         </td>
     </tr>
 </template>
@@ -682,7 +683,7 @@
                         </td>
                         <th class="first"></th>
                         <td class="first-value">
-                            <button id="bookInfoOut" style="background-color: #bbbbbb;"> 导出统计信息</button>
+                            <button id="bookInfoOut" style="background-color: #bbbbbb;">   <a id="bookInfoOutA"  href="/library/var/export-books.csv" ></a>导出统计信息</button>
                         </td>
                     </tr>
                     </tbody>
@@ -703,7 +704,8 @@
                         </td>
                         <th class="first"></th>
                         <td class="first-value">
-                            <button id="deviceInfoOut" style="background-color: #bbbbbb;"> 导出统计信息</button>
+                            <button id="deviceInfoOut" style="background-color: #bbbbbb;">  <a id="deviceInfoOutA" href="/library/var/export-devices.csv" ></a>导出统计信息</button>
+
                         </td>
                     </tr>
                     </tbody>

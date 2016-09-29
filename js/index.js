@@ -25,8 +25,8 @@ window.addEventListener('load', function (e) {
     doc.getElementById('timeNow').innerHTML = Date()
     var logout = doc.getElementById('logout')
     logout.addEventListener('click', function (e) {
-        //g.deleteData('/api/administrators/'+userName+'/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
-        g.deleteData('/api/administrators/admin/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
+        g.deleteData('/api/administrators/'+userName+'/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
+        //g.deleteData('/api/administrators/admin/sessions/' + g.getCookie('sessionId'), genericHeaders, function (r) {
             if (r.meta.code < 400) {
                 alert('logout ok!')
                 //clear sessionId
@@ -911,8 +911,8 @@ window.addEventListener('load', function (e) {
                 var setPassword = changePasswordPanel.querySelector('#setPassword')
                 setPassword.addEventListener('click', function (e) {
                     var oldPassword = document.querySelector('#oldPassword')
-                    //var u = {name: userName, password: oldPassword.value.trim()}
-                    var u = {name: "admin", password: oldPassword.value.trim()}
+                    var u = {name: userName, password: oldPassword.value.trim()}
+                    //var u = {name: "admin", password: oldPassword.value.trim()}
                     g.getData('/api/administrators?filter=' + encodeURIComponent(JSON.stringify(u)), genericHeaders, function (d) {
                         if (d.meta.code == 200) {
                             if (d.data.length == 1) {
@@ -1080,11 +1080,16 @@ window.addEventListener('load', function (e) {
                     data.bookStats.container.deleteRow(-1);
                 }
                 for (var i = 0, c = dataInfo.length; i < c; ++i) {
-                    if (dataInfo[i].name.length > 20) {
-                        dataInfo[i].shortName = dataInfo[i].name.substr(0, 15) + "..."
-                    } else {
-                        dataInfo[i].shortName = dataInfo[i].name
+                    if(dataInfo[i].name){
+                        if (dataInfo[i].name.length > 20) {
+                            dataInfo[i].shortName = dataInfo[i].name.substr(0, 15) + "..."
+                        } else {
+                            dataInfo[i].shortName = dataInfo[i].name
+                        }
+                    } else{
+                        dataInfo[i].shortName = ""
                     }
+
                     var body = doc.getElementById('bookStatsItem').content.cloneNode(true).children[0]
                     g.bind(body, dataInfo[i])
                     data.bookStats.container.appendChild(body)
@@ -1194,6 +1199,10 @@ window.addEventListener('load', function (e) {
                         hasCondition = true
                     }
                     if (userToValue != '') {
+                        //userToValue = new Date(userToValue);
+                        //userToValue = +userToValue + 1000*60*60*24-1000;
+                        //userToValue = new Date(userToValue);
+                        //filter.userTo = userToValue.getFullYear()+"-"+(userToValue.getMonth()+1)+"-"+userToValue.getDate();
                         filter.userTo = userToValue
                         hasCondition = true
                     }
@@ -1381,6 +1390,7 @@ window.addEventListener('load', function (e) {
                     g.getData("/api/books/export/count",genericHeaders,function(d){
                         if (d.meta.code == 200) {
                             var fileContent = d.data
+                            doc.getElementById('bookInfoOutA').click();
                         }
                     })
                 },false)
@@ -1388,11 +1398,10 @@ window.addEventListener('load', function (e) {
                 deviceInfoOut.addEventListener('click',function(event){
                     g.getData("/api/devices/export/count",genericHeaders,function(d){
                         if (d.meta.code == 200) {
-
+                            doc.getElementById('deviceInfoOutA').click();
                         }
                     })
                 },false)
-
             }
         },
         administrator: {
@@ -1479,25 +1488,47 @@ window.addEventListener('load', function (e) {
                 for (var i = 0, c = contents.length; i < c; ++i) {
                     var body = doc.getElementById('administratorInfo').content.cloneNode(true).children[0]
                     var date = new Date(contents[i].lastOperationTime * 1000)
-                    contents[i].lastOperationTime = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-                    g.bind(body, contents[i])
-                    //修改用户权限
-                    body.querySelector('.changePrivilege').addEventListener('click', function (e) {
-                        data.createAdmin.userId = e.target.dataset.id
-                        data.switchTo(doc.getElementById('createAdmin'))
-                        data.createAdmin.do()
-                    }, false)
+                    if(contents[i].name != "admin"){
+                        contents[i].time = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+                        g.bind(body, contents[i])
+                        //修改用户权限
+                        body.querySelector('.changePrivilege').addEventListener('click', function (e) {
+                            data.createAdmin.userId = e.target.dataset.id
+                            data.switchTo(doc.getElementById('createAdmin'))
+                            data.createAdmin.do()
+                        }, false)
 
-                    //注销用户
-                    body.querySelector('.changeOut').addEventListener('click', function (e) {
-                        var value = e.target.dataset.id
-                        data.administrator.changeOut(value)
-                    }, false)
-                    administrator.container.appendChild(body)
+                        //注销用户
+                        body.querySelector('.changeOut').addEventListener('click', function (e) {
+                            var value = e.target.dataset.id
+                            data.administrator.changeOut(value)
+                        }, false)
+                        //修改用户密码
+                        body.querySelector('.changePassword').addEventListener('click',function(e){
+                            //data.changeAdminPassword.userId = e.target.dataset.id
+                            //data.switchTo(doc.getElementById('createAdmin'))
+                            //data.changeAdminPassword.do()
+                            //
+                            //data.switchTo(doc.getElementById('changeAdminPassword'))
+                            data.changeAdminPassword.do( e.target.dataset.name)
+                            doc.getElementById('changeName').innerHTML = e.target.dataset.name
+                        })
+                        administrator.container.appendChild(body)
+                    }
+
                 }
             },
             changeOut: function (value) {
-                g.deleteData()
+                //    g.deleteData('/api/books/' + e.target.dataset.id, genericHeaders, function (r) {
+                //        books.handler(books.currentPage)
+                //    })
+                    g.deleteData('/api/administrators/' +value, genericHeaders, function (r) {
+                        if(r.meta.code == 200){
+                            alert("删除成功")
+                            data.administrator.currentPage=0;
+                            data.do('权限管理', 'administratorInfoFilter', 'administratorInfoHeader', data.administrator)
+                        }
+                    })
             },
             handler: function (pageNo) {
                 var administrator = data.administrator
@@ -1524,18 +1555,23 @@ window.addEventListener('load', function (e) {
                 if (userName != "" && userPassword != "") {
                     data.createAdmin.userInfo.userName = userName
                     data.createAdmin.userInfo.userPassword = userPassword
-                    data.createAdmin.userInfo.stage = [15001]
+                    data.createAdmin.userInfo.stage = [15000,15001]//修改密码
                     var stageChks = $("[name='select']:checked").each(function (c) {
                         data.createAdmin.userInfo.stage.push($(this).val())
                     });
-                    return result = data.createAdmin.userInfo
+
+                    if( data.createAdmin.userInfo.stage.length>2){
+                        return result = data.createAdmin.userInfo
+                    }else{
+                        alert("请勾选权限信息")
+                    }
                 } else {
                     alert("请输入用户名，密码")
                 }
                 return result
             },
             do: function () {
-                contentTitle.textContent = '用户信息'
+                contentTitle.textContent = '管理员信息'
                 mainContainer.innerHTML = ''
                 var firstPageContent = doc.getElementById('createAdminInfo').content.cloneNode(true).children[0]
                 mainContainer.appendChild(firstPageContent)
@@ -1549,6 +1585,7 @@ window.addEventListener('load', function (e) {
                                     g.postData('/api/administrators/full', genericHeaders, dataInfo, function (d) {
                                         if (d.meta.code == 200) {
                                             alert("创建成功")
+                                            data.administrator.currentPage=0;
                                             data.createAdmin.userId = 0
                                             data.switchTo(doc.getElementById('administrator'))
                                             data.administrator.do()
@@ -1615,6 +1652,71 @@ window.addEventListener('load', function (e) {
 
 
             }
+        },
+        changeAdminPassword: {
+            do: function (name) {
+                contentTitle.textContent = '修改用户密码'
+                mainContainer.innerHTML = ''
+                var changePasswordPanel = doc.getElementById('administratorInfoP').content.cloneNode(true)
+                var setPassword = changePasswordPanel.querySelector('#setPassword')
+                setPassword.addEventListener('click', function (e) {
+                    //var oldPassword = document.querySelector('#oldPassword')
+                    var u = {name: name, password: ""}
+                    //var u = {name: "admin", password: oldPassword.value.trim()}
+                    var newPassword = document.querySelector('#newPassword')
+                    var retryNewPassword = document.querySelector('#retryNewPassword')
+                    if (newPassword.value == retryNewPassword.value) {
+                        u.password = newPassword.value
+                        g.patchData('/api/administrators/' + u.name, genericHeaders, u, function (d) {
+                            if (d.meta.code < 400) {
+                                alert('修改成功')
+                                newPassword.value = ''
+                                retryNewPassword.value = ''
+                                data.administrator.currentPage=0;
+                                data.createAdmin.userId = 0
+                                data.switchTo(doc.getElementById('administrator'))
+                                data.administrator.do()
+                            }
+                        })
+                    } else {
+                        alert('新密码输入不相同')
+                    }
+                    //g.getData('/api/administrators?filter=' + encodeURIComponent(JSON.stringify(u)), genericHeaders, function (d) {
+                    //    if (d.meta.code == 200) {
+                    //        if (d.data.length == 1) {
+                    //            var newPassword = document.querySelector('#newPassword')
+                    //            var retryNewPassword = document.querySelector('#retryNewPassword')
+                    //            if (newPassword.value == retryNewPassword.value) {
+                    //                u.password = newPassword.value
+                    //                g.patchData('/api/administrators/' + u.name, genericHeaders, u, function (d) {
+                    //                    if (d.meta.code < 400) {
+                    //                        //alert('Your password changed!')
+                    //                        alert('修改成功')
+                    //                        oldPassword.value = ''
+                    //                        newPassword.value = ''
+                    //                        retryNewPassword.value = ''
+                    //                    }
+                    //                    // else if(d.meta.data==401){
+                    //                    //    alert('用户没有修改权限')
+                    //                    //}
+                    //                })
+                    //            } else {
+                    //                //alert('new password not same')
+                    //                alert('新密码输入不相同')
+                    //            }
+                    //        } else {
+                    //            alert('server internal error')
+                    //        }
+                    //    } else {
+                    //        //alert('old password incorrect')
+                    //        alert('旧密码错误，请重新输入')
+                    //    }
+                    //})
+                }, false)
+                mainContainer.appendChild(changePasswordPanel)
+                document.querySelector('#oldPasswordTr').style.display="none";
+                //var n = changePasswordPanel.querySelector('#oldPassword')
+            }
         }
     }
     var firstPage = doc.getElementById('firstPage')
@@ -1652,18 +1754,25 @@ window.addEventListener('load', function (e) {
         doc.getElementById('changeName').innerHTML = userName
     }, false)
     //用户权限
-    var administrator = doc.getElementById('administrator')
-    administrator.addEventListener('click', function (event) {
-        data.switchTo(administrator)
-        data.administrator.do()
-        //创建用户
-        var createUser = doc.getElementById('createAdmin')
-        createUser.addEventListener('click', function (event) {
-            data.createAdmin.userId = 0
-            data.switchTo(createUser)
-            data.createAdmin.do()
+
+        var administrator = doc.getElementById('administrator')
+        administrator.addEventListener('click', function (event) {
+            if(userName=="admin"){
+                data.switchTo(administrator)
+                data.administrator.do()
+                //创建用户
+                var createUser = doc.getElementById('createAdmin')
+                createUser.addEventListener('click', function (event) {
+                    data.createAdmin.userId = 0
+                    data.switchTo(createUser)
+                    data.createAdmin.do()
+                }, false)
+            }else{
+                alert("该权限只可以 admin 用户访问")
+            }
         }, false)
-    }, false)
+
+
     var stats = doc.getElementById('stats')
     stats.addEventListener('click', function (event) {
         data.switchTo(stats)

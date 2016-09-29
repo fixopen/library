@@ -52,7 +52,7 @@ class users
                     $where[] = $condition;
                 }
             }
-            //print_r($where);
+            print_r($where);
             $whereClause = ' AND ' . implode(' AND ', $where);
         }
         $dir = array_shift($request['paths']);
@@ -488,7 +488,7 @@ class users
             $result = '"registerTime" > ' . strtotime($value . 'T00:00:00');
         }
         if ($name === 'userTo') {
-            $result = '"registerTime" < ' . strtotime($value . 'T00:00:00');
+            $result = '"registerTime" < ' . strtotime($value . 'T23:59:59');
         }
 //        print 'user key is ' . $result . '<br />';
         return $result;

@@ -16,6 +16,7 @@ trait Permission
             // && in_array($className, self::$logins)
             //$infos['header']['authrozition'];
             foreach (self::$logins as $className) {
+//                print_r(">>>>>>>>>>>>>>");
                 $session = $className::IsPrimaryKey($sessionId);
                 if ($session) {
                     $session->setLastOperationTime(time());

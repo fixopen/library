@@ -30,8 +30,104 @@ class devices
     private $sessionId = NULL;
 
     private static $classSpecSubresource = array(
-        'counted' => 'countedProc'
+        'counted' => 'countedProc',
+        'export' => 'exportProc'
     );
+    function exportProc(array &$request) {
+        //step1: get data from database
+        $filter = $request['params']['filter'];
+        if ($filter != '') {
+            $filterJson = json_decode($filter);
+            $where = array();
+            foreach ($filterJson as $key => $value) {
+                $condition = self::specFilter($key, $value);
+                if ($condition == '') {
+                    if (is_null($value)) {
+                        $where[] = self::Mark($key) . ' IS NULL';
+                    } else {
+                        $where[] = self::Mark($key) . ' = ' . self::DatabaseQuote($value, self::GetTypeByName($key));
+                    }
+                } else {
+                    $where[] = $condition;
+                }
+            }
+            //print_r($where);
+            $whereClause = ' AND ' . implode(' AND ', $where);
+        }
+        $bookKind = [];
+        if($whereClause){
+            $sql = 'select id,no from device where 1=1'.$whereClause.' order by id asc ';
+        }else{
+            $sql = 'select id,no from device order by id asc';
+        }
+        $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+        if ($r) {
+            foreach ($r as $row) {
+                $item = new stdClass();
+                $item->no =$row['no'];
+                $item->id =$row['id'];
+                $bookKind[] = $item;
+            }
+        }
+        $one = new stdClass();
+        $one->name ='设备名称';
+        $one->totalUser ='用户总数';
+        $one->View ='借阅总数';
+        $one->Follow ='关注总数';
+        $one->Download ='下载总数';
+        $result[] = $one;
+        foreach($bookKind as $one){
+            $item = new stdClass();
+            $item->name = $one->no;
+//                        print_r($one);
+            $sql ='select count(id) from business where "deviceId"= '.$one->id.' group by "userId" ';
+            $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+            $item->totalUser =0;
+            if ($r) {
+                $number = 0;
+                foreach ($r as $row) {
+                    $number +=1;
+                    $item->totalUser =$number;
+                }
+            }
+            $sql ='select count(id) from business where "deviceId"='.$one->id.'  and action ='."'".Download."'";
+            $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+            if ($r) {
+                foreach ($r as $row) {
+                    $item->Download =$row['count'];
+                }
+            }
+            $sql ='select count(id) from business where "deviceId"='.$one->id.'  and action ='."'".View."'";
+            $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+            if ($r) {
+                foreach ($r as $row) {
+                    $item->View =$row['count'];
+                }
+            }
+            $sql ='select count(id) from business where "deviceId"='.$one->id.'  and action ='."'".Follow."'";
+            $r = Database::GetInstance()->query($sql, PDO::FETCH_ASSOC);
+            if ($r) {
+                foreach ($r as $row) {
+                    $item->Follow =$row['count'];
+                }
+            }
+            $result[] = $item;
+        }
+        $data = $result;
+        //step2: write to file
+        $filename ="../var/export-devices.csv"; //random string
+        $file = fopen($filename, 'w');
+        //fputcsv($file, array_keys($row)); //write header for csv or not??
+        foreach ($data as $row) {
+//            print_r($row);
+            fputcsv($file, (array)$row);
+        }
+        fclose($file);
+        $request['response']['headers']['Content-Type'] = 'text/csv';
+        $request['response']['body'] =file_get_contents($filename);
+        return $request;
+    }
+
     public static function countedProc(array &$request){
         $count = count($request['paths']);
         switch ($request['method']) {
