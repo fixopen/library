@@ -68,12 +68,13 @@ class books
         $filename ="export-books.csv"; //random string
         $file = fopen($filename, 'w');
         //fputcsv($file, array_keys($row)); //write header for csv or not??
+//        print_r($file);
         foreach ($data as $row) {
-            fputcsv($file, (array)$row);
+//            print_r($row);
+            fputcsv($file, $row);
         }
         fclose($file);
-        $request['response']['headers']['Content-Type'] = 'text/csv';
-        $request['response']['body'] =file_get_contents($filename);
+        $request['response']['body'] = $filename;
     }
 
     public static function countedProc(array &$request){
